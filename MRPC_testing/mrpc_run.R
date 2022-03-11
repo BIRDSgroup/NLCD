@@ -81,6 +81,8 @@ for(i in tests)
   for(j in datanumbers)
   {
     finalmatrix<-specifytest(j,i,n)
+    labels<-colnames(finalmatrix)
+    finalmatrix$model<-apply(finalmatrix,1,function(x) paste0(unlist(labels[which(x %in% 1)]),collapse=","))
     filename=paste(i,"truth",j,"numberofdata",n,".csv",sep="_")
     write.csv(finalmatrix,filename,row.names = FALSE)
     
