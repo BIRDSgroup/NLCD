@@ -4,4 +4,4 @@
 #$ -o outputfile
 #$ -e errorfile
 python3 --version
-python3 CITNonLinear_wandb_gndtruth1.py > output.log
+python3 CITNonLinear_wandb_gndtruth0.py > output.log

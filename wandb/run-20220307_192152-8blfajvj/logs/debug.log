@@ -1,0 +1,24 @@
+2022-03-07 19:21:52,927 INFO    MainThread:212889 [wandb_setup.py:_flush():69] setting env: {}
+2022-03-07 19:21:52,928 INFO    MainThread:212889 [wandb_setup.py:_flush():69] setting login settings: {}
+2022-03-07 19:21:52,928 INFO    MainThread:212889 [wandb_init.py:_log_setup():342] Logging user logs to /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192152-8blfajvj/logs/debug.log
+2022-03-07 19:21:52,928 INFO    MainThread:212889 [wandb_init.py:_log_setup():343] Logging internal logs to /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192152-8blfajvj/logs/debug-internal.log
+2022-03-07 19:21:52,928 INFO    MainThread:212889 [wandb_init.py:init():375] calling init triggers
+2022-03-07 19:21:52,928 INFO    MainThread:212889 [wandb_init.py:init():382] wandb.init called with sweep_config: {}
+config: {}
+2022-03-07 19:21:52,928 INFO    MainThread:212889 [wandb_init.py:init():424] starting backend
+2022-03-07 19:21:52,928 INFO    MainThread:212889 [backend.py:_multiprocessing_setup():72] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2022-03-07 19:21:52,947 INFO    MainThread:212889 [backend.py:ensure_launched():135] starting backend process...
+2022-03-07 19:21:52,966 INFO    MainThread:212889 [backend.py:ensure_launched():140] started backend process with pid: 213617
+2022-03-07 19:21:52,968 INFO    MainThread:212889 [wandb_init.py:init():429] backend started and connected
+2022-03-07 19:21:52,970 INFO    MainThread:212889 [wandb_init.py:init():477] updated telemetry
+2022-03-07 19:21:52,970 INFO    MainThread:212889 [wandb_init.py:init():500] communicating current version
+2022-03-07 19:21:53,752 INFO    MainThread:212889 [wandb_init.py:init():505] got version response upgrade_message: "wandb version 0.12.11 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2022-03-07 19:21:53,752 INFO    MainThread:212889 [wandb_init.py:init():513] communicating run to backend with 30 second timeout
+2022-03-07 19:21:54,085 INFO    MainThread:212889 [wandb_init.py:init():540] starting run threads in backend
+2022-03-07 19:21:56,067 INFO    MainThread:212889 [wandb_run.py:_console_start():1601] atexit reg
+2022-03-07 19:21:56,068 INFO    MainThread:212889 [wandb_run.py:_redirect():1475] redirect: SettingsConsole.REDIRECT
+2022-03-07 19:21:56,069 INFO    MainThread:212889 [wandb_run.py:_redirect():1480] Redirecting console.
+2022-03-07 19:21:56,072 INFO    MainThread:212889 [wandb_run.py:_redirect():1536] Redirects installed.
+2022-03-07 19:21:56,072 INFO    MainThread:212889 [wandb_init.py:init():565] run started, returning control to user process
+2022-03-12 09:56:42,440 INFO    MainThread:212889 [wandb_run.py:finish():1271] finishing run birds/yeast_pvalue_otherstats/8blfajvj
