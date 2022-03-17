@@ -4,4 +4,4 @@
 #$ -o outputfile
 #$ -e errorfile
 python3 --version
-python3 testing.py $runs $ini 
+python3 CITNonLinear_Qsub.py $runs $ini 

@@ -15,7 +15,7 @@ f=open("tesr.txt","a")
 
 
 #loading yeast groundtruth 0 data
-yeast=open("yeast_residual_data_full_1000_gt_2.txt","r")
+yeast=open("../yeast_residual_data_full_1000_gt_2.txt","r")
 
 
 
@@ -47,7 +47,7 @@ dataset_0 = [i for i in zip(L,A,B)]
 
 
 #loading yeast groundtruth 1 data
-yeast=open("yeast_residual_data_full_1000_gt_1.txt","r")
+yeast=open("../yeast_residual_data_full_1000_gt_1.txt","r")
 
 
 
