@@ -348,8 +348,8 @@ for i in range(j,j+n):
 
 
     shuffles=100
-    L,A,B=LinearLABData()
-    #L,A,B=yeast_data(1,i)
+    #L,A,B=LinearLABData()
+    L,A,B=yeast_data(0,i)
 
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
@@ -374,7 +374,7 @@ for i in range(j,j+n):
 f.close()
 
 pickle_items=[loss_list_LA,loss_list_LB,loss_list_LindB_A,true_LA,true_LB,true_LindB_A]
-file_name=str(shuffles)+"shuffles"+"LinearNoise"+".pkl"
+file_name=str(shuffles)+"shuffles"+"yeastgnd0"+".pkl"
 open_file = open(file_name, "wb")
 pickle.dump(pickle_items, open_file)
 open_file.close()
