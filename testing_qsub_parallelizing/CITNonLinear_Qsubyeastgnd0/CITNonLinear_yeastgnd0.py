@@ -373,7 +373,7 @@ for i in range(j,j+n):
 
 f.close()
 
-pickle_items=[loss_list_LA,loss_list_LB,loss_list_LindB_A,true_LA,true_LB,true_LindB_A]
+pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual]
 file_name=str(shuffles)+"shuffles"+"yeastgnd0"+".pkl"
 open_file = open(file_name, "wb")
 pickle.dump(pickle_items, open_file)
