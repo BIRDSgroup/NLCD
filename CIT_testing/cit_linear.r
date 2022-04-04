@@ -1,0 +1,5 @@
+library(cit)
+L<- rbinom(1000,1,0.5)
+A<- 0.6+ 3*L+ rnorm(1000,0,1)
+B<- 0.3+ 0.8*sin(A) + rnorm(1000,0,1)
+cit.cp(L,A,B)
