@@ -1,5 +1,28 @@
 library(cit)
-L<- rbinom(1000,1,0.5)
-A<- 0.6+ 3*L+ rnorm(1000,0,1)
-B<- 0.3+ 0.8*sin(A) + rnorm(1000,0,1)
+read_data<-function(path)
+{
+  dataset<- vector("list", 5)
+  con = file(path, "r")
+  for (i in 1:5)
+  {
+    line = readLines(con, n = 1)
+    line = readLines(con, n = 1)
+    line_edit<-unlist(strsplit(line," "))
+    l<-as.vector(as.numeric(line_edit))
+    line = readLines(con, n = 1)
+    line_edit<-unlist(strsplit(line," "))
+    a<-as.vector(as.numeric(line_edit))
+    line = readLines(con, n = 1)
+    line_edit<-unlist(strsplit(line," "))
+    b<-as.vector(as.numeric(line_edit))
+    dataset[[i]]<-list(l,a,b)
+    
+  }
+  return (dataset)
+}
+dataset_linear<- read_data("testing_writingvalues.txt")
+temp<-as.data.frame(dataset_linear[[1]],check.rows=FALSE,check.cols=FALSE,col.names=c("L","A","B"))
+L<-temp[,1]
+A<- temp[,2]
+B<- temp[,3]
 cit.cp(L,A,B)
