@@ -1,9 +1,9 @@
 library(cit)
 read_data<-function(path)
 {
-  dataset<- vector("list", 5)
+  dataset<- vector("list", 100)
   con = file(path, "r")
-  for (i in 1:5)
+  for (i in 1:100)
   {
     line = readLines(con, n = 1)
     line = readLines(con, n = 1)
@@ -18,11 +18,35 @@ read_data<-function(path)
     dataset[[i]]<-list(l,a,b)
     
   }
+  close(con)
   return (dataset)
 }
 dataset_linear<- read_data("testing_writingvalues.txt")
-temp<-as.data.frame(dataset_linear[[1]],check.rows=FALSE,check.cols=FALSE,col.names=c("L","A","B"))
+p_cit<-c()
+p_TL<-c()
+p_TG<-c()
+p_GL<-c()
+p_Lind<-c()
+p_res<-c()
+for(i in 1:100)
+{
+temp<-as.data.frame(dataset_linear[[i]],check.rows=FALSE,check.cols=FALSE,col.names=c("L","A","B"))
 L<-temp[,1]
 A<- temp[,2]
 B<- temp[,3]
-cit.cp(L,A,B)
+t<-cit.cp(L,A,B)
+p_cit<-c(p_cit,t[1])
+p_TL<-c(p_TL,t[2])
+p_TG<-c(p_TG,t[3])
+p_GL<-c(p_GL,t[4])
+p_Lind<-c(p_Lind,t[5])
+if(t[1]<0.05)
+{
+p_res<-c(p_res,"causal")
+}
+else
+p_res<-c(p_res," ")
+}
+df <- data.frame(p_cit,p_TL,p_TG,p_GL,p_Lind,p_res)
+write.csv(df,"results_cit.csv",row.names = FALSE)
+
