@@ -4,4 +4,4 @@
 #$ -o outputfile
 #$ -e errorfile
 python3 --version
-python3 CITNonLinearDifferentLinearvalues.py $runs $ini 
+python3 conditionaltestmodify.py $runs $ini 
