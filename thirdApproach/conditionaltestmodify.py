@@ -53,7 +53,7 @@ class MDN_module(tf.keras.Model):
 
         #chaging activation to relu from linear, changin relu to sigmoid 
         for i in range(1,3):
-          s="self"+".h"+str(i)+"= Dense(neurons, activation=\"relu\", ,kernel_initializer=\"HeUnifrom\",name="+"'h"+str(i)+"')"
+          s="self"+".h"+str(i)+"= Dense(neurons, activation=\"relu\",kernel_initializer=\"HeUnifrom\",name="+"'h"+str(i)+"')"
           exec(s)
         self.alphas = Dense(components, activation="softmax", name="alphas")
         self.mus = Dense(components, activation="linear",name="mus") 
