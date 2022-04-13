@@ -37,7 +37,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesr.txt","a")
+f=open("tesrheuniform.txt","a")
 
 
 # In[112]:
@@ -53,7 +53,7 @@ class MDN_module(tf.keras.Model):
 
         #chaging activation to relu from linear, changin relu to sigmoid 
         for i in range(1,3):
-          s="self"+".h"+str(i)+"= Dense(neurons, activation=\"relu\", name="+"'h"+str(i)+"')"
+          s="self"+".h"+str(i)+"= Dense(neurons, activation=\"relu\", ,kernel_initializer=\"HeUnifrom\",name="+"'h"+str(i)+"')"
           exec(s)
         self.alphas = Dense(components, activation="softmax", name="alphas")
         self.mus = Dense(components, activation="linear",name="mus") 
@@ -366,7 +366,7 @@ for i in range(j,j+n):
     f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
     pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     file_name=str(dataset_names[i])+".pkl"
-    open_file = open("./DLresultspickle/"+file_name, "wb")
+    open_file = open("./DLresultspickleHeUniform100/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
