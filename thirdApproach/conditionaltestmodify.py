@@ -37,7 +37,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesr1000shuffle.txt","a")
+f=open("tesrsinedata.txt","a")
 
 
 # In[112]:
@@ -241,12 +241,12 @@ def LinearLABData():
 # In[ ]:
 
 
-fo=open("testing_writingvalues.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_sine.txt", "r")
 L=[]
 A=[]
 B=[]
 #fe=open("dataset_params.txt",'w')
-for i in range(0,100):
+for i in range(0,121):
     line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
@@ -272,9 +272,9 @@ fo.close()
 # In[ ]:
 
 
-fer=open("dataset_params.txt","r")
+fer=open("../LinearDifferentvalues/dataset_params_sine.txt","r")
 dataset_names=[]
-for i in range(0,100):
+for i in range(0,121):
     line=fer.readline()
     line="_".join(line.split())
     dataset_names.append(line)
@@ -350,7 +350,7 @@ for i in range(j,j+n):
     A=np.array(dataset_linear[i][1])
     B=np.array(dataset_linear[i][2])
     L=np.array(dataset_linear[i][0])
-    shuffles=1000
+    shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
     #print("Original",B_shuffle)
@@ -366,7 +366,7 @@ for i in range(j,j+n):
     f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
     pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     file_name=str(dataset_names[i])+".pkl"
-    open_file = open("./DLresultspickle1000shuffle/"+file_name, "wb")
+    open_file = open("./DLresultsSine/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
