@@ -21,7 +21,7 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_Linear0to1.txt")
+dataset_linear<- read_data("../testing_writingvalues_sine.txt")
 p_cit<-c()
 p_TL<-c()
 p_TG<-c()
@@ -34,7 +34,8 @@ temp<-as.data.frame(dataset_linear[[i]],check.rows=FALSE,check.cols=FALSE,col.na
 L<-temp[,1]
 A<- temp[,2]
 B<- temp[,3]
-t<-cit.cp(L,A,B)
+#t<-cit.cp(L,A,B)
+t<-cit.cp(L,B,A)
 p_cit<-c(p_cit,t[1])
 p_TL<-c(p_TL,t[2])
 p_TG<-c(p_TG,t[3])
@@ -48,5 +49,5 @@ else
 p_res<-c(p_res," ")
 }
 df <- data.frame(p_cit,p_TL,p_TG,p_GL,p_Lind,p_res)
-write.csv(df,"results_cit_Linear0to1.csv",row.names = FALSE)
+write.csv(df,"results_cit_sine_BtoA.csv",row.names = FALSE)
 
