@@ -25,6 +25,38 @@ from scipy import stats
 import rpy2
 
 
+# In[1]:
+
+
+#loading yeast groundtruth 0 data
+yeast=open("../yeast_residual_data_full_1000_gt_2.txt","r")
+
+
+
+#yeast data read 
+L=[]
+A=[]
+B=[]
+for i in range(0,1000):
+    line=yeast.readline()
+    #line=line[1:-2] #remove double quotes 
+    #param = [j for j in line.split()]
+    #print(param)
+    #chrname.append(param[1])
+    #g1.append(param[2])
+    #g2.append(param[3])
+    line=yeast.readline()
+    l = [j for j in line.split()]
+    L.append([int(i) for i in l])
+    line=yeast.readline()
+    a = [j for j in line.split()]
+    A.append([float(i) for i in a])
+    line=yeast.readline()
+    b = [j for j in line.split()]
+    B.append([float(i) for i in b])
+dataset_0 = [i for i in zip(L,A,B)]
+
+
 # In[ ]:
 
 
@@ -37,7 +69,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesrInd.txt","a")
+f=open("tesryeast0.txt","a")
 
 
 # In[112]:
@@ -347,9 +379,10 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 
 for i in range(j,j+n): 
-    A=np.array(dataset_linear[i][1])
-    B=np.array(dataset_linear[i][2])
-    L=np.array(dataset_linear[i][0])
+    #changing dataset_linear to dataset_0
+    A=np.array(dataset_0[i][1])
+    B=np.array(dataset_0[i][2])
+    L=np.array(dataset_0[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
@@ -365,8 +398,10 @@ for i in range(j,j+n):
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
     f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
     pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
-    file_name=str(dataset_names[i])+".pkl"
-    open_file = open("./DLresultsInd/"+file_name, "wb")
+    #changing filename for yeast data , just keeping the dataset number 
+    #file_name=str(dataset_names[i])+".pkl"
+    file_name=str(i)+".pkl"
+    open_file = open("./DLresultsyeast0/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
