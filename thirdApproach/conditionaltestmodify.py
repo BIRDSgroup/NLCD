@@ -37,7 +37,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesrLinear0to1.txt","a")
+f=open("tesrInd.txt","a")
 
 
 # In[112]:
@@ -241,12 +241,12 @@ def LinearLABData():
 # In[ ]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_ind.txt", "r")
 L=[]
 A=[]
 B=[]
 #fe=open("dataset_params.txt",'w')
-for i in range(0,121):
+for i in range(0,144):
     line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
@@ -272,9 +272,9 @@ fo.close()
 # In[ ]:
 
 
-fer=open("../LinearDifferentvalues/dataset_params_Linear0to1.txt","r")
+fer=open("../LinearDifferentvalues/dataset_params_ind.txt","r")
 dataset_names=[]
-for i in range(0,121):
+for i in range(0,144):
     line=fer.readline()
     line="_".join(line.split())
     dataset_names.append(line)
@@ -366,7 +366,7 @@ for i in range(j,j+n):
     f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
     pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     file_name=str(dataset_names[i])+".pkl"
-    open_file = open("./DLresultsLinear0to1/"+file_name, "wb")
+    open_file = open("./DLresultsInd/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
