@@ -28,8 +28,8 @@ import rpy2
 # In[1]:
 
 
-#loading yeast groundtruth 0 data
-yeast=open("../yeast_residual_data_full_1000_gt_2.txt","r")
+#loading yeast groundtruth 1 data
+yeast=open("../yeast_residual_data_full_1000_gt_1.txt","r")
 
 
 
@@ -69,7 +69,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesryeast0.txt","a")
+f=open("tesryeast1.txt","a")
 
 
 # In[112]:
@@ -401,7 +401,7 @@ for i in range(j,j+n):
     #changing filename for yeast data , just keeping the dataset number 
     #file_name=str(dataset_names[i])+".pkl"
     file_name=str(i)+".pkl"
-    open_file = open("./DLresultsyeast0/"+file_name, "wb")
+    open_file = open("./DLresultsyeast1/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
