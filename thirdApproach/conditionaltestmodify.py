@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[110]:
+# In[1]:
 
 
 #loading the libraries
@@ -69,16 +69,16 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesryeast1.txt","a")
+f=open("tesrLinear0to1neurons20.txt","a")
 
 
-# In[112]:
+# In[2]:
 
 
 #defining the class MDN
 class MDN_module(tf.keras.Model):
-
-    def __init__(self, neurons=15, components = 1):
+#neurons changed from 15 to 20
+    def __init__(self, neurons=20, components = 1):
         super(MDN_module, self).__init__(name="MDN_module")
         self.neurons = neurons
         self.components = components
@@ -103,7 +103,7 @@ class MDN_module(tf.keras.Model):
         return self.pvec([alpha_v,mu_v, sigma_v])
 
 
-# In[113]:
+# In[3]:
 
 
 no_parameters=3
@@ -273,12 +273,12 @@ def LinearLABData():
 # In[ ]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_ind.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
 L=[]
 A=[]
 B=[]
 #fe=open("dataset_params.txt",'w')
-for i in range(0,144):
+for i in range(0,121):
     line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
@@ -304,9 +304,9 @@ fo.close()
 # In[ ]:
 
 
-fer=open("../LinearDifferentvalues/dataset_params_ind.txt","r")
+fer=open("../LinearDifferentvalues/testing_writingvalues_Linear0to1.txt","r")
 dataset_names=[]
-for i in range(0,144):
+for i in range(0,121):
     line=fer.readline()
     line="_".join(line.split())
     dataset_names.append(line)
@@ -380,9 +380,9 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 for i in range(j,j+n): 
     #changing dataset_linear to dataset_0
-    A=np.array(dataset_0[i][1])
-    B=np.array(dataset_0[i][2])
-    L=np.array(dataset_0[i][0])
+    A=np.array(dataset_linear[i][1])
+    B=np.array(dataset_linear[i][2])
+    L=np.array(dataset_linear[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
@@ -401,7 +401,7 @@ for i in range(j,j+n):
     #changing filename for yeast data , just keeping the dataset number 
     #file_name=str(dataset_names[i])+".pkl"
     file_name=str(i)+".pkl"
-    open_file = open("./DLresultsyeast1/"+file_name, "wb")
+    open_file = open("./DLresultsLinear0to1neuorns20/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
