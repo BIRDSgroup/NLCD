@@ -23,6 +23,7 @@ import pickle
 from sklearn.feature_selection import mutual_info_regression
 from scipy import stats
 import rpy2
+from scipy.stats import spearmanr,pearsonr
 
 
 # In[1]:
@@ -69,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesrLinearvarpoint1.txt","a")
+f=open("tesrsinewave.txt","a")
 
 
 # In[2]:
@@ -273,7 +274,7 @@ def LinearLABData():
 # In[2]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_LinearVarpoint1.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_sinewave.txt", "r")
 L=[]
 A=[]
 B=[]
@@ -304,7 +305,7 @@ fo.close()
 # In[6]:
 
 
-fer=open("../LinearDifferentvalues/dataset_params_LinearVarpoint1.txt","r")
+fer=open("../LinearDifferentvalues/dataset_params_sinewave.txt","r")
 dataset_names=[]
 for i in range(0,121):
     line=fer.readline()
@@ -375,7 +376,7 @@ def stratify_B_n_times_diff(L,A,B,n):
     return loss
 
 
-# In[ ]:
+# In[4]:
 
 
 for i in range(j,j+n): 
@@ -396,12 +397,12 @@ for i in range(j,j+n):
     LA_p=calculate_pvalue(true_LA,loss_list_LA)
     LB_p=calculate_pvalue(true_LB,loss_list_LB)
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
-    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
+    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+","+str(spearmanr(A,B)[0])+","+str(pearsonr(A,B)[0])+"\n")
     pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     #changing filename for yeast data , just keeping the dataset number 
     file_name=str(dataset_names[i])+".pkl"
     #file_name=str(i)+".pkl"
-    open_file = open("./DLresultsLinearVarpoint1/"+file_name, "wb")
+    open_file = open("./DLresultsSinewave/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
