@@ -21,7 +21,7 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_LinearVarpoint1.txt")
+dataset_linear<- read_data("../testing_writingvalues_sinewave.txt")
 p_cit<-c()
 p_TL<-c()
 p_TG<-c()
@@ -49,5 +49,5 @@ else
 p_res<-c(p_res," ")
 }
 df <- data.frame(p_cit,p_TL,p_TG,p_GL,p_Lind,p_res)
-write.csv(df,"results_cit_Linearvarpoint1.csv",row.names = FALSE)
+write.csv(df,"results_cit_Sinewave.csv",row.names = FALSE)
 
