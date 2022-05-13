@@ -1,9 +1,9 @@
 library(cit)
 read_data<-function(path)
 {
-  dataset<- vector("list", 121)
+  dataset<- vector("list", 1)
   con = file(path, "r")
-  for (i in 1:121)
+  for (i in 1:1)
   {
     line = readLines(con, n = 1)
     line = readLines(con, n = 1)
@@ -21,14 +21,14 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_sinewave.txt")
+dataset_linear<- read_data("../testing_writingvalues_debugSine.txt")
 p_cit<-c()
 p_TL<-c()
 p_TG<-c()
 p_GL<-c()
 p_Lind<-c()
 p_res<-c()
-for(i in 1:121)
+for(i in 1:1)
 {
 temp<-as.data.frame(dataset_linear[[i]],check.rows=FALSE,check.cols=FALSE,col.names=c("L","A","B"))
 L<-temp[,1]
@@ -49,5 +49,5 @@ else
 p_res<-c(p_res," ")
 }
 df <- data.frame(p_cit,p_TL,p_TG,p_GL,p_Lind,p_res)
-write.csv(df,"results_cit_Sinewave.csv",row.names = FALSE)
+write.csv(df,"debug_cit_Sinewave.csv",row.names = FALSE)
 
