@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesrsinewave.txt","a")
+f=open("tesrlinear100.txt","a")
 
 
 # In[2]:
@@ -78,8 +78,8 @@ f=open("tesrsinewave.txt","a")
 
 #defining the class MDN
 class MDN_module(tf.keras.Model):
-#neurons changed from 15 to 20
-    def __init__(self, neurons=20, components = 1):
+#neurons changed from 15 to 20, changed it back to 15 
+    def __init__(self, neurons=15, components = 1):
         super(MDN_module, self).__init__(name="MDN_module")
         self.neurons = neurons
         self.components = components
@@ -271,10 +271,10 @@ def LinearLABData():
     return [L,A,B]
 
 
-# In[2]:
+# In[5]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_sinewave.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
 L=[]
 A=[]
 B=[]
@@ -305,7 +305,7 @@ fo.close()
 # In[6]:
 
 
-fer=open("../LinearDifferentvalues/dataset_params_sinewave.txt","r")
+fer=open("../LinearDifferentvalues/dataset_params_Linear0to1.txt","r")
 dataset_names=[]
 for i in range(0,121):
     line=fer.readline()
@@ -381,9 +381,9 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 for i in range(j,j+n): 
     #changing dataset_linear to dataset_0
-    A=np.array(dataset_linear[i][1])
-    B=np.array(dataset_linear[i][2])
-    L=np.array(dataset_linear[i][0])
+    A=np.array(dataset_linear[i][1])[0:100]
+    B=np.array(dataset_linear[i][2])[0:100]
+    L=np.array(dataset_linear[i][0])[0:100]
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
@@ -397,12 +397,12 @@ for i in range(j,j+n):
     LA_p=calculate_pvalue(true_LA,loss_list_LA)
     LB_p=calculate_pvalue(true_LB,loss_list_LB)
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
-    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+","+str(spearmanr(A,B)[0])+","+str(pearsonr(A,B)[0])+"\n")
+    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")#+","+str(spearmanr(A,B)[0])+","+str(pearsonr(A,B)[0])+"\n")
     pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     #changing filename for yeast data , just keeping the dataset number 
     file_name=str(dataset_names[i])+".pkl"
     #file_name=str(i)+".pkl"
-    open_file = open("./DLresultsSinewave/"+file_name, "wb")
+    open_file = open("./DLresultsLinear0to1hundred/"+file_name, "wb")
     pickle.dump(pickle_items, open_file)
     open_file.close()
 
