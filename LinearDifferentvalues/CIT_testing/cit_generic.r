@@ -1,9 +1,9 @@
 library(cit)
 read_data<-function(path)
 {
-  dataset<- vector("list", 1000)
+  dataset<- vector("list", 100)
   con = file(path, "r")
-  for (i in 1:121)
+  for (i in 1:100)
   {
     line = readLines(con, n = 1)
     line = readLines(con, n = 1)
@@ -21,7 +21,7 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_Linear0to1.txt")
+dataset_linear<- read_data("../testing_writingvalues_Indpendent.txt")
 p_cit<-c()
 p_TL<-c()
 p_TG<-c()
