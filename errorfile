@@ -178,3 +178,13 @@ wandb: Synced yeast_simplenn_groundtruth_0_100shuffles: https://wandb.ai/birds/y
 R[write to console]: There were 50 or more warnings (use warnings() to see the first 50)
 R[write to console]: 
 
+2022-06-08 23:53:38.020797: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
+2022-06-08 23:53:38.035495: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+2022-06-09 00:00:38.418777: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
+2022-06-09 00:00:38.418850: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+R[write to console]: There were 33 warnings (use warnings() to see them)
+R[write to console]: 
+
+R[write to console]: There were 50 or more warnings (use warnings() to see the first 50)
+R[write to console]: 
+

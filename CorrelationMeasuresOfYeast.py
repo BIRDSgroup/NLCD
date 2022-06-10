@@ -5,7 +5,7 @@
 
 
 #loading yeast groundtruth 0 data
-yeast=open("../yeast_full_data/yeast_residual_data_full_62k_gt1.txt","r")
+yeast=open("../yeast_residual_data_full_209k_gt2.txt","r")
 
 
 
@@ -13,7 +13,8 @@ yeast=open("../yeast_full_data/yeast_residual_data_full_62k_gt1.txt","r")
 L=[]
 A=[]
 B=[]
-for i in range(0,62296):
+#209157,62296
+for i in range(0,209157):
     line=yeast.readline()
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
@@ -77,7 +78,7 @@ df = pd.DataFrame(columns = ['Dataset', 'pearson','spearman','Mututal_info','nlc
 # In[48]:
 
 
-for i in range(len(dataset_0[0:10])):
+for i in range(len(dataset_0)):
     A = np.array(dataset_0[i][1])
     B = np.array(dataset_0[i][2])
     loss_mutual=mutual_info_regression(A.reshape(-1,1),B)[0]
@@ -92,5 +93,5 @@ for i in range(len(dataset_0[0:10])):
 # In[52]:
 
 
-df.to_csv("Gt1_full_corr.csv")
+df.to_csv("Gt2_full_corr.csv")
 
