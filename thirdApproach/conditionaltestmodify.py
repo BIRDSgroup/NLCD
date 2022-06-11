@@ -30,32 +30,32 @@ from scipy.stats import spearmanr,pearsonr
 
 
 #loading yeast groundtruth 1 data
-yeast=open("../yeast_residual_data_full_1000_gt_1.txt","r")
+#yeast=open("../yeast_residual_data_full_1000_gt_1.txt","r")
 
 
 
 #yeast data read 
-L=[]
-A=[]
-B=[]
-for i in range(0,1000):
-    line=yeast.readline()
+#L=[]
+#A=[]
+#B=[]
+#for i in range(0,1000):
+    #line=yeast.readline()
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
     #print(param)
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-    line=yeast.readline()
-    l = [j for j in line.split()]
-    L.append([int(i) for i in l])
-    line=yeast.readline()
-    a = [j for j in line.split()]
-    A.append([float(i) for i in a])
-    line=yeast.readline()
-    b = [j for j in line.split()]
-    B.append([float(i) for i in b])
-dataset_0 = [i for i in zip(L,A,B)]
+    #line=yeast.readline()
+    #l = [j for j in line.split()]
+    #L.append([int(i) for i in l])
+    #line=yeast.readline()
+    #a = [j for j in line.split()]
+    #A.append([float(i) for i in a])
+    #line=yeast.readline()
+    #b = [j for j in line.split()]
+    #B.append([float(i) for i in b])
+#dataset_0 = [i for i in zip(L,A,B)]
 
 
 # In[ ]:
@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("tesrlinear100.txt","a")
+f=open("yeast10kgt1.txt","a")
 
 
 # In[2]:
@@ -274,13 +274,13 @@ def LinearLABData():
 # In[5]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
-L=[]
-A=[]
-B=[]
+#fo=open("../LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
+#L=[]
+#A=[]
+#B=[]
 #fe=open("dataset_params.txt",'w')
-for i in range(0,121):
-    line=fo.readline()
+#for i in range(0,121):
+    #line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
@@ -288,30 +288,76 @@ for i in range(0,121):
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-    line=fo.readline()
-    l = [j for j in line.split()]
-    L.append([int(i) for i in l])
-    line=fo.readline()
-    a = [j for j in line.split()]
-    A.append([float(i) for i in a])
-    line=fo.readline()
-    b = [j for j in line.split()]
-    B.append([float(i) for i in b])
-dataset_linear = [i for i in zip(L,A,B)]
-fo.close()
+    #line=fo.readline()
+    #l = [j for j in line.split()]
+    #L.append([int(i) for i in l])
+    #line=fo.readline()
+    #a = [j for j in line.split()]
+    #A.append([float(i) for i in a])
+    #line=fo.readline()
+    #b = [j for j in line.split()]
+    #B.append([float(i) for i in b])
+#dataset_linear = [i for i in zip(L,A,B)]
+#fo.close()
 #fe.close()
 
 
 # In[6]:
 
 
-fer=open("../LinearDifferentvalues/dataset_params_Linear0to1.txt","r")
-dataset_names=[]
-for i in range(0,121):
-    line=fer.readline()
-    line="_".join(line.split())
-    dataset_names.append(line)
-fer.close()
+#fer=open("../LinearDifferentvalues/dataset_params_Linear0to1.txt","r")
+#dataset_names=[]
+#for i in range(0,121):
+#    line=fer.readline()
+#    line="_".join(line.split())
+#    dataset_names.append(line)
+#fer.close()
+
+
+# In[ ]:
+
+
+#loading yeast groundtruth 1 data
+yeast=open("../../yeast_residual_data_full_62k_gt1.txt","r")
+
+
+
+#yeast data read 
+L=[]
+A=[]
+B=[]
+for i in range(0,62296):
+    line=yeast.readline()
+    #line=line[1:-2] #remove double quotes 
+    #param = [j for j in line.split()]
+    #print(param)
+    #chrname.append(param[1])
+    #g1.append(param[2])
+    #g2.append(param[3])
+    line=yeast.readline()
+    l = [j for j in line.split()]
+    L.append([int(i) for i in l])
+    line=yeast.readline()
+    a = [j for j in line.split()]
+    A.append([float(i) for i in a])
+    line=yeast.readline()
+    b = [j for j in line.split()]
+    B.append([float(i) for i in b])
+dataset_yeast = [i for i in zip(L,A,B)]
+
+
+# In[ ]:
+
+
+read_file = open("indicesUsed.pkl", "rb")
+indices=pickle.load(read_file)
+read_file.close()
+
+
+# In[ ]:
+
+
+dataset_yeast10k=[dataset_yeast[q] for q in indices]
 
 
 # In[170]:
@@ -380,10 +426,9 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 
 for i in range(j,j+n): 
-    #changing dataset_linear to dataset_0
-    A=np.array(dataset_linear[i][1])[0:100]
-    B=np.array(dataset_linear[i][2])[0:100]
-    L=np.array(dataset_linear[i][0])[0:100]
+    A=np.array(dataset_yeast10k[i][1])
+    B=np.array(dataset_yeast10k[i][2])
+    L=np.array(dataset_yeast10k[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
@@ -397,14 +442,12 @@ for i in range(j,j+n):
     LA_p=calculate_pvalue(true_LA,loss_list_LA)
     LB_p=calculate_pvalue(true_LB,loss_list_LB)
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
-    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")#+","+str(spearmanr(A,B)[0])+","+str(pearsonr(A,B)[0])+"\n")
-    pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
-    #changing filename for yeast data , just keeping the dataset number 
-    file_name=str(dataset_names[i])+".pkl"
-    #file_name=str(i)+".pkl"
-    open_file = open("./DLresultsLinear0to1hundred/"+file_name, "wb")
-    pickle.dump(pickle_items, open_file)
-    open_file.close()
+    f.write(str(indices[i])+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
+    #pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
+    #file_name=str(dataset_names[i])+".pkl"
+    #open_file = open("./DLresultspickle1000shuffle/"+file_name, "wb")
+    #pickle.dump(pickle_items, open_file)
+    #open_file.close()
 
 
 # In[41]:
