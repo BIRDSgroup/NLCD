@@ -70,7 +70,13 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("yeast10kgt1.txt","a")
+f=open("halfbola125.txt","a")
+
+
+# In[ ]:
+
+
+
 
 
 # In[2]:
@@ -161,7 +167,8 @@ def eval_mdn_model(x_test, y_test, mdn_model):
 #reshapefunction
 def eval_mdn_model_mle(x_test,y_test):
         indices_1 = [i for i, x in enumerate(x_test) if x == 1]
-        indices_0 = [i for i, x in enumerate(x_test) if x == 0]
+        #changing x==0 to x==-1
+        indices_0 = [i for i, x in enumerate(x_test) if x == -1]
         mu_0=np.mean(y_test[indices_0])
         mu_1=np.mean(y_test[indices_1])
         sigma_0=np.std(y_test[indices_0])
@@ -217,7 +224,8 @@ def compute_loss_y_pred(P,Q,mle=False):
         return y_pred[:,1]
     else:
         indices_1 = [i for i, x in enumerate(P) if x == 1]
-        indices_0 = [i for i, x in enumerate(P) if x == 0]
+        #changing x==0 to x==-1
+        indices_0 = [i for i, x in enumerate(P) if x == -1]
         mu_0=np.mean(Q[indices_0])
         mu_1=np.mean(Q[indices_1])
         #sigma_0=np.std(Q[indices_0])
@@ -271,16 +279,16 @@ def LinearLABData():
     return [L,A,B]
 
 
-# In[5]:
+# In[1]:
 
 
-#fo=open("../LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
-#L=[]
-#A=[]
-#B=[]
+fo=open("../LinearDifferentvalues/testing_writingvalues_half_bola.txt", "r")
+L=[]
+A=[]
+B=[]
 #fe=open("dataset_params.txt",'w')
-#for i in range(0,121):
-    #line=fo.readline()
+for i in range(0,125):
+    line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
@@ -288,17 +296,17 @@ def LinearLABData():
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-    #line=fo.readline()
-    #l = [j for j in line.split()]
-    #L.append([int(i) for i in l])
-    #line=fo.readline()
-    #a = [j for j in line.split()]
-    #A.append([float(i) for i in a])
-    #line=fo.readline()
-    #b = [j for j in line.split()]
-    #B.append([float(i) for i in b])
-#dataset_linear = [i for i in zip(L,A,B)]
-#fo.close()
+    line=fo.readline()
+    l = [j for j in line.split()]
+    L.append([int(i) for i in l])
+    line=fo.readline()
+    a = [j for j in line.split()]
+    A.append([float(i) for i in a])
+    line=fo.readline()
+    b = [j for j in line.split()]
+    B.append([float(i) for i in b])
+dataset_linear = [i for i in zip(L,A,B)]
+fo.close()
 #fe.close()
 
 
@@ -318,46 +326,46 @@ def LinearLABData():
 
 
 #loading yeast groundtruth 1 data
-yeast=open("../../yeast_residual_data_full_62k_gt1.txt","r")
+#yeast=open("../../yeast_residual_data_full_62k_gt1.txt","r")
 
 
 
 #yeast data read 
-L=[]
-A=[]
-B=[]
-for i in range(0,62296):
-    line=yeast.readline()
+#L=[]
+#A=[]
+#B=[]
+#for i in range(0,62296):
+    #line=yeast.readline()
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
     #print(param)
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-    line=yeast.readline()
-    l = [j for j in line.split()]
-    L.append([int(i) for i in l])
-    line=yeast.readline()
-    a = [j for j in line.split()]
-    A.append([float(i) for i in a])
-    line=yeast.readline()
-    b = [j for j in line.split()]
-    B.append([float(i) for i in b])
-dataset_yeast = [i for i in zip(L,A,B)]
+    #line=yeast.readline()
+    #l = [j for j in line.split()]
+    #L.append([int(i) for i in l])
+    #line=yeast.readline()
+    #a = [j for j in line.split()]
+    #A.append([float(i) for i in a])
+    #line=yeast.readline()
+    #b = [j for j in line.split()]
+    #B.append([float(i) for i in b])
+#dataset_yeast = [i for i in zip(L,A,B)]
 
 
 # In[ ]:
 
 
-read_file = open("indicesUsed.pkl", "rb")
-indices=pickle.load(read_file)
-read_file.close()
+#read_file = open("indicesUsed.pkl", "rb")
+#indices=pickle.load(read_file)
+#read_file.close()
 
 
 # In[ ]:
 
 
-dataset_yeast10k=[dataset_yeast[q] for q in indices]
+#dataset_yeast10k=[dataset_yeast[q] for q in indices]
 
 
 # In[170]:
@@ -408,7 +416,8 @@ def calculate_difference(L,A,B):
 def stratify_B_n_times_diff(L,A,B,n):
     loss=[]
     indices_1 = [i for i, x in enumerate(L) if x == 1]
-    indices_0 = [i for i, x in enumerate(L) if x == 0]
+    #changin x==0 to x=-1
+    indices_0 = [i for i, x in enumerate(L) if x == -1]
     for i in range(0,n):
         B_dist_temp=np.zeros(len(B))
         mod_indices_1=random.sample(indices_1,len(indices_1))
@@ -426,9 +435,9 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 
 for i in range(j,j+n): 
-    A=np.array(dataset_yeast10k[i][1])
-    B=np.array(dataset_yeast10k[i][2])
-    L=np.array(dataset_yeast10k[i][0])
+    A=np.array(dataset_linear[i][1])
+    B=np.array(dataset_linear[i][2])
+    L=np.array(dataset_linear[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
