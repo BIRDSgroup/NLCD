@@ -1,5 +1,5 @@
 library(cit)
-inputs=125
+inputs=62296
 read_data<-function(path)
 {
   dataset<- vector("list", inputs)
@@ -22,8 +22,12 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_half_bola.txt")
-
+dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_62k_gt1.txt")
+indices_used<-read_pickle_file("../../thirdApproach/indicesUsed.pkl")
+#adding +1 since R is 1 indexed 
+indices_used<-indices_used+1
+dataset_linear<- dataset_yeast[indices_used[1:10000]]
+inputs=10000
 p_cit<-numeric(inputs)
 p_cit[1:inputs]=-1
 p_TL<- numeric(inputs)
@@ -34,7 +38,6 @@ p_GL<- numeric(inputs)
 p_GL[1:inputs]=-1
 p_Lind<- numeric(inputs)
 p_Lind[1:inputs]=-1
-p_TG<-numeric(inputs)
 p_res<-character(inputs)
 p_res[1:inputs]="NA"
 for(i in 1:inputs)
@@ -48,7 +51,6 @@ A<- temp[,2]
 B<- temp[,3]
 
 t<-cit.cp(L,A,B)
-
 
 #t<-cit.cp(L,B,A)
 p_cit[i]<-t[1]
@@ -66,7 +68,7 @@ p_res[i]<-" "
 
   }
   )}
-
+save(dataset_linear,file="yeast10k.Rdata")
 df <- data.frame(p_cit,p_TL,p_TG,p_GL,p_Lind,p_res)
-write.csv(df,"result_Linear100datapoints.csv",row.names = FALSE)
+write.csv(df,"result_yeast10kcausal.csv",row.names=FALSE)
 
