@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("halfbola125.txt","a")
+f=open("halfsine125.txt","a")
 
 
 # In[ ]:
@@ -282,7 +282,7 @@ def LinearLABData():
 # In[1]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_half_bola.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_half_sine.txt", "r")
 L=[]
 A=[]
 B=[]
@@ -451,7 +451,7 @@ for i in range(j,j+n):
     LA_p=calculate_pvalue(true_LA,loss_list_LA)
     LB_p=calculate_pvalue(true_LB,loss_list_LB)
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
-    f.write(str(indices[i])+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
+    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
     #pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     #file_name=str(dataset_names[i])+".pkl"
     #open_file = open("./DLresultspickle1000shuffle/"+file_name, "wb")
