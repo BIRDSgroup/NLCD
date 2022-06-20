@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 #loading the libraries
@@ -26,7 +26,7 @@ import rpy2
 from scipy.stats import spearmanr,pearsonr
 
 
-# In[1]:
+# In[ ]:
 
 
 #loading yeast groundtruth 1 data
@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("halfsine125.txt","a")
+f=open("yeast10k_ind.txt","a")
 
 
 # In[ ]:
@@ -79,7 +79,7 @@ f=open("halfsine125.txt","a")
 
 
 
-# In[2]:
+# In[ ]:
 
 
 #defining the class MDN
@@ -110,7 +110,7 @@ class MDN_module(tf.keras.Model):
         return self.pvec([alpha_v,mu_v, sigma_v])
 
 
-# In[3]:
+# In[ ]:
 
 
 no_parameters=3
@@ -168,7 +168,7 @@ def eval_mdn_model(x_test, y_test, mdn_model):
 def eval_mdn_model_mle(x_test,y_test):
         indices_1 = [i for i, x in enumerate(x_test) if x == 1]
         #changing x==0 to x==-1
-        indices_0 = [i for i, x in enumerate(x_test) if x == -1]
+        indices_0 = [i for i, x in enumerate(x_test) if x == 0]
         mu_0=np.mean(y_test[indices_0])
         mu_1=np.mean(y_test[indices_1])
         sigma_0=np.std(y_test[indices_0])
@@ -189,7 +189,7 @@ def reshapevar(X):
   return np.reshape(X,newshape=(len(X),-1))
 
 
-# In[4]:
+# In[ ]:
 
 
 def compute_loss(P,Q,mle=False):
@@ -209,7 +209,7 @@ def compute_loss(P,Q,mle=False):
         
 
 
-# In[5]:
+# In[ ]:
 
 
 def compute_loss_y_pred(P,Q,mle=False):
@@ -225,7 +225,7 @@ def compute_loss_y_pred(P,Q,mle=False):
     else:
         indices_1 = [i for i, x in enumerate(P) if x == 1]
         #changing x==0 to x==-1
-        indices_0 = [i for i, x in enumerate(P) if x == -1]
+        indices_0 = [i for i, x in enumerate(P) if x == 0]
         mu_0=np.mean(Q[indices_0])
         mu_1=np.mean(Q[indices_1])
         #sigma_0=np.std(Q[indices_0])
@@ -237,7 +237,7 @@ def compute_loss_y_pred(P,Q,mle=False):
         
 
 
-# In[6]:
+# In[ ]:
 
 
 def shuffleBtimes(P,Q,B,mle=False):
@@ -253,7 +253,7 @@ def shuffleBtimes(P,Q,B,mle=False):
     return loss
 
 
-# In[7]:
+# In[ ]:
 
 
 def LinearLABData():
@@ -279,16 +279,16 @@ def LinearLABData():
     return [L,A,B]
 
 
-# In[1]:
+# In[ ]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_half_sine.txt", "r")
-L=[]
-A=[]
-B=[]
+#fo=open("../LinearDifferentvalues/testing_writingvalues_half_bola.txt", "r")
+#L=[]
+#A=[]
+#B=[]
 #fe=open("dataset_params.txt",'w')
-for i in range(0,125):
-    line=fo.readline()
+#for i in range(0,125):
+#    line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
@@ -296,21 +296,21 @@ for i in range(0,125):
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-    line=fo.readline()
-    l = [j for j in line.split()]
-    L.append([int(i) for i in l])
-    line=fo.readline()
-    a = [j for j in line.split()]
-    A.append([float(i) for i in a])
-    line=fo.readline()
-    b = [j for j in line.split()]
-    B.append([float(i) for i in b])
-dataset_linear = [i for i in zip(L,A,B)]
-fo.close()
+#    line=fo.readline()
+#    l = [j for j in line.split()]
+#    L.append([int(i) for i in l])
+#    line=fo.readline()
+#    a = [j for j in line.split()]
+#    A.append([float(i) for i in a])
+#    line=fo.readline()
+#    b = [j for j in line.split()]
+#    B.append([float(i) for i in b])
+#dataset_linear = [i for i in zip(L,A,B)]
+#fo.close()
 #fe.close()
 
 
-# In[6]:
+# In[ ]:
 
 
 #fer=open("../LinearDifferentvalues/dataset_params_Linear0to1.txt","r")
@@ -357,9 +357,17 @@ fo.close()
 # In[ ]:
 
 
-#read_file = open("indicesUsed.pkl", "rb")
-#indices=pickle.load(read_file)
-#read_file.close()
+read_file = open("indicesUsedIndependent.pkl", "rb")
+indices=pickle.load(read_file)
+read_file.close()
+
+
+# In[ ]:
+
+
+read_file = open("../../10kyeast_ind.pkl", "rb")
+dataset_yeast10k=pickle.load(read_file)
+read_file.close()
 
 
 # In[ ]:
@@ -368,7 +376,7 @@ fo.close()
 #dataset_yeast10k=[dataset_yeast[q] for q in indices]
 
 
-# In[170]:
+# In[ ]:
 
 
 def calculate_pvalue(original,loss_list):
@@ -380,7 +388,7 @@ def calculate_pvalue(original,loss_list):
     
 
 
-# In[155]:
+# In[ ]:
 
 
 def compute_third_testloss(A,B):
@@ -402,7 +410,7 @@ def compute_third_testloss(A,B):
     return -tf.reduce_mean(log_likelihood, axis=-1).numpy()
 
 
-# In[160]:
+# In[ ]:
 
 
 def calculate_difference(L,A,B):
@@ -410,14 +418,14 @@ def calculate_difference(L,A,B):
     
 
 
-# In[162]:
+# In[ ]:
 
 
 def stratify_B_n_times_diff(L,A,B,n):
     loss=[]
     indices_1 = [i for i, x in enumerate(L) if x == 1]
     #changin x==0 to x=-1
-    indices_0 = [i for i, x in enumerate(L) if x == -1]
+    indices_0 = [i for i, x in enumerate(L) if x == 0]
     for i in range(0,n):
         B_dist_temp=np.zeros(len(B))
         mod_indices_1=random.sample(indices_1,len(indices_1))
@@ -431,13 +439,13 @@ def stratify_B_n_times_diff(L,A,B,n):
     return loss
 
 
-# In[4]:
+# In[ ]:
 
 
 for i in range(j,j+n): 
-    A=np.array(dataset_linear[i][1])
-    B=np.array(dataset_linear[i][2])
-    L=np.array(dataset_linear[i][0])
+    A=np.array(dataset_yeast10k[i][1])
+    B=np.array(dataset_yeast10k[i][2])
+    L=np.array(dataset_yeast10k[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
@@ -451,7 +459,7 @@ for i in range(j,j+n):
     LA_p=calculate_pvalue(true_LA,loss_list_LA)
     LB_p=calculate_pvalue(true_LB,loss_list_LB)
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
-    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
+    f.write(str(indices[i])+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
     #pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     #file_name=str(dataset_names[i])+".pkl"
     #open_file = open("./DLresultspickle1000shuffle/"+file_name, "wb")
@@ -459,7 +467,7 @@ for i in range(j,j+n):
     #open_file.close()
 
 
-# In[41]:
+# In[ ]:
 
 
 f.close()
