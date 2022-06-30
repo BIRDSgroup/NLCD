@@ -24,8 +24,8 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-#dataset_linear<- read_data("../../yeast_residual_data_full_1000_gt_1.txt")
-dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_62k_gt1.txt ")
+dataset_linear<- read_data("../../yeast_residual_data_full_1000_gt_1.txt")
+#dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_209k_gt2.txt")
 indices_used<-read_pickle_file("../../thirdApproach/indicesUsedIndependent.pkl")
 #adding +1 since R is 1 indexed 
 indices_used<-indices_used+1
@@ -73,5 +73,5 @@ p_res[i]<-" "
   )}
 save(dataset_linear,file="yeast10k.Rdata")
 df <- data.frame(p_cit,p_TL,p_TG,p_GL,p_Lind,p_res)
-write.csv(df,"result_yeast10kcausal.csv",row.names=FALSE)
+write.csv(df,"result_yeast10kindep.csv",row.names=FALSE)
 
