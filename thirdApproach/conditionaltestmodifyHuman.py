@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("Humans121.txt","a")
+f=open("Humansindp.txt","a")
 
 
 # In[ ]:
@@ -288,12 +288,12 @@ def LinearLABData():
 # In[4]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_humans.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_humans_indp.txt", "r")
 L=[]
 A=[]
 B=[]
 #fe=open("dataset_params.txt",'w')
-for i in range(0,121):
+for i in range(0,144):
     line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
@@ -319,9 +319,9 @@ fo.close()
 # In[2]:
 
 
-fer=open("../LinearDifferentvalues/dataset_params_Linear0to1.txt","r")
+fer=open("../LinearDifferentvalues/dataset_params_humans_indp.txt","r")
 dataset_names=[]
-for i in range(0,121):
+for i in range(0,144):
     line=fer.readline()
     line="_".join(line.split())
     dataset_names.append(line)
