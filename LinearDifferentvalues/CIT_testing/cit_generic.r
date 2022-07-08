@@ -2,7 +2,7 @@ library(cit)
 #inputs=10000
 #inputs=62296
 #inputs=209157
-inputs=121
+inputs=144
 read_data<-function(path)
 {
   dataset<- vector("list", inputs)
@@ -25,14 +25,14 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_humans.txt")
+dataset_linear<- read_data("../testing_writingvalues_humans_indp.txt")
 #dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_209k_gt2.txt")
 #indices_used<-read_pickle_file("../../thirdApproach/indicesUsedIndependent.pkl")
 #adding +1 since R is 1 indexed 
 #indices_used<-indices_used+1
 #dataset_linear<- dataset_yeast[indices_used[1:10000]]
 #inputs=10000
-inputs=121
+inputs=144
 p_cit<-numeric(inputs)
 p_cit[1:inputs]=-1
 p_TL<- numeric(inputs)
@@ -75,5 +75,5 @@ p_res[i]<-" "
   )}
 save(dataset_linear,file="yeast10k.Rdata")
 df <- data.frame(p_cit,p_TL,p_TG,p_GL,p_Lind,p_res)
-write.csv(df,"result_humans.csv",row.names=FALSE)
+write.csv(df,"result_humans_indp.csv",row.names=FALSE)
 
