@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 #loading the libraries
@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("yeast10k_ind.txt","a")
+f=open("diff_var.txt","a")
 
 
 # In[ ]:
@@ -168,7 +168,7 @@ def eval_mdn_model(x_test, y_test, mdn_model):
 def eval_mdn_model_mle(x_test,y_test):
         indices_1 = [i for i, x in enumerate(x_test) if x == 1]
         #changing x==0 to x==-1
-        indices_0 = [i for i, x in enumerate(x_test) if x == 0]
+        indices_0 = [i for i, x in enumerate(x_test) if x == -1]
         mu_0=np.mean(y_test[indices_0])
         mu_1=np.mean(y_test[indices_1])
         sigma_0=np.std(y_test[indices_0])
@@ -225,7 +225,7 @@ def compute_loss_y_pred(P,Q,mle=False):
     else:
         indices_1 = [i for i, x in enumerate(P) if x == 1]
         #changing x==0 to x==-1
-        indices_0 = [i for i, x in enumerate(P) if x == 0]
+        indices_0 = [i for i, x in enumerate(P) if x == -1]
         mu_0=np.mean(Q[indices_0])
         mu_1=np.mean(Q[indices_1])
         #sigma_0=np.std(Q[indices_0])
@@ -279,16 +279,16 @@ def LinearLABData():
     return [L,A,B]
 
 
-# In[ ]:
+# In[1]:
 
 
-#fo=open("../LinearDifferentvalues/testing_writingvalues_half_bola.txt", "r")
-#L=[]
-#A=[]
-#B=[]
-#fe=open("dataset_params.txt",'w')
-#for i in range(0,125):
-#    line=fo.readline()
+fo=open("../LinearDifferentvalues/testing_writingvalues_diff_variance.txt", "r")
+L=[]
+A=[]
+B=[]
+#fe=open("dataset_params_diff_variance.txt",'w')
+for i in range(0,100):
+    line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
@@ -296,17 +296,17 @@ def LinearLABData():
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-#    line=fo.readline()
-#    l = [j for j in line.split()]
-#    L.append([int(i) for i in l])
-#    line=fo.readline()
-#    a = [j for j in line.split()]
-#    A.append([float(i) for i in a])
-#    line=fo.readline()
-#    b = [j for j in line.split()]
-#    B.append([float(i) for i in b])
-#dataset_linear = [i for i in zip(L,A,B)]
-#fo.close()
+    line=fo.readline()
+    l = [j for j in line.split()]
+    L.append([int(i) for i in l])
+    line=fo.readline()
+    a = [j for j in line.split()]
+    A.append([float(i) for i in a])
+    line=fo.readline()
+    b = [j for j in line.split()]
+    B.append([float(i) for i in b])
+dataset_linear = [i for i in zip(L,A,B)]
+fo.close()
 #fe.close()
 
 
@@ -357,17 +357,17 @@ def LinearLABData():
 # In[ ]:
 
 
-read_file = open("indicesUsedIndependent.pkl", "rb")
-indices=pickle.load(read_file)
-read_file.close()
+#read_file = open("indicesUsedIndependent.pkl", "rb")
+#indices=pickle.load(read_file)
+#read_file.close()
 
 
 # In[ ]:
 
 
-read_file = open("../../10kyeast_ind.pkl", "rb")
-dataset_yeast10k=pickle.load(read_file)
-read_file.close()
+#read_file = open("../../10kyeast_ind.pkl", "rb")
+#dataset_yeast10k=pickle.load(read_file)
+#read_file.close()
 
 
 # In[ ]:
@@ -425,7 +425,7 @@ def stratify_B_n_times_diff(L,A,B,n):
     loss=[]
     indices_1 = [i for i, x in enumerate(L) if x == 1]
     #changin x==0 to x=-1
-    indices_0 = [i for i, x in enumerate(L) if x == 0]
+    indices_0 = [i for i, x in enumerate(L) if x == -1]
     for i in range(0,n):
         B_dist_temp=np.zeros(len(B))
         mod_indices_1=random.sample(indices_1,len(indices_1))
@@ -443,9 +443,9 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 
 for i in range(j,j+n): 
-    A=np.array(dataset_yeast10k[i][1])
-    B=np.array(dataset_yeast10k[i][2])
-    L=np.array(dataset_yeast10k[i][0])
+    A=np.array(dataset_linear[i][1])
+    B=np.array(dataset_linear[i][2])
+    L=np.array(dataset_linear[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
@@ -459,7 +459,8 @@ for i in range(j,j+n):
     LA_p=calculate_pvalue(true_LA,loss_list_LA)
     LB_p=calculate_pvalue(true_LB,loss_list_LB)
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
-    f.write(str(indices[i])+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
+    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
+    #f.write(str(indices[i])+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+"\n")
     #pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     #file_name=str(dataset_names[i])+".pkl"
     #open_file = open("./DLresultspickle1000shuffle/"+file_name, "wb")
