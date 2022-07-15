@@ -167,8 +167,8 @@ def eval_mdn_model(x_test, y_test, mdn_model):
 #reshapefunction
 def eval_mdn_model_mle(x_test,y_test):
         indices_1 = [i for i, x in enumerate(x_test) if x == 1]
-        #changing x==0 to x==-1
-        indices_0 = [i for i, x in enumerate(x_test) if x == -1]
+        #changing x==0 to x==-1 changin for yeast
+        indices_0 = [i for i, x in enumerate(x_test) if x == 0]
         mu_0=np.mean(y_test[indices_0])
         mu_1=np.mean(y_test[indices_1])
         sigma_0=np.std(y_test[indices_0])
@@ -225,7 +225,7 @@ def compute_loss_y_pred(P,Q,mle=False):
     else:
         indices_1 = [i for i, x in enumerate(P) if x == 1]
         #changing x==0 to x==-1
-        indices_0 = [i for i, x in enumerate(P) if x == -1]
+        indices_0 = [i for i, x in enumerate(P) if x == 0]
         mu_0=np.mean(Q[indices_0])
         mu_1=np.mean(Q[indices_1])
         #sigma_0=np.std(Q[indices_0])
@@ -434,7 +434,7 @@ def stratify_B_n_times_diff(L,A,B,n):
     loss=[]
     indices_1 = [i for i, x in enumerate(L) if x == 1]
     #changin x==0 to x=-1
-    indices_0 = [i for i, x in enumerate(L) if x == -1]
+    indices_0 = [i for i, x in enumerate(L) if x == 0]
     for i in range(0,n):
         B_dist_temp=np.zeros(len(B))
         mod_indices_1=random.sample(indices_1,len(indices_1))
@@ -452,9 +452,9 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 
 for i in range(j,j+n): 
-    A=np.array(dataset_linear[i][1])
-    B=np.array(dataset_linear[i][2])
-    L=np.array(dataset_linear[i][0])
+    A=np.array(dataset_yeast[i][1])
+    B=np.array(dataset_yeast[i][2])
+    L=np.array(dataset_yeast[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
