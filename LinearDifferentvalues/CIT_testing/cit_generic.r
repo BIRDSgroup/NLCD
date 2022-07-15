@@ -2,7 +2,7 @@ library(cit)
 #inputs=10000
 #inputs=62296
 #inputs=209157
-inputs=144
+inputs=62296
 read_data<-function(path)
 {
   dataset<- vector("list", inputs)
@@ -25,8 +25,8 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_humans_indp.txt")
-#dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_209k_gt2.txt")
+#dataset_linear<- read_data("../testing_writingvalues_humans_indp.txt")
+dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_62k_gt1.txt")
 #indices_used<-read_pickle_file("../../thirdApproach/indicesUsedIndependent.pkl")
 #adding +1 since R is 1 indexed 
 #indices_used<-indices_used+1
