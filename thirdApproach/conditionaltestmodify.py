@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[4]:
+# In[2]:
 
 
 #loading the libraries
@@ -30,32 +30,32 @@ from scipy.stats import spearmanr,pearsonr
 
 
 #loading yeast groundtruth 1 data
-yeast=open("../yeast_residual_data_full_1000_gt_1.txt","r")
+#yeast=open("../yeast_residual_data_full_1000_gt_1.txt","r")
 
 
 
 #yeast data read 
-L=[]
-A=[]
-B=[]
-for i in range(0,1000):
-    line=yeast.readline()
+#L=[]
+#A=[]
+#B=[]
+#for i in range(0,1000):
+    #line=yeast.readline()
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
     #print(param)
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-    line=yeast.readline()
-    l = [j for j in line.split()]
-    L.append([int(i) for i in l])
-    line=yeast.readline()
-    a = [j for j in line.split()]
-    A.append([float(i) for i in a])
-    line=yeast.readline()
-    b = [j for j in line.split()]
-    B.append([float(i) for i in b])
-dataset_0 = [i for i in zip(L,A,B)]
+    #line=yeast.readline()
+    #l = [j for j in line.split()]
+    #L.append([int(i) for i in l])
+    #line=yeast.readline()
+    #a = [j for j in line.split()]
+    #A.append([float(i) for i in a])
+    #line=yeast.readline()
+    #b = [j for j in line.split()]
+    #B.append([float(i) for i in b])
+#dataset_0 = [i for i in zip(L,A,B)]
 
 
 # In[ ]:
@@ -70,13 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("diff_var_yeast_1_var.txt","a")
-
-
-# In[ ]:
-
-
-
+f=open("yeast_gt1_batch2_10k.txt","a")
 
 
 # In[ ]:
@@ -167,7 +161,7 @@ def eval_mdn_model(x_test, y_test, mdn_model):
 #reshapefunction
 def eval_mdn_model_mle(x_test,y_test):
         indices_1 = [i for i, x in enumerate(x_test) if x == 1]
-        #changing x==0 to x==-1 changin for yeast
+        #changing x==0 to x==-1
         indices_0 = [i for i, x in enumerate(x_test) if x == 0]
         mu_0=np.mean(y_test[indices_0])
         mu_1=np.mean(y_test[indices_1])
@@ -326,57 +320,57 @@ def LinearLABData():
 
 
 #loading yeast groundtruth 1 data
-yeast=open("../../yeast_residual_data_full_62k_gt1.txt","r")
+#yeast=open("../../yeast_residual_data_full_62k_gt1.txt","r")
 
 
 
 #yeast data read 
-L=[]
-A=[]
-B=[]
-for i in range(0,62296):
-    line=yeast.readline()
+#L=[]
+#A=[]
+#B=[]
+#for i in range(0,62296):
+    #line=yeast.readline()
     #line=line[1:-2] #remove double quotes 
     #param = [j for j in line.split()]
     #print(param)
     #chrname.append(param[1])
     #g1.append(param[2])
     #g2.append(param[3])
-    line=yeast.readline()
-    l = [j for j in line.split()]
-    L.append([int(i) for i in l])
-    line=yeast.readline()
-    a = [j for j in line.split()]
-    A.append([float(i) for i in a])
-    line=yeast.readline()
-    b = [j for j in line.split()]
-    B.append([float(i) for i in b])
-dataset_yeast = [i for i in zip(L,A,B)]
+    #line=yeast.readline()
+    #l = [j for j in line.split()]
+    #L.append([int(i) for i in l])
+    #line=yeast.readline()
+    #a = [j for j in line.split()]
+    #A.append([float(i) for i in a])
+    #line=yeast.readline()
+    3b = [j for j in line.split()]
+    #B.append([float(i) for i in b])
+#dataset_yeast = [i for i in zip(L,A,B)]
 
 
-# In[ ]:
+# In[6]:
 
 
-#read_file = open("indicesUsedIndependent.pkl", "rb")
-#indices=pickle.load(read_file)
-#read_file.close()
+read_file = open("indicesUsedbatch-2.pkl", "rb")
+indices=pickle.load(read_file)
+read_file.close()
 
 
-# In[ ]:
+# In[3]:
 
 
-#read_file = open("../../10kyeast_ind.pkl", "rb")
-#dataset_yeast10k=pickle.load(read_file)
-#read_file.close()
+read_file = open("../../yeast_full_data/yeastrawgtbatch-2.pkl", "rb")
+dataset_yeast10k=pickle.load(read_file)
+read_file.close()
 
 
 # In[5]:
 
 
-with open('indices_var_diff_gt1.pkl', 'rb') as file:
+#with open('indices_var_diff_gt1.pkl', 'rb') as file:
       
     # Call load method to deserialze
-    indices = pickle.load(file)
+    #indices = pickle.load(file)
 
 
 # In[ ]:
@@ -452,9 +446,9 @@ def stratify_B_n_times_diff(L,A,B,n):
 
 
 for i in range(j,j+n): 
-    A=np.array(dataset_yeast[i][1])
-    B=np.array(dataset_yeast[i][2])
-    L=np.array(dataset_yeast[i][0])
+    A=np.array(dataset_yeast10k[i][1])
+    B=np.array(dataset_yeast10k[i][2])
+    L=np.array(dataset_yeast10k[i][0])
     shuffles=100
     A_shuffle=np.copy(A)
     B_shuffle=np.copy(B)
