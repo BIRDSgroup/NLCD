@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 #loading the libraries
@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("yeast_gt1_batch2_10k.txt","a")
+f=open("yeast_1k_gt1_second.txt","a")
 
 
 # In[ ]:
@@ -343,7 +343,7 @@ def LinearLABData():
     #a = [j for j in line.split()]
     #A.append([float(i) for i in a])
     #line=yeast.readline()
-    3b = [j for j in line.split()]
+    #b = [j for j in line.split()]
     #B.append([float(i) for i in b])
 #dataset_yeast = [i for i in zip(L,A,B)]
 
@@ -351,7 +351,7 @@ def LinearLABData():
 # In[6]:
 
 
-read_file = open("indicesUsedbatch-2.pkl", "rb")
+read_file = open("indices_yeastgt1_1k_secondtime.pkl", "rb")
 indices=pickle.load(read_file)
 read_file.close()
 
