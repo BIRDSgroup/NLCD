@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("yeast_1k_gt1_second.txt","a")
+f=open("yeast_1k_gt2_second.txt","a")
 
 
 # In[ ]:
@@ -351,7 +351,7 @@ def LinearLABData():
 # In[6]:
 
 
-read_file = open("indices_yeastgt1_1k_secondtime.pkl", "rb")
+read_file = open("indices_yeastgt2_1k_secondtime.pkl", "rb")
 indices=pickle.load(read_file)
 read_file.close()
 
@@ -359,7 +359,7 @@ read_file.close()
 # In[3]:
 
 
-read_file = open("../../yeast_full_data/yeastrawgtbatch-2.pkl", "rb")
+read_file = open("../../yeastgt2_1k_secondtime.pkl", "rb")
 dataset_yeast10k=pickle.load(read_file)
 read_file.close()
 
