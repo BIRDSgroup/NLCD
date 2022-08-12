@@ -70,7 +70,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("Humansindp.txt","a")
+f=open("HumansCausalReattempt.txt","a")
 
 
 # In[ ]:
@@ -288,7 +288,7 @@ def LinearLABData():
 # In[4]:
 
 
-fo=open("../LinearDifferentvalues/testing_writingvalues_humans_indp.txt", "r")
+fo=open("../LinearDifferentvalues/testing_writingvalues_humans.txt", "r")
 L=[]
 A=[]
 B=[]
@@ -319,13 +319,13 @@ fo.close()
 # In[2]:
 
 
-fer=open("../LinearDifferentvalues/dataset_params_humans_indp.txt","r")
-dataset_names=[]
-for i in range(0,144):
-    line=fer.readline()
-    line="_".join(line.split())
-    dataset_names.append(line)
-fer.close()
+#fer=open("../LinearDifferentvalues/dataset_params_humans.txt","r")
+#dataset_names=[]
+#for i in range(0,144):
+#    line=fer.readline()
+#    line="_".join(line.split())
+#    dataset_names.append(line)
+#fer.close()
 
 
 # In[ ]:
@@ -389,7 +389,7 @@ def calculate_pvalue(original,loss_list):
     '''
     calculate the p value 
     '''
-    return sum(i < original for i in loss_list)/len(loss_list)
+    return sum(abs(i) < abs(original) for i in loss_list)/len(loss_list)
     
     
 
