@@ -1,8 +1,8 @@
 library(cit)
 #inputs=10000
-#inputs=62296
+inputs=62296
 #inputs=209157
-inputs=121
+#inputs=121
 read_data<-function(path)
 {
   dataset<- vector("list", inputs)
@@ -25,14 +25,14 @@ read_data<-function(path)
   close(con)
   return (dataset)
 }
-dataset_linear<- read_data("../testing_writingvalues_humans.txt")
-#dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_62k_gt1.txt")
-#indices_used<-read_pickle_file("../../thirdApproach/indicesUsedIndependent.pkl")
+#dataset_linear<- read_data("../testing_writingvalues_humans.txt")
+dataset_yeast<- read_data("../../../yeast_full_data/yeast_residual_data_full_62k_gt1.txt")
+indices_used<-read_pickle_file("../../thirdApproach/indices_yeastgt1_1k_secondtime.pkl")
 #adding +1 since R is 1 indexed 
-#indices_used<-indices_used+1
+indices_used<-indices_used+1
 #dataset_linear<- dataset_yeast[indices_used[1:10000]]
 #inputs=10000
-inputs=100
+#inputs=100
 p_cit<-numeric(inputs)
 p_cit[1:inputs]=-1
 p_TL<- numeric(inputs)
@@ -45,12 +45,12 @@ p_Lind<- numeric(inputs)
 p_Lind[1:inputs]=-1
 p_res<-character(inputs)
 p_res[1:inputs]="NA"
-for(i in 1:inputs)
+for(i in indices_used)
 {
   print(i)
   try(
   {
-temp<-as.data.frame(dataset_linear[[i]],check.rows=FALSE,check.cols=FALSE,col.names=c("L","A","B"))
+temp<-as.data.frame(dataset_yeast[[i]],check.rows=FALSE,check.cols=FALSE,col.names=c("L","A","B"))
 L<-temp[,1]
 A<- temp[,2]
 B<- temp[,3]
