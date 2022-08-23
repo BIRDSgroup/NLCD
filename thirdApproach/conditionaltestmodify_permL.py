@@ -347,7 +347,7 @@ def calculate_pvalue(original,loss_list):
 #at every shuffle here
 def calculateLshuffle(L,A,B,shuffle):
     loss_list=[]
-    opt = tf.optimizers.Nadam(1e-3)
+    opt = tf.optimizers.SGD(1e-3)
     mdn_PQ = MDN_module()
     mdn_PQ.compile(loss=gnll_loss, optimizer=opt)
     withoutL=mdn_PQ.fit(x=np.concatenate([L.reshape(-1,1),A.reshape(-1,1)],axis=1), y=B.T,epochs=100,  batch_size=32,verbose=0)
@@ -362,7 +362,7 @@ def calculateLshuffle(L,A,B,shuffle):
     orig_loss= -tf.reduce_mean(log_likelihood, axis=-1).numpy()
     for i in range(shuffle):
         L_shuffle=np.random.permutation(L)
-        opt = tf.optimizers.Nadam(1e-3)
+        opt = tf.optimizers.SGD(1e-3)
         mdn_PQ = MDN_module()
         mdn_PQ.compile(loss=gnll_loss, optimizer=opt)
         withoutL=mdn_PQ.fit(x=np.concatenate([L_shuffle.reshape(-1,1),A.reshape(-1,1)],axis=1), y=B.T,epochs=100,  batch_size=32,verbose=0)
