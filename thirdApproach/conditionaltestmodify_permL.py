@@ -37,7 +37,7 @@ n=int(sys.argv[1])
 # In[ ]:
 
 
-f=open("yeast10kgt1.txt","a")
+f=open("LinearPermRetrain.txt","a")
 
 
 # In[112]:
