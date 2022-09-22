@@ -445,11 +445,11 @@ for i in range(j,j+n):
     #true_LBresidual=calculate_difference(L,A,B)
     #loss_list_Bresidual,true_LBresidual=calculateLshuffle(L,A,B,shuffles)
     true_LBresidual=thirdtestoriginal(L,A,B)
-    loss_list_Bresidual,a=thirdtestperm(L,A,B,shuffles)
+    loss_list_Bresidual=thirdtestperm(L,A,B,shuffles)
     LA_p=calculate_pvalue(true_LA,loss_list_LA)
     LB_p=calculate_pvalue(true_LB,loss_list_LB)
     AB_p=calculate_pvalue(true_LBresidual,loss_list_Bresidual)
-    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+","+str(a)+"\n")
+    f.write(str(i)+","+str(LA_p)+","+str(LB_p)+","+str(AB_p)+","+"\n")
     #pickle_items=[loss_list_LA,loss_list_LB,loss_list_Bresidual,true_LA,true_LB,true_LBresidual,LA_p,LB_p,AB_p]
     #file_name=str(dataset_names[i])+".pkl"
     #open_file = open("./DLresultspickle1000shuffle/"+file_name, "wb")
