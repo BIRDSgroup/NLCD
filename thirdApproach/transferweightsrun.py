@@ -76,6 +76,9 @@ class MDN_module(tf.keras.Model):
 
 no_parameters=3
 components=1
+
+epochs=100
+batchsize=32
 def nnelu(input):
     """ Computes the Non-Negative Exponential Linear Unit
     """
@@ -227,7 +230,7 @@ def calculate_pvalue(original,loss_list):
 # In[ ]:
 
 
-fo=open("/home/aravind/projects/CIT_Non_Linear/LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
+fo=open("/data/users/cs20s037/CITNonLinear/LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
 L=[]
 A=[]
 B=[]
@@ -371,7 +374,7 @@ def thirdtestoriginal(L,A,B):
     #print("Loss Order: Random,L=0 tranfer, L= 1 tranfer, Full data transfer")
     loss,neg=thirdtestonecycle(L,A,B)
     #print(" Difference(minimum from Loss A - minimum from Loss LA) ",loss)
-    return loss,neg
+    return loss
 
 
 # In[ ]:
