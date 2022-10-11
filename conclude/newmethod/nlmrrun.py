@@ -24,7 +24,7 @@ j=int(sys.argv[2])
 n=int(sys.argv[1])
 
 # %%
-f=open("NLMRnewmethod.txt","a")
+f=open("NLMRnewmethodupdated.txt","a")
 
 # %%
 #defining the class MDN
@@ -261,7 +261,8 @@ def compute_third_testloss(L,A,B):
     L_zeros=np.zeros((L.shape))
     #print(min(A))
     #print(max(A))
-    A_test=np.linspace(min(A),max(A),1000)
+    #A_test=np.linspace(min(A),max(A),1000)
+    A_test=A
     y_pred_ones= mdn_PQ.predict(np.concatenate([L_ones.reshape(-1,1),A_test.reshape(-1,1)],axis=1))
     y_pred_zeros= mdn_PQ.predict(np.concatenate([L_zeros.reshape(-1,1),A_test.reshape(-1,1)],axis=1))
     #y_pred = mdn_PQ.predict(A)
@@ -287,7 +288,7 @@ def stratify_B_n_times_diff(L,A,B,n):
             B_dist_temp[indices_0[i]]=B[mod_indices_0[i]]
         _,y_pred_ones,y_pred_zeros=compute_third_testloss(L,A,B_dist_temp)
         
-        loss.append(abs(sum(y_pred_zeros[:,1]-y_pred_ones[:,1])/1000))
+        loss.append(sum(abs(y_pred_zeros[:,1]-y_pred_ones[:,1])/1000))
     return loss
 
 # %%
