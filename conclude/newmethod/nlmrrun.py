@@ -24,7 +24,7 @@ j=int(sys.argv[2])
 n=int(sys.argv[1])
 
 # %%
-f=open("NLMRnewmethodupdated.txt","a")
+f=open("NLMRnewmethodupdatedind.txt","a")
 
 # %%
 #defining the class MDN
@@ -194,7 +194,7 @@ def shuffleBtimes(P,Q,B,mle=False):
 
 
 # %%
-fo=open("/data/users/cs20s037/CITNonLinear/LinearDifferentvalues/testing_writingvalues_Linear0to1.txt", "r")
+fo=open("/data/users/cs20s037/CITNonLinear/LinearDifferentvalues/testing_writingvalues_ind.txt", "r")
 L=[]
 A=[]
 B=[]
