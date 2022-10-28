@@ -24,7 +24,7 @@ j=int(sys.argv[2])
 n=int(sys.argv[1])
 
 # %%
-f=open("NLMRnewmethodupdatedind.txt","a")
+f=open("NLMRnewmethodupdateddiffvar.txt","a")
 
 # %%
 #defining the class MDN
@@ -114,7 +114,7 @@ def eval_mdn_model(x_test, y_test, mdn_model):
 def eval_mdn_model_mle(x_test,y_test):
         indices_1 = [i for i, x in enumerate(x_test) if x == 1]
         #changing x to -1
-        indices_0 = [i for i, x in enumerate(x_test) if x == 0]
+        indices_0 = [i for i, x in enumerate(x_test) if x == -1]
         mu_0=np.mean(y_test[indices_0])
         mu_1=np.mean(y_test[indices_1])
         sigma_0=np.std(y_test[indices_0])
@@ -167,7 +167,7 @@ def compute_loss_y_pred(P,Q,mle=False):
         return y_pred[:,1]
     else:
         indices_1 = [i for i, x in enumerate(P) if x == 1]
-        indices_0 = [i for i, x in enumerate(P) if x == 0]
+        indices_0 = [i for i, x in enumerate(P) if x == -1]
         mu_0=np.mean(Q[indices_0])
         mu_1=np.mean(Q[indices_1])
         #sigma_0=np.std(Q[indices_0])
@@ -194,12 +194,12 @@ def shuffleBtimes(P,Q,B,mle=False):
 
 
 # %%
-fo=open("/data/users/cs20s037/CITNonLinear/LinearDifferentvalues/testing_writingvalues_ind.txt", "r")
+fo=open("/data/users/cs20s037/CITNonLinear/LinearDifferentvalues/testing_writingvalues_diff_variance.txt", "r")
 L=[]
 A=[]
 B=[]
 #fe=open("dataset_params.txt",'w')
-for i in range(0,121):
+for i in range(0,100):
     line=fo.readline()
     #fe.write(line)
     #line=line[1:-2] #remove double quotes 
@@ -235,7 +235,7 @@ def calculate_pvalue(original,loss_list):
 def stratifydata(L,B):
     indices_1 = [i for i, x in enumerate(L) if x == 1]
     #changin x==0 to x=-1
-    indices_0 = [i for i, x in enumerate(L) if x == 0]
+    indices_0 = [i for i, x in enumerate(L) if x == -1]
     B_dist_temp=np.zeros(len(B))
     mod_indices_1=random.sample(indices_1,len(indices_1))
     for i in range(len(indices_1)):
@@ -276,7 +276,7 @@ def stratify_B_n_times_diff(L,A,B,n):
     loss=[]
     indices_1 = [i for i, x in enumerate(L) if x == 1]
     #changin x==0 to x=-1
-    indices_0 = [i for i, x in enumerate(L) if x == 0]
+    indices_0 = [i for i, x in enumerate(L) if x == -1]
     for i in range(0,n):
         B_dist_temp=np.zeros(len(B))
         mod_indices_1=random.sample(indices_1,len(indices_1))
