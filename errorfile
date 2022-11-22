@@ -1,190 +1,0 @@
-2022-03-07 19:01:03.959539: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-03-07 19:01:03.959622: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-/opt/anaconda3/lib/python3.7/site-packages/statsmodels/tools/_testing.py:19: FutureWarning: pandas.util.testing is deprecated. Use the functions in the public API at pandas.testing instead.
-  import pandas.util.testing as tm
-Traceback (most recent call last):
-  File "CITNonLinear_wandb_gndtruth1.py", line 86, in <module>
-    import statsmodels.api as sm
-  File "/opt/anaconda3/lib/python3.7/site-packages/statsmodels/api.py", line 9, in <module>
-    from .regression.recursive_ls import RecursiveLS
-  File "/opt/anaconda3/lib/python3.7/site-packages/statsmodels/regression/recursive_ls.py", line 14, in <module>
-    from statsmodels.tsa.statespace.mlemodel import (
-  File "/opt/anaconda3/lib/python3.7/site-packages/statsmodels/tsa/statespace/mlemodel.py", line 29, in <module>
-    import statsmodels.tsa.base.tsa_model as tsbase
-  File "/opt/anaconda3/lib/python3.7/site-packages/statsmodels/tsa/base/tsa_model.py", line 2, in <module>
-    from statsmodels.compat.pandas import is_numeric_dtype
-  File "/opt/anaconda3/lib/python3.7/site-packages/statsmodels/compat/pandas.py", line 23, in <module>
-    data_klasses = (pandas.Series, pandas.DataFrame, pandas.Panel)
-  File "/opt/anaconda3/lib/python3.7/site-packages/pandas/__init__.py", line 244, in __getattr__
-    raise AttributeError(f"module 'pandas' has no attribute '{name}'")
-AttributeError: module 'pandas' has no attribute 'Panel'
-Traceback (most recent call last):
-  File "CITNonLinear_wandb_gndtruth1.py", line 73, in <module>
-    from tensorflow_probability import distributions as tfd
-ModuleNotFoundError: No module named 'tensorflow_probability'
-2022-03-07 19:20:48.366087: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-03-07 19:20:48.366143: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-wandb: Currently logged in as: aeaswar81 (use `wandb login --relogin` to force relogin)
-wandb: wandb version 0.12.11 is available!  To upgrade, please run:
-wandb:  $ pip install wandb --upgrade
-2022-03-07 19:20:54.749425: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-03-07 19:20:54.749483: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-
-CondaEnvException: Unable to determine environment
-
-Please re-run this command with one of the following options:
-
-* Provide an environment name via --name or -n
-* Re-run this command inside an activated conda environment.
-
-wandb: Tracking run with wandb version 0.12.1
-wandb: Syncing run yeast_simplenn_groundtruth_1_100shuffles
-wandb: ⭐️ View project at https://wandb.ai/birds/yeast_pvalue_otherstats
-wandb: 🚀 View run at https://wandb.ai/birds/yeast_pvalue_otherstats/runs/1hrpwn4b
-wandb: Run data is saved locally in /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192052-1hrpwn4b
-wandb: Run `wandb offline` to turn off syncing.
-2022-03-07 19:20:56.590293: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-03-07 19:20:56.590420: W tensorflow/stream_executor/cuda/cuda_driver.cc:269] failed call to cuInit: UNKNOWN ERROR (303)
-2022-03-07 19:20:56.590509: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (birds): /proc/driver/nvidia/version does not exist
-2022-03-07 19:20:56.591664: I tensorflow/core/platform/cpu_feature_guard.cc:142] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2022-03-07 19:20:56.739900: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:185] None of the MLIR Optimization Passes are enabled (registered 2)
-2022-03-07 19:21:48.353957: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-03-07 19:21:48.354020: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-wandb: Currently logged in as: aeaswar81 (use `wandb login --relogin` to force relogin)
-wandb: wandb version 0.12.11 is available!  To upgrade, please run:
-wandb:  $ pip install wandb --upgrade
-2022-03-07 19:21:54.461286: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-03-07 19:21:54.461346: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-
-CondaEnvException: Unable to determine environment
-
-Please re-run this command with one of the following options:
-
-* Provide an environment name via --name or -n
-* Re-run this command inside an activated conda environment.
-
-wandb: Tracking run with wandb version 0.12.1
-wandb: Syncing run yeast_simplenn_groundtruth_0_100shuffles
-wandb: ⭐️ View project at https://wandb.ai/birds/yeast_pvalue_otherstats
-wandb: 🚀 View run at https://wandb.ai/birds/yeast_pvalue_otherstats/runs/8blfajvj
-wandb: Run data is saved locally in /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192152-8blfajvj
-wandb: Run `wandb offline` to turn off syncing.
-2022-03-07 19:21:56.128585: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-03-07 19:21:56.128696: W tensorflow/stream_executor/cuda/cuda_driver.cc:269] failed call to cuInit: UNKNOWN ERROR (303)
-2022-03-07 19:21:56.128798: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (birds): /proc/driver/nvidia/version does not exist
-2022-03-07 19:21:56.129782: I tensorflow/core/platform/cpu_feature_guard.cc:142] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F FMA
-To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2022-03-07 19:21:56.224625: I tensorflow/compiler/mlir/mlir_graph_optimization_pass.cc:185] None of the MLIR Optimization Passes are enabled (registered 2)
-wandb: Network error (ConnectTimeout), entering retry loop.
-wandb: Network error (ConnectTimeout), entering retry loop.
-[34m[1mwandb[0m: Network error resolved after 0:00:56.906639, resuming normal operation.
-[34m[1mwandb[0m: Network error resolved after 0:00:59.058146, resuming normal operation.
-wandb: Network error (ReadTimeout), entering retry loop.
-wandb: Network error (ReadTimeout), entering retry loop.
-[34m[1mwandb[0m: Network error resolved after 0:00:58.204873, resuming normal operation.
-[34m[1mwandb[0m: Network error resolved after 0:00:38.816577, resuming normal operation.
-wandb: Network error (ReadTimeout), entering retry loop.
-[34m[1mwandb[0m: Network error resolved after 0:00:44.717870, resuming normal operation.
-wandb: Waiting for W&B process to finish, PID 207060
-wandb: Program ended successfully.
-wandb: - 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb:                                                                                
-wandb: Find user logs for this run at: /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192052-1hrpwn4b/logs/debug.log
-wandb: Find internal logs for this run at: /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192052-1hrpwn4b/logs/debug-internal.log
-wandb: Run summary:
-wandb:          dataset 999
-wandb:        loss_LA_p 0.0
-wandb:        loss_LB_p 0.04
-wandb:   loss_LA_mutual 0.04446
-wandb:   loss_LB_mutual 0
-wandb:    loss_LA_spear -0.22913
-wandb:    loss_LB_spear -0.06756
-wandb:     loss_LA_pear -0.19919
-wandb:     loss_LB_pear -0.07515
-wandb:    loss_LA_nlcor 0.19919
-wandb:    loss_LB_nlcor 0.09535
-wandb:          true_LA 0.21923
-wandb:          true_LB -0.08061
-wandb:         _runtime 396534
-wandb:       _timestamp 1647057586
-wandb:            _step 999
-wandb: Run history:
-wandb:          dataset ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
-wandb:        loss_LA_p ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁
-wandb:        loss_LB_p ▂▃▁▁▃▂▄▅▆█▂▄▆▁▂▃▅▁▄▅▁▁▆▃▁▁▆▇▂▂▇▆▃▆▇▁▅█▂▇
-wandb:   loss_LA_mutual ▁▁▃▂▂▁▁▃▂▃▃▂▃▂▁▂▂▄▂▁▁▁▁▁▁▂▃█▃▂▁▁▂▁▃▁▁▂▂▁
-wandb:   loss_LB_mutual ▁▄▁▁▆▁▁▂▁▁▅▁▁█▃▁▁▇▅▁▃▄▃▁▂▁▁▆▁▁▁▃▂▄▁▁▄▁▃▁
-wandb:    loss_LA_spear ▅▄▃▃▃▄▆█▃▂█▃█▃▄▄▆▂▃▇▄▆▄▆▄▃▃▁▃▄▆▄▃▅▃▄▄▃▇▄
-wandb:    loss_LB_spear ▅█▇▃▃▄▆▅▃▇▇▇▆▄▄▅▆▃▇▅▄▁▆▆█▆▆▅▇▄█▆▄▇▅▇▆▆█▆
-wandb:     loss_LA_pear ▆▄▃▄▄▄▆█▃▃█▃█▃▅▄▆▃▄▇▄▆▅▆▄▃▃▁▃▄▆▅▃▆▃▅▄▄▇▄
-wandb:     loss_LB_pear ▄▇▇▃▄▄▆▅▃▆▇▇▅▃▃▄▆▃▇▅▃▁▅▅█▆▅▅▇▃█▄▄▆▅▇▆▅█▆
-wandb:    loss_LA_nlcor ▁▃▄▃▃▂▁▅▄▅▄▄▄▄▂▃▂▄▃▃▂▁▁▁▂▄▄█▄▂▁▂▄▁▄▂▂▃▃▂
-wandb:    loss_LB_nlcor ▃▃▂▄▃▃▄▂▃▂▃▂▁▃▃▂▁▄▂▂▃█▄▆▅█▆▁▂▄▄▂█▂▂▃▂▁▅▂
-wandb:          true_LA ▅▃▃▂▂▄▆▃▂▂▄▂▄▂▇▄▃▄▁▃▂▂▄▁▁▂▃▄█▆▆▇▂▅▃▆▂▂▆▃
-wandb:          true_LB ▂▁▄▃▁▃▃▃▁▁▂▃▂█▃▃▂▂▂▂▅▁▁▃▃▂▄▂▂▅▃▃▂▃▄▃▂▁▁▁
-wandb:         _runtime ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇███
-wandb:       _timestamp ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇███
-wandb:            _step ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
-wandb: 
-wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
-wandb: 
-wandb: Synced yeast_simplenn_groundtruth_1_100shuffles: https://wandb.ai/birds/yeast_pvalue_otherstats/runs/1hrpwn4b
-R[write to console]: There were 50 or more warnings (use warnings() to see the first 50)
-R[write to console]: 
-
-wandb: Waiting for W&B process to finish, PID 213617
-wandb: Program ended successfully.
-wandb: - 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.00MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.00MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: - 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: \ 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: | 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb: / 0.01MB of 0.01MB uploaded (0.00MB deduped)wandb:                                                                                
-wandb: Find user logs for this run at: /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192152-8blfajvj/logs/debug.log
-wandb: Find internal logs for this run at: /data/users/cs20s037/CITNonLinear/wandb/run-20220307_192152-8blfajvj/logs/debug-internal.log
-wandb: Run summary:
-wandb:          dataset 999
-wandb:        loss_LA_p 0.0
-wandb:        loss_LB_p 0.01
-wandb:   loss_LA_mutual 0.29343
-wandb:   loss_LB_mutual 0
-wandb:    loss_LA_spear 0.69413
-wandb:    loss_LB_spear 0.07529
-wandb:     loss_LA_pear 0.67126
-wandb:     loss_LB_pear 0.07444
-wandb:    loss_LA_nlcor 0.67126
-wandb:    loss_LB_nlcor 0.07444
-wandb:          true_LA 0.50037
-wandb:          true_LB 0.0575
-wandb:         _runtime 398090
-wandb:       _timestamp 1647059202
-wandb:            _step 999
-wandb: Run history:
-wandb:          dataset ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
-wandb:        loss_LA_p ▁▁▁▁▁▁▇▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁█▁▁▁▁▁▁▁▁▁
-wandb:        loss_LB_p ▄▄▂▂█▆▄▅▁▁▂▂▂▃▃▇▃▂▆▇▁▂▁▃▁▄▅▁▄▅▄▆█▃▆▂▂▂▅▂
-wandb:   loss_LA_mutual █▄▂▃▂▄▁▁▂▄▁▂█▃▁▁▂▅▂▆▁▁▁▁▆▁▁▂▂▁▁▄▃▂▁▆▁▁▅▄
-wandb:   loss_LB_mutual ▁▁▁▂▁▂▁▁█▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▂▁▂▁▂▂▁▁▁▂▂▁▁▁▁▁
-wandb:    loss_LA_spear ▁▇▄▇▄▂▄▆▄▂▄▃▁▂▄▅▄▂▃█▄▄▄▄█▄▄▄▃▅▄▂▇▃▄█▄▄█▂
-wandb:    loss_LB_spear ▆▇▇▆▇▆▆▇▁▇▆▆▇▆▇▇▇▆▇▆▅▆█▇█▇▇▆▆▇▆▆▆▆▇▇▆▆▇▇
-wandb:     loss_LA_pear ▁▇▄▇▄▂▄▆▄▂▄▃▁▂▄▆▄▂▃█▄▄▄▄█▄▄▄▃▅▄▂▇▃▄█▄▄█▂
-wandb:     loss_LB_pear ▆▆▇▆▆▆▆▇▁▇▆▆▆▆▆▆▇▆▆▆▅▆█▆█▆▇▅▆▇▆▆▆▆▇▆▆▆▆▆
-wandb:    loss_LA_nlcor █▆▂▅▂▅▁▂▂▆▁▃█▅▁▂▂▇▄▇▂▂▂▁▇▁▁▂▃▁▁▆▅▃▂▇▂▁▆▆
-wandb:    loss_LB_nlcor ▂▂▁▁▁▁▁▁█▂▁▃▄▁▁▂▂▁▁▁▂▁▃▁▃▃▂▂▁▁▂▁▁▁▂▁▁▂▁▁
-wandb:          true_LA ▄▃▃▁▆▅▄▃▆▄▄▄▄▂▄█▆▃▄▅▃▄▃▄▅▆▂▃▃▅▂▄▁▆▃▅▂▂▁▄
-wandb:          true_LB ▁▃█▆▄▃▂▆▂▃▂▄▁▂▃▂▃▁▄▁▅▂▁▄▂▄▇▂▄▂▃▂▂▃▁▆▅▁▁▆
-wandb:         _runtime ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇███
-wandb:       _timestamp ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇███
-wandb:            _step ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
-wandb: 
-wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
-wandb: 
-wandb: Synced yeast_simplenn_groundtruth_0_100shuffles: https://wandb.ai/birds/yeast_pvalue_otherstats/runs/8blfajvj
-R[write to console]: There were 50 or more warnings (use warnings() to see the first 50)
-R[write to console]: 
-
-2022-06-08 23:53:38.020797: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-06-08 23:53:38.035495: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-2022-06-09 00:00:38.418777: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: :/home/cs20s037/.conda/envs/notears/lib/
-2022-06-09 00:00:38.418850: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
-R[write to console]: There were 33 warnings (use warnings() to see them)
-R[write to console]: 
-
-R[write to console]: There were 50 or more warnings (use warnings() to see the first 50)
-R[write to console]: 
-

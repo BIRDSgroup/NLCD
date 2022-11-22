@@ -4,4 +4,4 @@
 #$ -o outputfile
 #$ -e errorfile
 python3 --version
-python3 nlmrrun.py $runs $ini 
+python3  NLMRNNFILinear.py $runs $ini 
