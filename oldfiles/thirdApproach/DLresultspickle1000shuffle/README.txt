@@ -1,1 +1,0 @@
-Copy it from the other readme txt file
