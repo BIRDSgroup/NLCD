@@ -53,7 +53,7 @@ while(1):
     b = [j for j in line.split()]
     B.append([float(i) for i in b])
 #combine all the samples into a list 
-dataset_linear = [i for i in zip(L,A,B)]
+dataset = [i for i in zip(L,A,B)]
 fo.close()
 
 def gnll_eval(y,alpha, mu, sigma):
@@ -69,6 +69,7 @@ def gnll_eval(y,alpha, mu, sigma):
 
 
 
+    
 def compute_loss(x_test,y_test):
     """ Evaluate the model to get the loss by calculating the mle of mu and sigma 
     """
@@ -125,8 +126,8 @@ def compute_third_testloss(L,A,B,algo):
         regressor.fit(X,B)
 	#with L = 0 and L = 1 give the inputs 
         L_ones=np.ones((L.shape))
-        L_minus=np.ones((L.shape))*0
-        X_zero=np.vstack((L_minus,A)).T
+        L_zeros=np.ones((L.shape))*0
+        X_zero=np.vstack((L_zeros,A)).T
         X_one=np.vstack((L_ones,A)).T
         y_predict_zero=regressor.predict(X_zero)
         y_predict_one=regressor.predict(X_one)
@@ -141,8 +142,8 @@ def compute_third_testloss(L,A,B,algo):
         model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
         model.fit(X, B, epochs=150, batch_size=64,verbose=0)
         L_ones=np.ones((L.shape))
-        L_minus=np.ones((L.shape))*0
-        X_zero=np.vstack((L_minus,A)).T
+        L_zeros=np.ones((L.shape))*0
+        X_zero=np.vstack((L_zeros,A)).T
         X_one=np.vstack((L_ones,A)).T
         y_predict_zero=model.predict(X_zero)
         y_predict_one=model.predict(X_one)
@@ -156,8 +157,8 @@ def compute_third_testloss(L,A,B,algo):
         X=np.vstack((L,A)).T
         regressor.fit(X,B)
         L_ones=np.ones((L.shape))
-        L_minus=np.ones((L.shape))*0
-        X_zero=np.vstack((L_minus,A)).T
+        L_zeros=np.ones((L.shape))*0
+        X_zero=np.vstack((L_zeros,A)).T
         X_one=np.vstack((L_ones,A)).T
         y_predict_zero=regressor.predict(X_zero)
         y_predict_one=regressor.predict(X_one)
@@ -184,8 +185,8 @@ def get_prob(L,A):
     const= p_L0givenA+p_L1givenA
     p_L0givenA_norm= p_L0givenA/const
     p_L1givenA_norm=p_L1givenA/const
-    diff=np.minimum(p_L0givenA_norm,p_L1givenA_norm)
-    return diff
+    overlap=np.minimum(p_L0givenA_norm,p_L1givenA_norm)
+    return overlap
 
 def stratify_B_n_times_diff(L,A,B,n,algo):
     '''
@@ -194,7 +195,7 @@ def stratify_B_n_times_diff(L,A,B,n,algo):
     loss=[]
     indices_1 = [i for i, x in enumerate(L) if x == 1]
     indices_0 = [i for i, x in enumerate(L) if x == 0]
-    diff=get_prob(L,A)
+    overlap=get_prob(L,A)
     for i in range(0,n):
         B_dist_temp=np.zeros(len(B))
         mod_indices_1=random.sample(indices_1,len(indices_1))
@@ -208,7 +209,7 @@ def stratify_B_n_times_diff(L,A,B,n,algo):
         y_pred_ones,y_pred_zeros=compute_third_testloss(L,A,B_dist_temp,algo)
         
        
-        loss.append(sum(np.multiply(abs(y_pred_zeros-y_pred_ones),diff))/len(y_pred_ones))
+        loss.append(sum(np.multiply(abs(y_pred_zeros-y_pred_ones),overlap))/len(y_pred_ones))
     
     return loss
 
@@ -222,7 +223,30 @@ def test_1(L,T,shuffles):
     true_LT=compute_loss(L,T)
     return calculate_pvalue(true_LT,loss_list_LT)
 
-def test_3(L,A,B,shuffles):
+
+def test_4(L,A,B,shuffles,algo):
+    if(algo=="SVR"):  #SVM
+        regressor = SVR(kernel = 'rbf')
+        regressor.fit(B.reshape(-1,1),A)
+        y_predict=regressor.predict(B.reshape(-1,1))
+        y_resid=A-y_predict
+    elif(algo=="KRR"):  #KRR
+        regressor = KernelRidge(kernel = 'rbf')
+        regressor.fit(B.reshape(-1,1),A)
+        y_predict=regressor.predict(B.reshape(-1,1))
+        y_resid=A-y_predict
+    elif(algo=="ANN"):
+        model = Sequential()
+        model.add(Dense(12, input_shape=(1,), activation='relu'))
+        model.add(Dense(8, activation='relu'))
+        model.add(Dense(1, activation='linear'))
+        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
+        model.fit(B, A, epochs=150, batch_size=64,verbose=0)
+        y_pred=model.predict(B)
+        y_resid=A-y_pred.reshape((len(y_pred),))
+    return test_1(L,y_resid,shuffles)
+
+def test_3(L,A,B,shuffles,algo):
     '''
     this function conducts the third test, returns the p-value and the overlap score 
     '''
@@ -231,12 +255,17 @@ def test_3(L,A,B,shuffles):
     loss_list_Bresidual=stratify_B_n_times_diff(L,A_shuffle,B_shuffle,shuffles,algo)
     #calculate the FI score for the original sample 
     y_pred_ones,y_pred_zeros=compute_third_testloss(L,A,B,algo)
-    diff=get_prob(L,A)
-    true_LBresidual=(sum(np.multiply(abs(y_pred_zeros-y_pred_ones),diff))/len(y_pred_ones))
-    cutoff=sum(diff)/len(diff)
+    overlap=get_prob(L,A)
+    true_LBresidual=(sum(np.multiply(abs(y_pred_zeros-y_pred_ones),overlap))/len(y_pred_ones))
+    cutoff=sum(overlap)/len(overlap)
     return [calculate_pvalue(true_LBresidual,loss_list_Bresidual),cutoff]
 
-
+def combine_tests(L,A,B,shuffles,algo):
+    LA_p=test_1(L,A,shuffles)
+    LB_p=test_1(L,B,shuffles)
+    AB_p,cutoff=test_3(L,A,B,shuffles,algo)
+    ALgvnB=test_4(L,A,B,shuffles,algo)
+    return [LA_p,LB_p,AB_p,ALgvnB,cutoff]
 def main_call(i,child_seed):
     '''
     this function is called for each of the samples using Pooling, returns the sample index,p-values and overlap score
@@ -245,30 +274,24 @@ def main_call(i,child_seed):
     sample_seed=rng.integers(2**32 - 1)
     np.random.seed(sample_seed)
     random.seed(sample_seed)
-    A=np.array(dataset_linear[i][1])
-    B=np.array(dataset_linear[i][2])
-    L=np.array(dataset_linear[i][0])
-    LA_p=test_1(L,A,shuffles)
-    LB_p=test_1(L,B,shuffles)
-    AB_p,cutoff=test_3(L,A,B,shuffles)
-    return [i,LA_p,LB_p,AB_p,cutoff]
-
+    A=np.array(dataset[i][1])
+    B=np.array(dataset[i][2])
+    L=np.array(dataset[i][0])
+    #return combine_tests(L,A,B,shuffles,algo)
+    return combine_tests(L,B,A,shuffles,algo)
 
 if __name__ == '__main__':
     #generate a seed and save it to the start of the output file 
-    if(len(sys.argv)==6): #it means seed is already provided 
-        ss = int(sys.argv[5])
-    else:
-	ss = SeedSequence()
+    ss = SeedSequence()
     f=open(outputname,"a")
     f.write("Seed "+ str(ss.entropy))
     f.write("\n")
     f.close()
     #unique child seeds for each of the sample 
-    child_seeds = ss.spawn(len(dataset_linear))
+    child_seeds = ss.spawn(len(dataset))
     #parallelizing , here the number of workers is set as default to the number of cpus, you can modify it  
-    with Pool( initargs=(dataset_linear,)) as pool:
-        res=pool.starmap(main_call, zip(range(len(dataset_linear)), child_seeds))
+    with Pool( initargs=(dataset,)) as pool:
+        res=pool.starmap(main_call, zip(range(len(dataset)), child_seeds))
     
     df=pd.DataFrame(res)
     
