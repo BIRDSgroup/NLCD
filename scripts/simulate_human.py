@@ -14,6 +14,7 @@ import pandas as pd
 from sklearn.kernel_ridge import KernelRidge
 from multiprocessing import Pool
 from numpy.random import SeedSequence
+from sklearn.metrics import mean_squared_error
 import sys
 
 
@@ -214,7 +215,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False):
             original_loss+=FI_score(y_pred_original[i],y_pred_original[j],overlap)
             count+=1
     original_loss/=count
-    return [calculate_pvalue(original_loss,perm_loss,test_2),overlap]
+    return [calculate_pvalue(original_loss,perm_loss,test_2),np.sum(overlap)/len(overlap)]
 
 
 def compute_1_loss(x_test,y_test):
@@ -334,16 +335,16 @@ def combine_tests(L,A,B,shuffles,algo):
     '''
     #LA_p=test_1(L,A,shuffles)
     LB_p=test_1(L,B,shuffles)
-    LAgvnB,cutoff1=test_4(L,B,A,shuffles,algo,True)
+    LAgvnB,overlapscore1=test_4(L,B,A,shuffles,algo,True)
     ABgvnL=test_3(L,A,B,shuffles,algo)
-    LindBgvnA,cutoff2=test_4(L,A,B,shuffles,algo)
+    LindBgvnA,overlapscore2=test_4(L,A,B,shuffles,algo)
     # p value correction for all the tests 
     LB_p_corr=pcorrection(LB_p,shuffles)
     LAgvnB_corr=pcorrection(LAgvnB,shuffles)
     ABgvnL_corr=pcorrection(ABgvnL,shuffles)
     LindBgvnA_corr=pcorrection(LindBgvnA,shuffles)
     p_final=max(LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA)
-    return [p_final,LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA_corr,cutoff1,cutoff2]
+    return [p_final,LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA_corr,overlapscore1,overlapscore2]
 
 
 def main_call(i,child_seed):
