@@ -51,8 +51,7 @@ def main_call(i,child_seed):
     A=np.array(dataset[i][1])
     B=np.array(dataset[i][2])
     L=np.array(dataset[i][0])
-    #return combine_tests(L,A,B,shuffles,algo)
-    return combine_tests(L,B,A,shuffles,algo)
+    return combine_tests(L,A,B,shuffles,algo)
 
 
 if __name__ == '__main__':
