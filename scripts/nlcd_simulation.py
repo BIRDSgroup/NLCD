@@ -9,7 +9,8 @@ data= sys.argv[2]
 outputname= sys.argv[3]
 # fourth argument is for the number of permutations 
 shuffles=int(sys.argv[4])
-
+# fifth argument is whether to check the trios in reverse i.e. L-> B -> A 
+reverse=int(sys.argv[5])
 #read the input file 
 fo=open(data, "r")
 L=[]
@@ -51,7 +52,12 @@ def main_call(i,child_seed):
     A=np.array(dataset[i][1])
     B=np.array(dataset[i][2])
     L=np.array(dataset[i][0])
-    return combine_tests(L,A,B,shuffles,algo)
+    if(reverse==0):
+        return combine_tests(L,A,B,shuffles,algo)
+    elif(reverse==1):
+        return combine_tests(L,B,A,shuffles,algo)
+    else:
+        print("Invalid entry for reverse parameter")
 
 
 if __name__ == '__main__':

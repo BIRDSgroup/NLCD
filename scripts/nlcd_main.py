@@ -108,7 +108,7 @@ def compute_4_loss(L,A,B,algo):
             y_predict_ = model.predict(X_).reshape(-1)
             y_pred.append(y_predict_)
 
-    elif algo == 'KRR':
+    elif algo == "KRR":
         regressor = KernelRidge(kernel='rbf')
         X = np.column_stack((L, A))
         regressor.fit(X, B)
@@ -299,7 +299,7 @@ def combine_tests(L,A,B,shuffles,algo):
     LAgvnB_corr=pcorrection(LAgvnB,shuffles)
     ABgvnL_corr=pcorrection(ABgvnL,shuffles)
     LindBgvnA_corr=pcorrection(LindBgvnA,shuffles)
-    p_final=max(LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA)
+    p_final=np.max([LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA])
     return [p_final,LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA_corr,overlapscore1,overlapscore2]
 
 

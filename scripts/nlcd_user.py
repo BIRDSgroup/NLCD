@@ -1,5 +1,5 @@
 from nlcd_main import *
-def nlcd_group(data,shuffles,algo):
+def nlcd_batch(data,shuffles,algo):
     output=[]
     for i in range(len(data)):
         L=data[i][0]
