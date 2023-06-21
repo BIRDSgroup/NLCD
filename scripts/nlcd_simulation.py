@@ -45,10 +45,13 @@ def main_call(i,child_seed):
     '''
     this function is called for each of the samples using Pooling, returns the sample index,p-values and overlap score
     '''
-    rng=np.random.default_rng(child_seed)
-    sample_seed=rng.integers(2**32 - 1)
-    np.random.seed(sample_seed)
-    random.seed(sample_seed)
+    #rng=np.random.default_rng(child_seed)
+    #sample_seed=rng.integers(2**32 - 1)
+    #child_seed = SeedSequence(child_seed_entropy)
+    seeds = child_seed.spawn(2)
+    np.random.seed(seeds[0])
+    random.seed(seeds[1])
+    #set_random_seed(seeds[2])  #if set_random_seed needed for ANN
     A=np.array(dataset[i][1])
     B=np.array(dataset[i][2])
     L=np.array(dataset[i][0])
