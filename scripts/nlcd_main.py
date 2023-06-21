@@ -281,6 +281,29 @@ def test_2(L,A,B,shuffles,algo):         #using the regression method
         y_resid=A-y_pred.reshape((len(y_pred),))
     return test_1(L,y_resid,shuffles)
 
+def test_2_resid(L,A,B,shuffles,algo):
+    if(algo=="SVR"):  #SVM
+        regressor = SVR(kernel = 'rbf')
+        regressor.fit(B.reshape(-1,1),A)
+        y_predict=regressor.predict(B.reshape(-1,1))
+        y_resid=A-y_predict
+    elif(algo=="KRR"):  #KRR
+        regressor = KernelRidge(kernel = 'rbf')
+        regressor.fit(B.reshape(-1,1),A)
+        y_predict=regressor.predict(B.reshape(-1,1))
+        y_resid=A-y_predict
+    elif(algo=="ANN"):
+        model = Sequential()
+        model.add(Dense(12, input_shape=(1,), activation='relu'))
+        model.add(Dense(8, activation='relu'))
+        model.add(Dense(1, activation='linear'))
+        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
+        model.fit(B, A, epochs=150, batch_size=64,verbose=0)
+        y_pred=model.predict(B)
+
+        y_resid=A-y_pred.reshape((len(y_pred),))
+    Astar=y_predict+np.random.permutation(y_resid)
+    return test_4(L,Astar,B,shuffles,algo,True)
 
 def pcorrection(pval,shuffles):
     return (pval*shuffles+1)/(shuffles+2)
