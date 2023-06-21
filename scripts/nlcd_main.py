@@ -1,4 +1,5 @@
-#to keep track of the total time taken 
+import os 
+os.environ['OMP_NUM_THREADS'] = '1' 
 from tensorflow_probability import distributions as tfd
 from tensorflow.keras.layers import Dense
 import tensorflow as tf
