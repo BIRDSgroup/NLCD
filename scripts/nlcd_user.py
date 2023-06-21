@@ -46,6 +46,10 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
     np.random.seed(sample_seed1)
     random.seed(sample_seed2)
     tf.random.set_seed(sample_seed3)
+    ## check if L is haploid but contains only two unique values 
+    if (2 in L and len(np.unique(L))==2) :
+        print("Hapoloid but only 2 unique values for L hence treating it as diploid")
+        L=np.array([0 if (x == 0 or x == 1) else 1 for x in L])
     if reverse==False:
         out=combine_tests(L,A,B,shuffles,algo)
     elif reverse==True:
