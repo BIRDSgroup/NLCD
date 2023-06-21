@@ -1,4 +1,4 @@
-from nlcd_user import *
+from nlcd_user_alltest import *
 from argparse import ArgumentParser
 def read_data(data):
 
