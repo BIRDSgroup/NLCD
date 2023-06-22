@@ -33,7 +33,7 @@ def calculate_pvalue(original,loss_list,greater=False):
     calculate the p value 
     '''
     if(greater==False):
-        return sum(i < original for i in loss_list)/len(loss_list)
+        return sum(i <= original for i in loss_list)/len(loss_list)
     else:
         #It is reverse in test 2
         return sum(i >= original for i in loss_list)/len(loss_list)
@@ -165,6 +165,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False):
     
 
     y_pred_original=compute_4_loss(L,A,B,algo)
+    assert len(y_pred)==len(y_pred_original)
     original_loss=0
     count=0
     for i in range(len(y_pred_original)):
@@ -303,7 +304,7 @@ def test_2_resid(L,A,B,shuffles,algo):
 
         y_resid=A-y_pred.reshape((len(y_pred),))
     Astar=y_predict+np.random.permutation(y_resid)
-    return test_4(L,Astar,B,shuffles,algo,True)
+    return test_4(L,B,Astar,shuffles,algo,True)
 
 def pcorrection(pval,shuffles):
     return (pval*shuffles+1)/(shuffles+2)
