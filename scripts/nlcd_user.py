@@ -26,7 +26,7 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     et = time.time()
     elapsed_time = et - st
     print('start time: ', st,' end time: ',et, 'Execution time:', elapsed_time, 'seconds')
-    df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 2','OS Test 4','seed']
+    df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 4','seed']
     df=pd.concat([df, pd.DataFrame.from_records([{ 'p_final': 'Parent seed '+str(ss.entropy)}])])
     return df
 
@@ -42,10 +42,14 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
     
     sample_seed1 = rng.integers(2**32 - 1) # numpy will throw an error if the seed is set as sys.maxsize  
     sample_seed2 = rng.integers(sys.maxsize) 
-    sample_seed3 = rng.integers(sys.maxsize)
+    
     np.random.seed(sample_seed1)
     random.seed(sample_seed2)
-    tf.random.set_seed(sample_seed3)
+    if(algo=='ANN'):
+        import tensorflow as tf
+        sample_seed3 = rng.integers(sys.maxsize)
+        tf.random.set_seed(sample_seed3)
+        
     ## check if L is haploid but contains only two unique values 
     if (2 in L and len(np.unique(L))==2) :
         print("Hapoloid but only 2 unique values for L hence treating it as diploid")
@@ -63,9 +67,9 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
         print("Test 2 L assoc A | B ",out[2])
         print("Test 3 A assoc B | L ",out[3])
         print("Test 4 L ind B | A ",out[4])
-        print("Overlap score from Test 2 ",out[5])
-        print("Overlap score from Test 4 ",out[6])
-        print("Seed set at ",out[7])
+        #print("Overlap score from Test 2 ",out[5])
+        print("Overlap score from Test 4 ",out[5])
+        print("Seed set at ",out[6])
         
     
     return out

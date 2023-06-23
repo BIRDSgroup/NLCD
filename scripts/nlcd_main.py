@@ -1,11 +1,9 @@
 import os 
-os.environ['OMP_NUM_THREADS'] = '1' 
-from tensorflow_probability import distributions as tfd
-from tensorflow.keras.layers import Dense
-import tensorflow as tf
+os.environ['OMP_NUM_THREADS'] = '1'  ## This will prevent KRR algo from thrashing the server
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # This is to stop all the tensorflow warnings and infos 
+#not importing tensorflow packages here, as it will slowdown the parallelism. 
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-from tensorflow.keras.models import Sequential
 import random
 import numpy as np
 from sklearn.svm import SVR
@@ -19,6 +17,8 @@ import sys
 def gnll_eval(y,alpha, mu, sigma):
     """ Computes the mean negative log-likelihood loss of y given the mixture parameters.
     """
+    from tensorflow_probability import distributions as tfd
+    import tensorflow as tf
     gm = tfd.MixtureSameFamily(
         mixture_distribution=tfd.Categorical(probs=alpha),
         components_distribution=tfd.Normal(
@@ -93,6 +93,8 @@ def compute_4_loss(L,A,B,algo):
 
     
     elif algo=="ANN":
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import Dense
         model = Sequential()
         model.add(Dense(12, input_shape=(2,), activation='relu'))
         model.add(Dense(8, activation='relu'))
@@ -217,6 +219,8 @@ def test_3_loss(A,B,algo):
         y_predict = regressor.predict(A.reshape(-1, 1))
 
     elif algo == "ANN":
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import Dense
         model = Sequential([
             Dense(12, input_shape=(1,), activation='relu'),
             Dense(8, activation='relu'),
@@ -272,6 +276,8 @@ def test_2(L,A,B,shuffles,algo):         #using the regression method
         y_predict=regressor.predict(B.reshape(-1,1))
         y_resid=A-y_predict
     elif(algo=="ANN"):
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import Dense
         model = Sequential()
         model.add(Dense(12, input_shape=(1,), activation='relu'))
         model.add(Dense(8, activation='relu'))
@@ -294,6 +300,8 @@ def test_2_resid(L,A,B,shuffles,algo):
         y_predict=regressor.predict(B.reshape(-1,1))
         y_resid=A-y_predict
     elif(algo=="ANN"):
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import Dense
         model = Sequential()
         model.add(Dense(12, input_shape=(1,), activation='relu'))
         model.add(Dense(8, activation='relu'))
@@ -316,7 +324,8 @@ def combine_tests(L,A,B,shuffles,algo):
     '''
     #LA_p=test_1(L,A,shuffles)
     LB_p=test_1(L,B,shuffles)
-    LAgvnB,overlapscore1=test_4(L,B,A,shuffles,algo,True)
+    #LAgvnB,overlapscore1=test_4(L,B,A,shuffles,algo,True)
+    LAgvnB=test_2(L,A,B,shuffles,algo)
     ABgvnL=test_3(L,A,B,shuffles,algo)
     LindBgvnA,overlapscore2=test_4(L,A,B,shuffles,algo)
     # p value correction for all the tests 
@@ -325,6 +334,6 @@ def combine_tests(L,A,B,shuffles,algo):
     ABgvnL_corr=pcorrection(ABgvnL,shuffles)
     LindBgvnA_corr=pcorrection(LindBgvnA,shuffles)
     p_final=np.max([LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA])
-    return [p_final,LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA_corr,overlapscore1,overlapscore2]
+    return [p_final,LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA_corr,overlapscore2]
 
 
