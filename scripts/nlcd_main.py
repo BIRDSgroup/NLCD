@@ -125,7 +125,7 @@ def stratify_permute_variable(L, variable):
 
     for value in unique_values:
         indices = np.where(L == value)[0]
-        permuted_indices = np.random.choice(indices, len(indices))
+        permuted_indices = np.random.choice(indices, len(indices),replace=False)
         permuted_variable[indices] = variable[permuted_indices]
 
     return permuted_variable
