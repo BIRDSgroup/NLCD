@@ -2,60 +2,43 @@ import os
 os.environ['OMP_NUM_THREADS'] = '1'  ## This will prevent KRR algo from thrashing the server
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # This is to stop all the tensorflow warnings and infos 
 #not importing tensorflow packages here, as it will slowdown the parallelism. 
-import matplotlib.pyplot as plt
 from scipy.stats import norm
 import random
 import numpy as np
 from sklearn.svm import SVR
-import pandas as pd
 from sklearn.kernel_ridge import KernelRidge
-from multiprocessing import Pool
-from numpy.random import SeedSequence
 from sklearn.metrics import mean_squared_error
-import sys
+from sklearn.neural_network import MLPRegressor
+from sklearn.utils._testing import ignore_warnings
+from sklearn.exceptions import ConvergenceWarning
 
-def nlr_train_predict(xG, yG, algo, xL=None)
-'''
-Non-linear regression (NLR); 
-uses input gene xG and optionally input genotype xL to predict output gene yG, using the specified NLR algo
-returns predicted values and trained model (regressor)
-'''
-    if xL==None:
-        x = xG
+@ignore_warnings(category=ConvergenceWarning)
+def nlr_train_predict(xG, yG, algo, xL=None):
+    '''
+    Non-linear regression (NLR); 
+    uses input gene xG and optionally input genotype xL to predict output gene yG, using the specified NLR algo
+    returns predicted values and trained model (regressor)
+    '''
+    if xL is None :
+        x = xG.reshape(-1,1)
     else:
         x = np.column_stack((xL, xG))
         
-    if (algo=="SVR" or algo=="KRR")
-        if(algo=="SVR"):  #SVM
-            regressor = SVR(kernel = 'rbf')
-        else:
-            regressor = KernelRidge(kernel = 'rbf')
-        #regressor.fit(B.reshape(-1,1),A)
-        #y_predict=regressor.predict(B.reshape(-1,1))
-        #y_resid=A-y_predict
-        regressor.fit(x,yG)
-        y_pred = regressor.predict(x)
-        #y_resid=yG - y_pred
+            
+    if(algo=="SVR"):  #SVM
+        regressor = SVR(kernel = 'rbf')
+    elif(algo=="KRR"):
+        regressor = KernelRidge(kernel = 'rbf')
     elif(algo=="ANN"):
-        from tensorflow.keras.models import Sequential
-        from tensorflow.keras.layers import Dense
-        model = Sequential()
-        model.add(Dense(12, input_shape=(1,), activation='relu'))
-        model.add(Dense(8, activation='relu'))
-        model.add(Dense(1, activation='linear'))
-        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
-        #model.fit(B, A, epochs=150, batch_size=64,verbose=0)
-        #y_pred = model.predict(B)
-        #y_resid = A - y_pred.reshape((len(y_pred),))
-        model.fit(x, yG, epochs=150, batch_size=64, verbose=0)
-        y_pred = model.predict(x)
-        y_pred = y_pred.reshape((len(y_pred),))
-        y_resid = yG - y_pred
-        regressor = model
+        regressor=MLPRegressor()
     else:
+        print("Invalid Algorithm")
         assert False
         
-    return (y_pred, regressor)
+    regressor.fit(x,yG)
+    y_pred = regressor.predict(x)
+        
+    return y_pred,regressor
 
 
 def gnll_eval(y,alpha, mu, sigma):
@@ -103,7 +86,6 @@ def get_prob(L,A):
 
     diff=np.minimum.reduce(probs)
 
-
     return diff/norm_const
 
 
@@ -125,10 +107,11 @@ def compute_Luniqs_predns(L,A,B,algo):
     #regressor = SVR(kernel='rbf')
     #X = np.column_stack((L, A))
     #regressor.fit(X, B)
-    Bpred, regressor = nlr_train_predict(A, B, algo, L)
+    y_pred = []
+    _, regressor = nlr_train_predict(A, B, algo, L)
     
     unique_values = np.unique(L)
-    y_pred = []
+    
     for value in unique_values:
         L_1 = np.full_like(L, value)
         X_ = np.column_stack((L_1, A))
@@ -166,10 +149,10 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
                     y_pred=compute_Luniqs_predns(L,A,np.random.permutation(B),algo) #test2.v2
                 else:
                     Bstar = Bpred+random.permutation(B-Bpred)
-                    y_pred=compute__Luniqs_predns(L,A,Bstar,algo) #test2.v3
+                    y_pred=compute_Luniqs_predns(L,A,Bstar,algo) #test2.v3
+            
             total_FI=0
             count=0
-        
             for i in range(len(y_pred)):
                 for j in range(i + 1, len(y_pred)):
                     total_FI+=FI_score(y_pred[i],y_pred[j],overlap)
@@ -177,8 +160,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
             total_FI/=count
             perm_loss.append(total_FI)
     
-
-    y_pred_original=compute_t4_predns(L,A,B,algo)
+    y_pred_original=compute_Luniqs_predns(L,A,B,algo)
     assert len(y_pred)==len(y_pred_original)
     original_loss=0
     count=0
@@ -186,6 +168,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
         for j in range(i + 1, len(y_pred_original)):
             original_loss+=FI_score(y_pred_original[i],y_pred_original[j],overlap)
             count+=1
+
     original_loss/=count
     return [calculate_pvalue(original_loss,perm_loss,test_2),np.sum(overlap)/len(overlap)]
 
@@ -233,6 +216,7 @@ def test_3(L,A,B,shuffles,algo):
     '''
     unique_values = np.unique(L)
     p_values = []
+
     for value in unique_values:
         indices = np.where(L == value)
         A_value = A[indices]
@@ -247,7 +231,7 @@ def test_3(L,A,B,shuffles,algo):
     return max_p_value
 
 
-def test_2(L,A,B,shuffles,algo, version=1)
+def test_2(L,A,B,shuffles,algo, version=1):
     if version==1:   #using the regression method (test2.v1)
         Apred, _ = nlr_train_predict(B, A, algo)
         Aresid = A - Apred
@@ -260,17 +244,11 @@ def test_2(L,A,B,shuffles,algo, version=1)
     return out    
 
 
-#def pcorrection(pval,shuffles):
-#    return (pval*shuffles+1)/(shuffles+2)
-
-
 def combine_tests(L,A,B,shuffles,algo):
     '''
     Function to combine all the tests 
     '''
-    #LA_p=test_1(L,A,shuffles)
     LB_p=test_1(L,B,shuffles)
-    #LAgvnB,overlapscore1=test_4(L,B,A,shuffles,algo,True)
     LAgvnB=test_2(L,A,B,shuffles,algo,version=1)
     ABgvnL=test_3(L,A,B,shuffles,algo)
     LindBgvnA,overlapscore2=test_4(L,A,B,shuffles,algo)
