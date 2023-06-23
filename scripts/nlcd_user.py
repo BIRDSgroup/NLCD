@@ -29,8 +29,8 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     et = time.time()
     elapsed_time = et - st
     print('start time: ', st,' end time: ',et, 'Execution time:', elapsed_time, 'seconds')
-    df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 4','seed']
-    df=pd.concat([df, pd.DataFrame.from_records([{ 'p_final': 'Parent seed '+str(ss.entropy)}])])
+    df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 4','child_seed']
+    df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
     return df
 
 def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False):
@@ -44,14 +44,12 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
     rng=np.random.default_rng(sample_seed)
     
     sample_seed1 = rng.integers(2**32 - 1) # numpy will throw an error if the seed is set as sys.maxsize  
-    sample_seed2 = rng.integers(sys.maxsize) 
+    #sample_seed2 = rng.integers(sys.maxsize) 
     
     np.random.seed(sample_seed1)
-    random.seed(sample_seed2)
-    if(algo=='ANN'):
-        import tensorflow as tf
-        sample_seed3 = rng.integers(sys.maxsize)
-        tf.random.set_seed(sample_seed3)
+    #random.seed(sample_seed2)
+        #sample_seed3 = rng.integers(sys.maxsize)
+        #tf.random.set_seed(sample_seed3)
         
     ## check if L is haploid but contains only two unique values 
     if (2 in L and len(np.unique(L))==2) :

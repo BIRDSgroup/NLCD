@@ -11,7 +11,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.neural_network import MLPRegressor
 from sklearn.utils._testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
-
+from tensorflow_probability import distributions as tfd
 @ignore_warnings(category=ConvergenceWarning)
 def nlr_train_predict(xG, yG, algo, xL=None):
     '''
@@ -44,15 +44,13 @@ def nlr_train_predict(xG, yG, algo, xL=None):
 def gnll_eval(y,alpha, mu, sigma):
     """ Computes the mean negative log-likelihood loss of y given the mixture parameters.
     """
-    from tensorflow_probability import distributions as tfd
-    import tensorflow as tf
     gm = tfd.MixtureSameFamily(
         mixture_distribution=tfd.Categorical(probs=alpha),
         components_distribution=tfd.Normal(
             loc=mu,       
             scale=sigma))
-    log_likelihood = gm.log_prob(tf.transpose(y))
-    return -tf.reduce_mean(log_likelihood, axis=-1)
+    log_likelihood = gm.log_prob(np.transpose(y))
+    return -np.mean(log_likelihood, axis=-1)
 
 
 def calculate_pvalue(original, loss_list, greater=False):
@@ -104,9 +102,6 @@ def compute_Luniqs_predns(L,A,B,algo):
     '''
     Function to calculate the predictions of y for different values of L in the 4th (or 2nd) test 
     '''
-    #regressor = SVR(kernel='rbf')
-    #X = np.column_stack((L, A))
-    #regressor.fit(X, B)
     y_pred = []
     _, regressor = nlr_train_predict(A, B, algo, L)
     
@@ -130,7 +125,7 @@ def stratify_permute_variable(L, variable):
 
     for value in unique_values:
         indices = np.where(L == value)[0]
-        permuted_indices = random.sample(list(indices), len(indices))
+        permuted_indices = np.random.choice(indices, len(indices))
         permuted_variable[indices] = variable[permuted_indices]
 
     return permuted_variable
@@ -148,7 +143,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
                 if Bpred==None: 
                     y_pred=compute_Luniqs_predns(L,A,np.random.permutation(B),algo) #test2.v2
                 else:
-                    Bstar = Bpred+random.permutation(B-Bpred)
+                    Bstar = Bpred+np.random.permutation(B-Bpred)
                     y_pred=compute_Luniqs_predns(L,A,Bstar,algo) #test2.v3
             
             total_FI=0
@@ -189,7 +184,7 @@ def compute_1_loss(x_test,y_test):
         y_std[indices] = sigma
     #alpha is the probability of each distributiton, here we are all having it as 1 
     alpha=np.ones((len(y_mean),1))
-    return gnll_eval(y_test,alpha,y_mean.reshape((-1,1)),y_std.reshape((-1,1))).numpy()
+    return gnll_eval(y_test,alpha,y_mean.reshape((-1,1)),y_std.reshape((-1,1)))#.numpy()
 
 def test_1(L,B,shuffles):
     '''
@@ -198,6 +193,7 @@ def test_1(L,B,shuffles):
     perm_loss=[]
     for i in range(0,shuffles):
         perm_loss.append(compute_1_loss(L,np.random.permutation(B)))
+
     original_loss=compute_1_loss(L,B)
     return calculate_pvalue(original_loss,perm_loss)    
 
@@ -218,7 +214,7 @@ def test_3(L,A,B,shuffles,algo):
     p_values = []
 
     for value in unique_values:
-        indices = np.where(L == value)
+        indices = np.where(L == value)[0]
         A_value = A[indices]
         B_value = B[indices]
         
