@@ -14,6 +14,50 @@ from numpy.random import SeedSequence
 from sklearn.metrics import mean_squared_error
 import sys
 
+def nlr_train_predict(xG, yG, algo, xL=None)
+'''
+Non-linear regression (NLR); 
+uses input gene xG and optionally input genotype xL to predict output gene yG, using the specified NLR algo
+returns predicted values and trained model (regressor)
+'''
+    if xL==None:
+        x = xG
+    else:
+        x = np.column_stack((xL, xG))
+        
+    if (algo=="SVR" or algo=="KRR")
+        if(algo=="SVR"):  #SVM
+            regressor = SVR(kernel = 'rbf')
+        else:
+            regressor = KernelRidge(kernel = 'rbf')
+        #regressor.fit(B.reshape(-1,1),A)
+        #y_predict=regressor.predict(B.reshape(-1,1))
+        #y_resid=A-y_predict
+        regressor.fit(x,yG)
+        y_pred = regressor.predict(x)
+        #y_resid=yG - y_pred
+    elif(algo=="ANN"):
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import Dense
+        model = Sequential()
+        model.add(Dense(12, input_shape=(1,), activation='relu'))
+        model.add(Dense(8, activation='relu'))
+        model.add(Dense(1, activation='linear'))
+        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
+        #model.fit(B, A, epochs=150, batch_size=64,verbose=0)
+        #y_pred = model.predict(B)
+        #y_resid = A - y_pred.reshape((len(y_pred),))
+        model.fit(x, yG, epochs=150, batch_size=64, verbose=0)
+        y_pred = model.predict(x)
+        y_pred = y_pred.reshape((len(y_pred),))
+        y_resid = yG - y_pred
+        regressor = model
+    else:
+        assert False
+        
+    return (y_pred, regressor)
+
+
 def gnll_eval(y,alpha, mu, sigma):
     """ Computes the mean negative log-likelihood loss of y given the mixture parameters.
     """
@@ -28,16 +72,17 @@ def gnll_eval(y,alpha, mu, sigma):
     return -tf.reduce_mean(log_likelihood, axis=-1)
 
 
-def calculate_pvalue(original,loss_list,greater=False):
+def calculate_pvalue(original, loss_list, greater=False):
     '''
-    calculate the p value 
+    calculate the p value (with +1/+2 correction) 
     '''
     if(greater==False):
-        return sum(i <= original for i in loss_list)/len(loss_list)
+        pvalNr = sum(i <= original for i in loss_list)
     else:
         #It is reverse in test 2
-        return sum(i >= original for i in loss_list)/len(loss_list)
-
+        pvalNr = sum(i >= original for i in loss_list)
+    return (pvalNr + 1)/(len(loss_list) + 2)
+    
 
 def get_prob(L,A):
     '''
@@ -73,57 +118,23 @@ def FI_score(x,y,overlap ):
     return np.sum(np.multiply(diff,overlap))/len(x)
 
 
-def compute_4_loss(L,A,B,algo):
+def compute_Luniqs_predns(L,A,B,algo):
     '''
-    Function to calculate the predictions of y for different values of L in the 4th test 
+    Function to calculate the predictions of y for different values of L in the 4th (or 2nd) test 
     '''
+    #regressor = SVR(kernel='rbf')
+    #X = np.column_stack((L, A))
+    #regressor.fit(X, B)
+    Bpred, regressor = nlr_train_predict(A, B, algo, L)
+    
     unique_values = np.unique(L)
     y_pred = []
-
-    if algo == "SVR":
-        regressor = SVR(kernel='rbf')
-        X = np.column_stack((L, A))
-        regressor.fit(X, B)
-
-        for value in unique_values:
-            L_1 = np.full_like(L, value)
-            X_ = np.column_stack((L_1, A))
-            y_predict_ = regressor.predict(X_)
-            y_pred.append(y_predict_)
-
+    for value in unique_values:
+        L_1 = np.full_like(L, value)
+        X_ = np.column_stack((L_1, A))
+        y_predict_ = regressor.predict(X_)
+        y_pred.append(y_predict_)
     
-    elif algo=="ANN":
-        from tensorflow.keras.models import Sequential
-        from tensorflow.keras.layers import Dense
-        model = Sequential()
-        model.add(Dense(12, input_shape=(2,), activation='relu'))
-        model.add(Dense(8, activation='relu'))
-        model.add(Dense(1, activation='linear'))
-
-        X = np.column_stack((L, A))
-
-        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
-        model.fit(X, B, epochs=150, batch_size=64,verbose=0)
-
-        for value in unique_values:
-            L_1 = np.full_like(L, value)
-            X_ = np.column_stack((L_1, A))
-            y_predict_ = model.predict(X_).reshape(-1)
-            y_pred.append(y_predict_)
-
-    elif algo == "KRR":
-        regressor = KernelRidge(kernel='rbf')
-        X = np.column_stack((L, A))
-        regressor.fit(X, B)
-
-        for value in unique_values:
-            L_1 = np.full_like(L, value)
-            X_ = np.column_stack((L_1, A))
-            y_predict_ = regressor.predict(X_)
-            y_pred.append(y_predict_)
-    else:
-        print("Invalid Algorithm")
-
     return y_pred
 
 
@@ -141,20 +152,21 @@ def stratify_permute_variable(L, variable):
 
     return permuted_variable
 
-
-def test_4(L,A,B,shuffles,algo,test_2=False):
+def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
     '''
     Function for the 4th test , same function is used for the second test 
     '''
-
     overlap=get_prob(L,A)
     perm_loss=[]
     for i in range(shuffles):
             if test_2==False:
-                y_pred=compute_4_loss(L,A,stratify_permute_variable(L,B),algo)
-            else:
-            
-                y_pred=compute_4_loss(L,A,np.random.permutation(B),algo) 
+                y_pred=compute_Luniqs_predns(L,A,stratify_permute_variable(L,B),algo)
+            else:            
+                if Bpred==None: 
+                    y_pred=compute_Luniqs_predns(L,A,np.random.permutation(B),algo) #test2.v2
+                else:
+                    Bstar = Bpred+random.permutation(B-Bpred)
+                    y_pred=compute__Luniqs_predns(L,A,Bstar,algo) #test2.v3
             total_FI=0
             count=0
         
@@ -166,7 +178,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False):
             perm_loss.append(total_FI)
     
 
-    y_pred_original=compute_4_loss(L,A,B,algo)
+    y_pred_original=compute_t4_predns(L,A,B,algo)
     assert len(y_pred)==len(y_pred_original)
     original_loss=0
     count=0
@@ -196,7 +208,6 @@ def compute_1_loss(x_test,y_test):
     alpha=np.ones((len(y_mean),1))
     return gnll_eval(y_test,alpha,y_mean.reshape((-1,1)),y_std.reshape((-1,1))).numpy()
 
-
 def test_1(L,B,shuffles):
     '''
     Function for the first test 
@@ -212,110 +223,45 @@ def test_3_loss(A,B,algo):
     '''
     function to return the loss in the third function 
     '''
-    
-    if algo == "SVR":
-        regressor = SVR(kernel='rbf')
-        regressor.fit(A.reshape(-1, 1), B)
-        y_predict = regressor.predict(A.reshape(-1, 1))
-
-    elif algo == "ANN":
-        from tensorflow.keras.models import Sequential
-        from tensorflow.keras.layers import Dense
-        model = Sequential([
-            Dense(12, input_shape=(1,), activation='relu'),
-            Dense(8, activation='relu'),
-            Dense(1, activation='linear')
-        ])
-        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
-        model.fit(A, B, epochs=150, batch_size=64, verbose=0)
-        y_predict = model.predict(A)
-
-    elif algo == "KRR":
-        regressor = KernelRidge(kernel='rbf')
-        regressor.fit(A.reshape(-1, 1), B)
-        y_predict = regressor.predict(A.reshape(-1, 1))
-
-    mse = mean_squared_error(B, y_predict)
-
+    Bpred, _ = nlr_train_predict(A, B, algo)
+    mse = mean_squared_error(B, Bpred)
     return mse
-
-
+    
 def test_3(L,A,B,shuffles,algo):
     '''
     function for the third tes t
     '''
-
     unique_values = np.unique(L)
-
     p_values = []
-
     for value in unique_values:
         indices = np.where(L == value)
         A_value = A[indices]
         B_value = B[indices]
         
         original_loss = test_3_loss(A_value, B_value, algo)
-        perm_loss = [test_3_loss(A_value, np.random.permutation(B_value), algo) for _ in range(shuffles)]
-        p_value = calculate_pvalue(original_loss, perm_loss)
+        perm_losses = [test_3_loss(A_value, np.random.permutation(B_value), algo) for _ in range(shuffles)]
+        p_value = calculate_pvalue(original_loss, perm_losses)
         p_values.append(p_value)
-
+        
     max_p_value = max(p_values)
-
     return max_p_value
 
 
-def test_2(L,A,B,shuffles,algo):         #using the regression method
-    if(algo=="SVR"):  #SVM
-        regressor = SVR(kernel = 'rbf')
-        regressor.fit(B.reshape(-1,1),A)
-        y_predict=regressor.predict(B.reshape(-1,1))
-        y_resid=A-y_predict
-    elif(algo=="KRR"):  #KRR
-        regressor = KernelRidge(kernel = 'rbf')
-        regressor.fit(B.reshape(-1,1),A)
-        y_predict=regressor.predict(B.reshape(-1,1))
-        y_resid=A-y_predict
-    elif(algo=="ANN"):
-        from tensorflow.keras.models import Sequential
-        from tensorflow.keras.layers import Dense
-        model = Sequential()
-        model.add(Dense(12, input_shape=(1,), activation='relu'))
-        model.add(Dense(8, activation='relu'))
-        model.add(Dense(1, activation='linear'))
-        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
-        model.fit(B, A, epochs=150, batch_size=64,verbose=0)
-        y_pred=model.predict(B)
-        y_resid=A-y_pred.reshape((len(y_pred),))
-    return test_1(L,y_resid,shuffles)
+def test_2(L,A,B,shuffles,algo, version=1)
+    if version==1:   #using the regression method (test2.v1)
+        Apred, _ = nlr_train_predict(B, A, algo)
+        Aresid = A - Apred
+        out = test_1(L, Aresid, shuffles)
+    elif version==2: #using FI-based A_perm (test2.v2)
+        out = test_4(L,B,A,shuffles,algo,test_2=True)
+    elif version==3: #using FI-based A_stratperm_wrt_B (test2.v3)
+        Apred, _ = nlr_train_predict(B, A, algo)
+        out = test_4(L,B,A,shuffles,algo,True,Apred)
+    return out    
 
-def test_2_resid(L,A,B,shuffles,algo):
-    if(algo=="SVR"):  #SVM
-        regressor = SVR(kernel = 'rbf')
-        regressor.fit(B.reshape(-1,1),A)
-        y_predict=regressor.predict(B.reshape(-1,1))
-        y_resid=A-y_predict
-    elif(algo=="KRR"):  #KRR
-        regressor = KernelRidge(kernel = 'rbf')
-        regressor.fit(B.reshape(-1,1),A)
-        y_predict=regressor.predict(B.reshape(-1,1))
-        y_resid=A-y_predict
-    elif(algo=="ANN"):
-        from tensorflow.keras.models import Sequential
-        from tensorflow.keras.layers import Dense
-        model = Sequential()
-        model.add(Dense(12, input_shape=(1,), activation='relu'))
-        model.add(Dense(8, activation='relu'))
-        model.add(Dense(1, activation='linear'))
-        model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mean_squared_error'])
-        model.fit(B, A, epochs=150, batch_size=64,verbose=0)
-        y_pred=model.predict(B)
 
-        y_resid=A-y_pred.reshape((len(y_pred),))
-    Astar=y_predict+np.random.permutation(y_resid)
-    return test_4(L,B,Astar,shuffles,algo,True)
-
-def pcorrection(pval,shuffles):
-    return (pval*shuffles+1)/(shuffles+2)
+#def pcorrection(pval,shuffles):
+#    return (pval*shuffles+1)/(shuffles+2)
 
 
 def combine_tests(L,A,B,shuffles,algo):
@@ -325,15 +271,10 @@ def combine_tests(L,A,B,shuffles,algo):
     #LA_p=test_1(L,A,shuffles)
     LB_p=test_1(L,B,shuffles)
     #LAgvnB,overlapscore1=test_4(L,B,A,shuffles,algo,True)
-    LAgvnB=test_2(L,A,B,shuffles,algo)
+    LAgvnB=test_2(L,A,B,shuffles,algo,version=1)
     ABgvnL=test_3(L,A,B,shuffles,algo)
     LindBgvnA,overlapscore2=test_4(L,A,B,shuffles,algo)
-    # p value correction for all the tests 
-    LB_p_corr=pcorrection(LB_p,shuffles)
-    LAgvnB_corr=pcorrection(LAgvnB,shuffles)
-    ABgvnL_corr=pcorrection(ABgvnL,shuffles)
-    LindBgvnA_corr=pcorrection(LindBgvnA,shuffles)
-    p_final=np.max([LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA])
-    return [p_final,LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA_corr,overlapscore2]
+    p_final=np.max([LB_p,LAgvnB,ABgvnL,LindBgvnA])
+    return [p_final,LB_p,LAgvnB,ABgvnL,LindBgvnA,overlapscore2]
 
 
