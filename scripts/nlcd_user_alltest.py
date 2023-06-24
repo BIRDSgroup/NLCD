@@ -11,7 +11,7 @@ def combine_tests(L,A,B,shuffles,algo):
     #LA_p=test_1(L,A,shuffles)
     LB_p=test_1(L,B,shuffles)
     LAgvnBv1=test_2(L,A,B,shuffles,algo,version=1)
-    LAgvnBv2,overlapscoret2v2=test_2(L,B,A,shuffles,algo,version=2) # v2
+    LAgvnBv2,overlapscoret2v2=test_2(L,A,B,shuffles,algo,version=2) # v2
     LAgvnBv3,overlapscoret2v3=test_2(L,A,B,shuffles,algo,version=3)
     ABgvnL=test_3(L,A,B,shuffles,algo)
     LindBgvnA,overlapscoret4=test_4(L,A,B,shuffles,algo)
