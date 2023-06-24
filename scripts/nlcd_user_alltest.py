@@ -1,25 +1,21 @@
 from nlcd_main import *
-import time 
+import time
+import sys
+from numpy.random import SeedSequence
+from multiprocessing import Pool
+import pandas as pd 
 def combine_tests(L,A,B,shuffles,algo):
     '''
     Function to combine all the tests 
     '''
     #LA_p=test_1(L,A,shuffles)
     LB_p=test_1(L,B,shuffles)
-    LAgvnBv1=test_2(L,A,B,shuffles,algo)
-    LAgvnBv2,overlapscoret2v2=test_4(L,B,A,shuffles,algo,True) # v2
-    LAgvnBv3,overlapscoret2v3=test_2_resid(L,A,B,shuffles,algo)
+    LAgvnBv1=test_2(L,A,B,shuffles,algo,version=1)
+    LAgvnBv2,overlapscoret2v2=test_2(L,B,A,shuffles,algo,version=2) # v2
+    LAgvnBv3,overlapscoret2v3=test_2(L,A,B,shuffles,algo,version=3)
     ABgvnL=test_3(L,A,B,shuffles,algo)
     LindBgvnA,overlapscoret4=test_4(L,A,B,shuffles,algo)
-    # p value correction for all the tests 
-    LB_p_corr=pcorrection(LB_p,shuffles)
-    LAgvnBv1_corr=pcorrection(LAgvnBv1,shuffles)
-    LAgvnBv2_corr=pcorrection(LAgvnBv2,shuffles)
-    LAgvnBv3_corr=pcorrection(LAgvnBv3,shuffles)
-    ABgvnL_corr=pcorrection(ABgvnL,shuffles)
-    LindBgvnA_corr=pcorrection(LindBgvnA,shuffles)
-    #p_final=np.max([LB_p_corr,LAgvnB_corr,ABgvnL_corr,LindBgvnA])
-    return [LB_p_corr,LAgvnBv1_corr,LAgvnBv2_corr,LAgvnBv3_corr,ABgvnL_corr,LindBgvnA_corr,overlapscoret2v2,overlapscoret2v3,overlapscoret4]
+    return [LB_p,LAgvnBv1,LAgvnBv2,LAgvnBv3,ABgvnL,LindBgvnA,overlapscoret2v2,overlapscoret2v3,overlapscoret4]
 
 def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     st = time.time()
@@ -47,7 +43,7 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     print('start time: ', st,' end time: ',et, 'Execution time:', elapsed_time, 'seconds')
     df.columns=['LB_p','LA|Bv1','LA|Bv2','LA|Bv3','AB|L','LindB|A','OSt2v2','OSt2v3','OSt4','seed']
     #save the seed in the end 
-    df=pd.concat([df, pd.DataFrame.from_records([{ 'LB_p': 'Parent seed '+str(ss.entropy)}])])
+    df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
     return df
 
 def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False):
@@ -61,11 +57,7 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
     rng=np.random.default_rng(sample_seed)
     
     sample_seed1 = rng.integers(2**32 - 1) # numpy will throw an error if the seed is set as sys.maxsize  
-    sample_seed2 = rng.integers(sys.maxsize) 
-    sample_seed3 = rng.integers(sys.maxsize)
     np.random.seed(sample_seed1)
-    random.seed(sample_seed2)
-    tf.random.set_seed(sample_seed3)
     ## check if L is haploid but contains only two unique values 
     if (2 in L and len(np.unique(L))==2) :
         print("Hapoloid but only 2 unique values for L hence treating it as diploid")
@@ -78,6 +70,7 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
         print("Invalid entry for reverse parameter")
     out.append(sample_seed)
     if verbose==True:
+	#need to modify these print statements 
         print("The final p value is ",out[0])
         print("Test 1 L assoc B ",out[1])
         print("Test 2 L assoc A | B ",out[2])
