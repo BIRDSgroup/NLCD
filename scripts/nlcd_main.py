@@ -140,7 +140,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
             if test_2==False:
                 y_pred=compute_Luniqs_predns(L,A,stratify_permute_variable(L,B),algo)
             else:            
-                if Bpred==None: 
+                if Bpred is None: 
                     y_pred=compute_Luniqs_predns(L,A,np.random.permutation(B),algo) #test2.v2
                 else:
                     Bstar = Bpred+np.random.permutation(B-Bpred)
