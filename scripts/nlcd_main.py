@@ -152,6 +152,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
                 for j in range(i + 1, len(y_pred)):
                     total_FI+=FI_score(y_pred[i],y_pred[j],overlap)
                     count+=1
+            assert count>0
             total_FI/=count
             perm_loss.append(total_FI)
     
@@ -163,7 +164,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
         for j in range(i + 1, len(y_pred_original)):
             original_loss+=FI_score(y_pred_original[i],y_pred_original[j],overlap)
             count+=1
-
+    assert count>0
     original_loss/=count
     return [calculate_pvalue(original_loss,perm_loss,test_2),np.sum(overlap)/len(overlap)]
 
@@ -244,6 +245,12 @@ def combine_tests(L,A,B,shuffles,algo):
     '''
     Function to combine all the tests 
     '''
+    if( len(np.unique(L))==1):
+        print("Zero variance of L, skipping trio")
+        return [None]*6
+    if( 1 in [sum(L==x) for x in np.unique(L)] ):
+        print(" Only single value for a genotype value, cant do the statistics ")
+        return [None]*6
     LB_p=test_1(L,B,shuffles)
     LAgvnB=test_2(L,A,B,shuffles,algo,version=1)
     ABgvnL=test_3(L,A,B,shuffles,algo)

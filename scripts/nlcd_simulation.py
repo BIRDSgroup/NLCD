@@ -10,7 +10,7 @@ def read_data(data):
 # the simulated data is generated with a seed at the start of the file
 # so we skip it, but not for the yeast data 
 # if yeast is present then dont read the seed line
-    if(data.find('yeast')==-1): #if yeast is not present
+    if(data.find('yeast')==-1 and data.find('human')==-1): #if yeast is not present
         line=fo.readline() # read the line, the control will start from the next line 
 
     while(1):
