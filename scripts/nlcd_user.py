@@ -4,6 +4,59 @@ import sys
 from numpy.random import SeedSequence
 from multiprocessing import Pool
 import pandas as pd
+def read_data(data):
+
+    #read the input file 
+    fo=open(data, "r")
+    L=[]
+    A=[]
+    B=[]
+# the simulated data is generated with a seed at the start of the file
+# so we skip it, but not for the yeast data 
+# if yeast is present then dont read the seed line
+    if(data.find('yeast')==-1 and data.find('human')==-1): #if yeast is not present
+        line=fo.readline() # read the line, the control will start from the next line 
+
+    while(1):
+    # the first line of the trio is the parameter configuration, skip it 
+        line=fo.readline()
+    # read the genotype information 
+        line=fo.readline()
+        if line== "" :
+            break
+        l = [j for j in line.split()]
+        L.append(np.array([int(i) for i in l]))
+        line=fo.readline()
+        a = [j for j in line.split()]
+        A.append(np.array([float(i) for i in a]))
+        line=fo.readline()
+        b = [j for j in line.split()]
+        B.append(np.array([float(i) for i in b]))
+#combine all the samples into a list 
+    dataset = [i for i in zip(L,A,B)]
+    fo.close()
+    return dataset
+def read_configuration(data):
+    fo=open(data, "r")
+    confignames=[]
+    if(data.find('yeast')==-1 and data.find('human')==-1): #if yeast is not present
+        line=fo.readline() # read the line, the control will start from the next line 
+    while(1):
+        line=fo.readline()
+        if(line==""):
+            break
+        line=line.replace("\n","")
+        line=line.replace("\"","")
+        line=line.split(" ")  
+        configs=[]  
+        for i in line: 
+            configs.append(i)
+        confignames.append(configs)
+        line=fo.readline()
+        line=fo.readline()
+        line=fo.readline()
+    fo.close()
+    return pd.DataFrame(confignames)
 
 def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     st = time.time()
