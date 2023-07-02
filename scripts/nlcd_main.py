@@ -224,7 +224,7 @@ def test_3(L,A,B,shuffles,algo):
         p_value = calculate_pvalue(original_loss, perm_losses)
         p_values.append(p_value)
         
-    max_p_value = max(p_values)
+    max_p_value = min(p_values)
     return max_p_value
 
 
@@ -233,9 +233,7 @@ def test_2(L,A,B,shuffles,algo, version=1):
         Apred, _ = nlr_train_predict(B, A, algo)
         Aresid = A - Apred
         out = test_1(L, Aresid, shuffles)
-    elif version==2: #using FI-based A_perm (test2.v2)
-        out = test_4(L,B,A,shuffles,algo,test_2=True)
-    elif version==3: #using FI-based A_stratperm_wrt_B (test2.v3)
+    elif version==2: #using FI-based A_stratperm_wrt_B (test2.v2)
         Apred, _ = nlr_train_predict(B, A, algo)
         out = test_4(L,B,A,shuffles,algo,True,Apred)
     return out    
