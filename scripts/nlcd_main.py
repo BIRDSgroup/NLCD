@@ -224,8 +224,8 @@ def test_3(L,A,B,shuffles,algo):
         p_value = calculate_pvalue(original_loss, perm_losses)
         p_values.append(p_value)
         
-    max_p_value = min(p_values)
-    return max_p_value
+    min_p_value = min(p_values)
+    return min_p_value
 
 
 def test_2(L,A,B,shuffles,algo, version=1):
