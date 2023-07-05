@@ -11,4 +11,5 @@ The scripts folder contains :
 Open the user_run.ipynb file, and based on the need call nlcd_user() function or nlcd_group()  
 L is the instrument variable, A and B are the gene pairs, shuffle is the number of times to do the permutation testing, and algorithm can be SVR, KRR and ANN  
 nlcd_user(L,A,B,shuffles,algo) : This function is to test a single trio  
-nlcd_group(data,shuffles,algo) : This function can test for a set of trios. data variable contains the set of trios to be tested.  
+nlcd_group(data,shuffles,algo) : This function can test for a set of trios. data variable contains the set of trios to be tested. 
+All the yeast data and files that are big can be found this in drive link : https://drive.google.com/drive/folders/1kuUakCynxg145uJckRI7spIvj4JaGgJO?usp=sharing  
