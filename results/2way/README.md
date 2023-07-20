@@ -1,6 +1,6 @@
 
 ## How to reproduce the results?
-For example, lets reproduce LinearANN1000s500perm.csv. Here the Linear in the file name indicates we are using Linear dataset, ANN as the algorithm, 1000 samples and 500 permutations.
+For example, lets reproduce LinearKRR500s100perm_rev.csv. Here the Linear in the file name indicates we are using Linear dataset, KRR as the algorithm, 500 samples, 100 permutations and rev indicates that we are testing it in the reverese direction.
 Open the file or just view the first few lines to know the parent seed  
 ![This image shows how to reproduce NLCD results](https://drive.google.com/uc?export=view&id=1xcAosXJzU2EmrDInBuS7N5ZOlstxsbOT)
 Note down the parent seed marked in red here
