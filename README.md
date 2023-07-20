@@ -13,4 +13,3 @@ L is the instrument variable, A and B are the gene pairs, shuffle is the number 
 nlcd_user(L,A,B,shuffles,algo) : This function is to test a single trio  
 nlcd_group(data,shuffles,algo) : This function can test for a set of trios. data variable contains the set of trios to be tested. 
 All the yeast data and files that are big can be found this in drive link : https://drive.google.com/drive/folders/1kuUakCynxg145uJckRI7spIvj4JaGgJO?usp=sharing  
-![This image shows how to reproduce NLCD results](https://drive.google.com/uc?export=view&id=1smq7paTuRWiK-nHNE-OVF1-JqaJen81v) 
