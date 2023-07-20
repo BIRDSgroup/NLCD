@@ -1,4 +1,4 @@
-##How to reproduce the results?   
+## How to reproduce the results?   
 For example, lets reproduce LinearANN1000s500perm.csv. Here the Linear in the file name indicates we are using Linear dataset, ANN as the algorithm, 1000 samples and 500 permutations.  
 Open the file or just view the first few lines to know the parent seed   
 ![This image shows how to reproduce NLCD results](https://drive.google.com/uc?export=view&id=1smq7paTuRWiK-nHNE-OVF1-JqaJen81v)  
