@@ -14,5 +14,5 @@ L is the instrument variable, A and B are the gene pairs, shuffle is the number 
 `nlcd_single(L,A,B,shuffles,algo,sample_seed=None,verbose=True,reverse=False)`: This function is to test a single trio, reverse parameter checks the relation from $B \rightarrow A$, the default is testing from $A \rightarrow B$. If no sample seed is provided, the program will generate a sample seed.  
 `nlcd_batch(data,shuffles,algo,reverse=False,sample_seed=None)`: This function can test for a set of trios. data variable contains the set of trios to be tested. This function has a parent seed which we can pass as sample_seed, for each of the trios separate seed (child seed) is produced so that their values can be reproduced using `nlcd_single()` function.     
 All the yeast data and files that are big can be found this in drive link : https://drive.google.com/drive/folders/1kuUakCynxg145uJckRI7spIvj4JaGgJO?usp=sharing  
-## Reproduction of Results and Figures  
-Instructions are provided in the results folder and figures folder on how to reproduce the results and figures for both cit and nlcd.    
+## Reproduction of Data generated, Results and Figures
+Instructions are provided in the data folder,results folder and figures folder on how to reproduce the results,data and figures for both cit and nlcd.    
