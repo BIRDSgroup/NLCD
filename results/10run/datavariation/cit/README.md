@@ -6,7 +6,7 @@ Note down the parent seed marked in red here
 Open the `cit_run.r`. Compile `read_data()` function and `cit_process()` function.
 Call `cit_process()` with the following parameters:
 ```
-cit_process("./data/10rundata/Linear500.txt",inputs=100,perms = 100,outpath = './results/journal/simulation/cit/filename.csv',seed=1291353810)
+cit_process("./data/10rundata/Linear500run8.txt",inputs=100,perms = 100,outpath = './results/journal/simulation/cit/filename.csv',seed=1291353810)
 ```
 Make sure that the input file path is correct and the file is among the 10 generated linear datasets with 500 samples. The outputfilename can be of user's preference.
 
