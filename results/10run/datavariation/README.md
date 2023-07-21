@@ -1,0 +1,1 @@
+Here we are running both cit and nlcd on 10 newly generated datasets using the same equations. The input data for this is present in the 10rundata folder inside the datafolder. Make sure to give the input correctly to reproduce the results
