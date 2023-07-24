@@ -81,10 +81,12 @@ def get_prob(L,A):
         p_LgivenA = p_AgivenL * p_L
         probs.append(p_LgivenA)
         norm_const += p_LgivenA
+    diff=[]
+    for i in range(len(probs)):
+        for j in range(i+1,len(probs)):
+            diff.append(np.minimum(probs[i],probs[j])/norm_const)
 
-    diff=np.minimum.reduce(probs)
-
-    return diff/norm_const
+    return diff
 
 
 def FI_score(x,y,overlap ):
@@ -134,6 +136,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
     '''
     Function for the 4th test , same function is used for the second test 
     '''
+
     overlap=get_prob(L,A)
     perm_loss=[]
     for i in range(shuffles):
@@ -150,7 +153,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
             count=0
             for i in range(len(y_pred)):
                 for j in range(i + 1, len(y_pred)):
-                    total_FI+=FI_score(y_pred[i],y_pred[j],overlap)
+                    total_FI+=FI_score(y_pred[i],y_pred[j],overlap[count])
                     count+=1
             assert count>0
             total_FI/=count
@@ -162,11 +165,13 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
     count=0
     for i in range(len(y_pred_original)):
         for j in range(i + 1, len(y_pred_original)):
-            original_loss+=FI_score(y_pred_original[i],y_pred_original[j],overlap)
+            original_loss+=FI_score(y_pred_original[i],y_pred_original[j],overlap[count])
             count+=1
     assert count>0
     original_loss/=count
-    return [calculate_pvalue(original_loss,perm_loss,test_2),np.sum(overlap)/len(overlap)]
+    overlap_scores = [np.sum(overlaps) / len(overlaps) for overlaps in overlap]
+    total_overlap_score = np.sum(overlap_scores)/count
+    return [calculate_pvalue(original_loss,perm_loss,test_2),total_overlap_score]
 
 
 def compute_1_loss(x_test,y_test):
@@ -209,7 +214,7 @@ def test_3_loss(A,B,algo):
     
 def test_3(L,A,B,shuffles,algo):
     '''
-    function for the third tes t
+    function for the third test
     '''
     unique_values = np.unique(L)
     p_values = []
