@@ -26,3 +26,12 @@ write.csv(convert_hgnc("./results/journal/human_muscle/nlcd/causal_rev.csv"),"./
 
 
 
+
+
+
+
+
+
+
+
+
