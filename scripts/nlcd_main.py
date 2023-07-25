@@ -108,7 +108,7 @@ def compute_Luniqs_predns(L,A,B,algo):
     _, regressor = nlr_train_predict(A, B, algo, L)
     
     unique_values = np.unique(L)
-    assert unique_values==[0,1] or unique_values==[0,1,2]
+    assert (unique_values==[0,1]).all() or (unique_values==[0,1,2]).all()
     for value in unique_values:
         L_1 = np.full_like(L, value)
         X_ = np.column_stack((L_1, A))
@@ -140,14 +140,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
     overlap=get_prob(L,A)
     perm_loss=[]
     for i in range(shuffles):
-            if test_2==False:
-                y_pred=compute_Luniqs_predns(L,A,stratify_permute_variable(L,B),algo)
-            else:            
-                if Bpred is None: 
-                    y_pred=compute_Luniqs_predns(L,A,np.random.permutation(B),algo) #test2.v2
-                else:
-                    Bstar = Bpred+np.random.permutation(B-Bpred)
-                    y_pred=compute_Luniqs_predns(L,A,Bstar,algo) #test2.v3
+            y_pred=compute_Luniqs_predns(L,A,stratify_permute_variable(L,B),algo)
             
             total_FI=0
             count=0
@@ -168,7 +161,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
         for j in range(i + 1, len(y_pred_original)):
             original_loss+=FI_score(y_pred_original[i],y_pred_original[j],overlap[count])
             count+=1
-    assert count>0
+    #assert count>0
     original_loss/=count
     overlap_scores = [np.sum(overlaps) / len(overlaps) for overlaps in overlap]
     total_overlap_score = np.sum(overlap_scores)/count
