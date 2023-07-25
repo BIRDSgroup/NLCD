@@ -107,8 +107,9 @@ def compute_Luniqs_predns(L,A,B,algo):
     y_pred = []
     _, regressor = nlr_train_predict(A, B, algo, L)
     
+    
     unique_values = np.unique(L)
-    assert (unique_values==[0,1]).all() or (unique_values==[0,1,2]).all()
+    assert (len(unique_values)==2 and (unique_values==[0,1]).all()) or (len(unique_values)==3 and (unique_values==[0,1,2]).all())
     for value in unique_values:
         L_1 = np.full_like(L, value)
         X_ = np.column_stack((L_1, A))
@@ -254,5 +255,3 @@ def combine_tests(L,A,B,shuffles,algo):
     LindBgvnA,overlapscore2=test_4(L,A,B,shuffles,algo)
     p_final=np.max([LB_p,LAgvnB,ABgvnL,LindBgvnA])
     return [p_final,LB_p,LAgvnB,ABgvnL,LindBgvnA,overlapscore2]
-
-
