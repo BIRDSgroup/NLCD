@@ -6,7 +6,7 @@ Open the file or just view the first few lines to know the parent seed
 Note down the parent seed marked in red here
 Run the below command:
 ```
-python3 nlcd_simulation.py -a=KRR -s=500 -i=inputfiledirectory/human_muscle.txt -o=AtoB.csv --seed=196824294903844221866610020071140119398
+python3 nlcd_simulation.py -a=KRR -s=500 -i=inputfiledirectory/human_muscle.txt -o=AtoB.csv --seed=113251897075920252768230107881809121307
 ```
 To reproduce AtoB_rev.csv. 
 Open the file or just view the first few lines to know the parent seed
@@ -14,7 +14,7 @@ Open the file or just view the first few lines to know the parent seed
 Note down the parent seed marked in red here
 Run the below command:
 ```
-python3 nlcd_simulation.py -a=KRR -s=500 -i=inputfiledirectory/human_muscle.txt -o=BtoA_rev.csv --seed=233362693158198143346700831088686120739 --reverse
+python3 nlcd_simulation.py -a=KRR -s=500 -i=inputfiledirectory/human_muscle.txt -o=BtoA_rev.csv --seed=213279958020309568089849721184150175980 --reverse
 ```
 Make sure that the input file path is correct, this file is present in the drive link provided. The outputfilename can be of user's preference.  
 human_muscle.txt was obtained by running `human.R`. The files referred in human.R are given in the this link: https://drive.google.com/file/d/1y8vNrmRs2nTe77ekyLEqZapdeLEtG49p/view This is taken from Biswas et., al paper.  
