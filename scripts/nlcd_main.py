@@ -108,7 +108,7 @@ def compute_Luniqs_predns(L,A,B,algo):
     _, regressor = nlr_train_predict(A, B, algo, L)
     
     unique_values = np.unique(L)
-    
+    assert unique_values==[0,1] or unique_values==[0,1,2]
     for value in unique_values:
         L_1 = np.full_like(L, value)
         X_ = np.column_stack((L_1, A))
@@ -161,6 +161,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
     
     y_pred_original=compute_Luniqs_predns(L,A,B,algo)
     assert len(y_pred)==len(y_pred_original)
+    assert len(y_pred)==2 or len(y_pred)==3
     original_loss=0
     count=0
     for i in range(len(y_pred_original)):
