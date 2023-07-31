@@ -100,8 +100,8 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
     sample_seed1 = rng.integers(2**32 - 1) # numpy will throw an error if the seed is set as sys.maxsize  
     
     np.random.seed(sample_seed1)
-    if index:
-        print(index) 
+    #if index: # for debugging
+    #    print(index) 
     ## check if L is haploid but contains only two unique values 
     if (2 in L and len(np.unique(L))==2) :
         print("Diploid but only 2 unique values for L hence treating it as haploid")

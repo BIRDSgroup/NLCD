@@ -38,15 +38,11 @@ def nlr_train_predict(xG, yG, algo, xL=None):
     return y_pred,regressor
 
 
-def calculate_pvalue(original, loss_list, greater=False):
+def calculate_pvalue(original, loss_list):
     '''
     calculate the p value (with +1/+2 correction) 
     '''
-    if(greater==False):
-        pvalNr = sum(i <= original for i in loss_list)
-    else:
-        #It is reverse in test 2
-        pvalNr = sum(i >= original for i in loss_list)
+    pvalNr = sum(i <= original for i in loss_list)
     return (pvalNr + 1)/(len(loss_list) + 2)
     
 
@@ -151,7 +147,7 @@ def test_4(L,A,B,shuffles,algo):
     original_loss/=count
     overlap_scores = [np.sum(overlaps) / len(overlaps) for overlaps in overlap]
     total_overlap_score = np.sum(overlap_scores)/count
-    return [calculate_pvalue(original_loss,perm_loss,test_2),total_overlap_score]
+    return [calculate_pvalue(original_loss,perm_loss),total_overlap_score]
 
 
 def compute_1_loss(x_test,y_test):
@@ -202,14 +198,13 @@ def test_3(L,A,B,shuffles,algo):
         indices = np.where(L == value)[0]
         A_value = A[indices]
         B_value = B[indices]
-        
+      
         original_loss = test_3_loss(A_value, B_value, algo)
         perm_losses = [test_3_loss(A_value, np.random.permutation(B_value), algo) for _ in range(shuffles)]
         p_value = calculate_pvalue(original_loss, perm_losses)
         p_values.append(p_value)
         
     min_p_value = min(p_values)
-    print(p_values)
     return min_p_value
 
 
