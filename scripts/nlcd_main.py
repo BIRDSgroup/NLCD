@@ -118,7 +118,7 @@ def stratify_permute_variable(L, variable):
 
     return permuted_variable
 
-def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
+def test_4(L,A,B,shuffles,algo):
     '''
     Function for the 4th test , same function is used for the second test 
     '''
@@ -147,7 +147,7 @@ def test_4(L,A,B,shuffles,algo,test_2=False,Bpred=None):
         for j in range(i + 1, len(y_pred_original)):
             original_loss+=FI_score(y_pred_original[i],y_pred_original[j],overlap[count])
             count+=1
-    #assert count>0
+    assert count>0
     original_loss/=count
     overlap_scores = [np.sum(overlaps) / len(overlaps) for overlaps in overlap]
     total_overlap_score = np.sum(overlap_scores)/count
@@ -168,8 +168,7 @@ def compute_1_loss(x_test,y_test):
         mu, sigma = np.mean(y_test[indices]), np.std(y_test[indices])
         y_mean[indices] = mu
         y_std[indices] = sigma
-    #alpha is the probability of each distributiton, here we are all having it as 1 
-    alpha=np.ones((len(y_mean),1))
+    #return NLL loss 
     return -np.mean(np.log(np.exp(-(((y_test-y_mean)/y_std)**2)/2)/np.sqrt(2*np.pi*(y_std**2))))
 
 def test_1(L,B,shuffles):
@@ -214,14 +213,10 @@ def test_3(L,A,B,shuffles,algo):
     return min_p_value
 
 
-def test_2(L,A,B,shuffles,algo, version=1):
-    if version==1:   #using the regression method (test2.v1)
-        Apred, _ = nlr_train_predict(B, A, algo)
-        Aresid = A - Apred
-        out = test_1(L, Aresid, shuffles)
-    elif version==2: #using FI-based A_stratperm_wrt_B (test2.v2)
-        Apred, _ = nlr_train_predict(B, A, algo)
-        out = test_4(L,B,A,shuffles,algo,True,Apred)
+def test_2(L,A,B,shuffles,algo):
+    Apred, _ = nlr_train_predict(B, A, algo)
+    Aresid = A - Apred
+    out = test_1(L, Aresid, shuffles)
     return out    
 
 
@@ -236,7 +231,7 @@ def combine_tests(L,A,B,shuffles,algo):
         print(" Only single value for a genotype value, cant do the statistics ")
         return [None]*6
     LB_p=test_1(L,B,shuffles)
-    LAgvnB=test_2(L,A,B,shuffles,algo,version=1)
+    LAgvnB=test_2(L,A,B,shuffles,algo)
     ABgvnL=test_3(L,A,B,shuffles,algo)
     LindBgvnA,overlapscore2=test_4(L,A,B,shuffles,algo)
     p_final=np.max([LB_p,LAgvnB,ABgvnL,LindBgvnA])
