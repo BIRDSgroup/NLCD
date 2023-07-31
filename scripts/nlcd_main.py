@@ -1,7 +1,5 @@
 import os 
 os.environ['OMP_NUM_THREADS'] = '1'  ## This will prevent KRR algo from thrashing the server
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # This is to stop all the tensorflow warnings and infos 
-#not importing tensorflow packages here, as it will slowdown the parallelism. 
 from scipy.stats import norm
 import random
 import numpy as np
@@ -11,7 +9,6 @@ from sklearn.metrics import mean_squared_error
 from sklearn.neural_network import MLPRegressor
 from sklearn.utils._testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
-from tensorflow_probability import distributions as tfd
 @ignore_warnings(category=ConvergenceWarning)
 def nlr_train_predict(xG, yG, algo, xL=None):
     '''
@@ -39,18 +36,6 @@ def nlr_train_predict(xG, yG, algo, xL=None):
     y_pred = regressor.predict(x)
         
     return y_pred,regressor
-
-
-def gnll_eval(y,alpha, mu, sigma):
-    """ Computes the mean negative log-likelihood loss of y given the mixture parameters.
-    """
-    gm = tfd.MixtureSameFamily(
-        mixture_distribution=tfd.Categorical(probs=alpha),
-        components_distribution=tfd.Normal(
-            loc=mu,       
-            scale=sigma))
-    log_likelihood = gm.log_prob(np.transpose(y))
-    return -np.mean(log_likelihood, axis=-1)
 
 
 def calculate_pvalue(original, loss_list, greater=False):
@@ -185,7 +170,7 @@ def compute_1_loss(x_test,y_test):
         y_std[indices] = sigma
     #alpha is the probability of each distributiton, here we are all having it as 1 
     alpha=np.ones((len(y_mean),1))
-    return gnll_eval(y_test,alpha,y_mean.reshape((-1,1)),y_std.reshape((-1,1)))#.numpy()
+    return -np.mean(np.log(np.exp(-(((y_test-y_mean)/y_std)**2)/2)/np.sqrt(2*np.pi*(y_std**2))))
 
 def test_1(L,B,shuffles):
     '''
@@ -225,6 +210,7 @@ def test_3(L,A,B,shuffles,algo):
         p_values.append(p_value)
         
     min_p_value = min(p_values)
+    print(p_values)
     return min_p_value
 
 
