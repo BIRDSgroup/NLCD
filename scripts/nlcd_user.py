@@ -76,7 +76,7 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     verbose = False    
     #parallelizing, here the number of workers is set as default to the number of cpus, you can modify it  
     with Pool() as pool:
-        res = pool.starmap(nlcd_single_for_batch, zip(shared_data, [shuffles]*ntrios, [algo]*ntrios, child_seeds_ints, [verbose]*ntrios, [reverse]*ntrios,list(np.arange(0,ntrios))))
+        res = pool.starmap(nlcd_single_for_batch, zip(shared_data, [shuffles]*ntrios, [algo]*ntrios, child_seeds_ints, [verbose]*ntrios, [reverse]*ntrios))
     
     df=pd.DataFrame(res)
     et = time.time()
@@ -87,11 +87,11 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
     return df
 
-def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False,index=None):
+def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False):
     assert len(singletriodata)==3
-    return nlcd_single(singletriodata[0],singletriodata[1],singletriodata[2], shuffles, algo, sample_seed, verbose, reverse,index)
+    return nlcd_single(singletriodata[0],singletriodata[1],singletriodata[2], shuffles, algo, sample_seed, verbose, reverse)
 
-def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse=False,index=None):
+def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse=False):
     if(sample_seed==None):
         rng = np.random.default_rng()
         sample_seed = rng.integers(sys.maxsize) 
@@ -100,8 +100,6 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
     sample_seed1 = rng.integers(2**32 - 1) # numpy will throw an error if the seed is set as sys.maxsize  
     
     np.random.seed(sample_seed1)
-    #if index: # for debugging
-    #    print(index) 
     ## check if L is haploid but contains only two unique values 
     if (2 in L and len(np.unique(L))==2) :
         print("Diploid but only 2 unique values for L hence treating it as haploid")
