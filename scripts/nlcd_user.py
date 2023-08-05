@@ -58,7 +58,7 @@ def read_configuration(data):
     fo.close()
     return pd.DataFrame(confignames)
 
-def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
+def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,normal=False):
     st = time.time()
     if(sample_seed==None):
         ss = SeedSequence()
@@ -76,7 +76,7 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     verbose = False    
     #parallelizing, here the number of workers is set as default to the number of cpus, you can modify it  
     with Pool() as pool:
-        res = pool.starmap(nlcd_single_for_batch, zip(shared_data, [shuffles]*ntrios, [algo]*ntrios, child_seeds_ints, [verbose]*ntrios, [reverse]*ntrios))
+        res = pool.starmap(nlcd_single_for_batch, zip(shared_data, [shuffles]*ntrios, [algo]*ntrios, child_seeds_ints, [verbose]*ntrios, [reverse]*ntrios,[normal]*ntrios))
     
     df=pd.DataFrame(res)
     et = time.time()
@@ -87,11 +87,11 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None):
     df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
     return df
 
-def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False):
+def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False, normal=False):
     assert len(singletriodata)==3
     return nlcd_single(singletriodata[0],singletriodata[1],singletriodata[2], shuffles, algo, sample_seed, verbose, reverse)
 
-def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse=False):
+def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse=False,normal=False):
     if(sample_seed==None):
         rng = np.random.default_rng()
         sample_seed = rng.integers(sys.maxsize) 
@@ -105,9 +105,9 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
         print("Diploid but only 2 unique values for L hence treating it as haploid")
         L=np.array([0 if (x == 0 or x == 1) else 1 for x in L])
     if reverse==False:
-        out=combine_tests(L,A,B,shuffles,algo)
+        out=combine_tests(L,A,B,shuffles,algo,normal)
     elif reverse==True:
-        out=combine_tests(L,B,A,shuffles,algo)
+        out=combine_tests(L,B,A,shuffles,algo,normal)
     else:
         print("Invalid entry for reverse parameter")
     out.append(sample_seed)

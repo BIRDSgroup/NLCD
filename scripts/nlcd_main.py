@@ -10,6 +10,18 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.utils._testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
 @ignore_warnings(category=ConvergenceWarning)
+def normalize(x_test,y_test):
+    '''
+    Function to standard normalize A|L for all the values of L to mean of 0 and variance 1 
+    '''
+    unique_values=np.unique(x_test)
+    for value in unique_values:
+        indices = np.where(x_test == value)[0]
+        mu, sigma = np.mean(y_test[indices]), np.std(y_test[indices])
+        y_test[indices] = (y_test[indices]-mu)/sigma
+    return y_test 
+    
+
 def nlr_train_predict(xG, yG, algo, xL=None):
     '''
     Non-linear regression (NLR); 
@@ -114,6 +126,7 @@ def stratify_permute_variable(L, variable):
 
     return permuted_variable
 
+
 def test_4(L,A,B,shuffles,algo):
     '''
     Function for the 4th test , same function is used for the second test 
@@ -167,6 +180,7 @@ def compute_1_loss(x_test,y_test):
     #return NLL loss 
     return -np.mean(np.log(np.exp(-(((y_test-y_mean)/y_std)**2)/2)/np.sqrt(2*np.pi*(y_std**2))))
 
+
 def test_1(L,B,shuffles):
     '''
     Function for the first test 
@@ -186,6 +200,7 @@ def test_3_loss(A,B,algo):
     Bpred, _ = nlr_train_predict(A, B, algo)
     mse = mean_squared_error(B, Bpred)
     return mse
+
     
 def test_3(L,A,B,shuffles,algo):
     '''
@@ -215,7 +230,7 @@ def test_2(L,A,B,shuffles,algo):
     return out    
 
 
-def combine_tests(L,A,B,shuffles,algo):
+def combine_tests(L,A,B,shuffles,algo,normal):
     '''
     Function to combine all the tests 
     '''
@@ -225,6 +240,9 @@ def combine_tests(L,A,B,shuffles,algo):
     if( 1 in [sum(L==x) for x in np.unique(L)] ):
         print(" Only single value for a genotype value, cant do the statistics ")
         return [None]*6
+    if(normal==True):
+        A=normalize(L,A)
+
     LB_p=test_1(L,B,shuffles)
     LAgvnB=test_2(L,A,B,shuffles,algo)
     ABgvnL=test_3(L,A,B,shuffles,algo)
