@@ -89,7 +89,7 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,norma
 
 def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False, normal=False):
     assert len(singletriodata)==3
-    return nlcd_single(singletriodata[0],singletriodata[1],singletriodata[2], shuffles, algo, sample_seed, verbose, reverse)
+    return nlcd_single(singletriodata[0],singletriodata[1],singletriodata[2], shuffles, algo, sample_seed, verbose, reverse,normal)
 
 def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse=False,normal=False):
     if(sample_seed==None):

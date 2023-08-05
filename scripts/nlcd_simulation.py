@@ -14,6 +14,6 @@ if __name__ == '__main__':
     parser.add_argument("--seed",type=int,help='Seed to reproduce the result')
     args = parser.parse_args()
     dataset=read_data(args.inputpath)
-    df=nlcd_batch(dataset, args.shuffles, args.algo, args.reverse,args.seed,args.reverse)
+    df=nlcd_batch(dataset, args.shuffles, args.algo, args.reverse,args.seed,args.normal)
     df.to_csv(args.outputpath, header=True, index=False,mode='a',float_format='%f')
     
