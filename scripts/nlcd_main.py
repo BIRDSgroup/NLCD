@@ -242,6 +242,7 @@ def combine_tests(L,A,B,shuffles,algo,normal):
         return [None]*6
     if(normal==True):
         A=normalize(L,A)
+        B=normalize(L,B)
 
     LB_p=test_1(L,B,shuffles)
     LAgvnB=test_2(L,A,B,shuffles,algo)
