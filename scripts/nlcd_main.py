@@ -17,8 +17,8 @@ def normalize(x_test,y_test):
     unique_values=np.unique(x_test)
     for value in unique_values:
         indices = np.where(x_test == value)[0]
-        mu, sigma = np.mean(y_test[indices]), np.std(y_test[indices])
-        y_test[indices] = (y_test[indices]-mu)/sigma
+        sigma = np.std(y_test[indices])
+        y_test[indices] = (y_test[indices])/sigma
     return y_test 
     
 
