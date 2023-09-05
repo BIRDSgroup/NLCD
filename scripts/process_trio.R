@@ -472,6 +472,54 @@ read_trios<-function(path,inputs)
 data<- read_data("./muscle/human_muscle_deseq.txt",inputs = 5239)
 resultsBtoA<- read.table("./../results/journal/human_muscle/test_muscle_rev.csv",sep=',',header=T,check.names = F)
 resultsAtoB<- read.table("./../results/journal/human_muscle/test_muscle.csv",sep=',',header=T,check.names = F)
+
+cross_map<-read.table("./mappability/hg38_cross_mappability_strength_symmetric_mean_sorted.txt.gz",sep='\t',header=F)
+#check for duplication before version numbers are removed 
+sum(duplicated(cross_map[,c("V1","V2")]))
+#0 duplication 
+#remove the version numbers 
+cross_map$V1<-sub("\\..*$","",cross_map$V1)
+cross_map$V2<-sub("\\..*$","",cross_map$V2)
+#check if any pairs are duplicated 36757 duplicated 
+sum(duplicated(cross_map[,c("V1","V2")]))
+#there are duplicates after removing the versions 
+#get the duplicated data 
+#cross_map_dup<-cross_map[duplicated(cross_map[,c("V1","V2")],fromLast=T),]
+#get the number of duplicates, max value of cross mappability, min value 
+summary_cross_map<-cross_map %>% group_by(V1,V2) %>% summarize(count=n(),max_value = max(V3),min_value=min(V3))
+# summary_cross_map has 28,306,345 entries
+# total entries 28343102, subtract 36757 , we get 28306345
+# check this gene: ENSG00000214717 grep it and see, there is PAR_Y version 
+# used this command: zcat hg38_cross_mappability_strength_symmetric_mean_sorted.txt.gz  | grep 'ENSG00000182162'| grep 'ENSG00000169084'
+# gave the below result 
+#ENSG00000169084.13	ENSG00000182162.10	2
+#ENSG00000169084.13	ENSG00000182162.10_PAR_Y	1
+#ENSG00000169084.13_PAR_Y	ENSG00000182162.10	1
+# hence we have three duplicates 
+# samme issue with gene mappability 
+gene_map<-read.table("./mappability/hg38_gene_mappability.txt.gz",sep='\t',header = F)
+#check the duplicates without removing version numbers
+sum(duplicated(gene_map[,c("V1")]))
+gene_map$V1<-sub("\\..*$","",gene_map$V1)
+#check the duplicates after removing version numbers
+sum(duplicated(gene_map[,c("V1")])) # 45 duplicates
+summary_gene_map<-gene_map %>% group_by(V1) %>% summarize(count=n(),max_value = max(V2),min_value=min(V2))
+# summary_gene_map has 58174 entries
+# total gene map entries 58219 entries, subtract 45, we get 58174 
+
+trionames_map<-read_trios("./muscle/human_muscle_deseq.txt",inputs=5239)
+trionames_map$A<-sub("\\..*$","",trionames_map$A)
+trionames_map$B<-sub("\\..*$","",trionames_map$B)
+trionames_map$id=1:nrow(trionames_map)
+trionames_Amerge<-merge(trionames_map,summary_gene_map,by.x='A',by.y='V1')
+trionames_Amerge<-trionames_Amerge[order(trionames_Amerge$id),]
+colnames(trionames_Amerge)<-c("A","L","B","id","A.count","A.max","A.min")
+trionames_bothmerge<-merge(trionames_Amerge,summary_gene_map,by.x='B',by.y='V1')
+trionames_bothmerge<-trionames_bothmerge[order(trionames_bothmerge$id),]
+colnames(trionames_bothmerge)<-c("B","A","L","id","A.count","A.max","A.min","B.count","B.max","B.min")
+trionames_dropped<-trionames_bothmerge[,c("L","A","B","A.max","B.max")]
+trionames_cross_merge<-merge(trionames_dropped,summary_cross_map,by.x=c("A","B"),by.y=c("V1","V2"))
+# only 358 entries in trionames_cross_merge 
 # without p value adjustment 
 addmargins(table(resultsAtoB$p_final<=0.05,resultsBtoA$p_final<=0.05))
 ## losing out a lot of calls after doing p adjust ## 
