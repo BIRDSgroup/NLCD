@@ -524,24 +524,38 @@ colnames(trionames_Amerge)<-c("A","L","B","id","A.count","A.max","A.min")
 trionames_bothmerge<-merge(trionames_Amerge,summary_gene_map,by.x='B',by.y='V1')
 trionames_bothmerge<-trionames_bothmerge[order(trionames_bothmerge$id),]
 colnames(trionames_bothmerge)<-c("B","A","L","id","A.count","A.max","A.min","B.count","B.max","B.min")
-trionames_dropped<-trionames_bothmerge[,c("L","A","B","A.max","B.max")]
+trionames_dropped<-trionames_bothmerge[,c("id","L","A","B","A.max","B.max")]
+# only 358 entries in trionames_cross_merge
+# merge in the reverse direction also by creating a duplicate 
+# 656 pairs now
 #create a duplicate and merge 
 summary_cross_map_rev<-summary_cross_map
 summary_cross_map_rev[,c("V1","V2")]<-summary_cross_map_rev[,c("V2","V1")]
 summary_cross_map_final<-rbind(summary_cross_map,summary_cross_map_rev)
 trionames_cross_merge<-merge(trionames_dropped,summary_cross_map_final,by.x=c("A","B"),by.y=c("V1","V2"),all.x=T)
+trionames_cross_merge<-trionames_cross_merge[order(trionames_cross_merge$id),]
 #sseparating them into two different tables, one with NAs and the other without
 trionames_cm_NA<-trionames_cross_merge[is.na(trionames_cross_merge$count),]
 trionames_cm<-trionames_cross_merge[!is.na(trionames_cross_merge$count),]
 
-table(trionames_cm_NA$A.max<1,trionames_cm_NA$B.max<1)
+table(trionames_cm_NA$A.max<1,trionames_cm_NA$B.max<1,useNA="ifany")
 
-table(trionames_cm$A.max<1,trionames_cm$B.max<1)
+table(trionames_cm$A.max<1,trionames_cm$B.max<1,useNA="ifany")
+
+sum(is.na(gene_map$V2)) #1237 
+
+sum(is.na(trionames_cm$A.max))    #0
+sum(is.na(trionames_cm$B.max))    #0
+sum(is.na(trionames_cm_NA$A.max)) #0
+sum(is.na(trionames_cm_NA$B.max)) #0
 
 
-# only 358 entries in trionames_cross_merge
-# merge in the reverse direction also by creating a duplicate 
-# 
+## going to take only those indices where these values are present ####
+mappableindices<- trionames_cm$id
+# do the below two only if you want to exclude based on mappability 
+resultsAtoB<- resultsAtoB[mappableindices,]
+resultsBtoA<- resultsBtoA[mappableindices,]
+
 # without p value adjustment 
 addmargins(table(resultsAtoB$p_final<=0.05,resultsBtoA$p_final<=0.05))
 ## losing out a lot of calls after doing p adjust ## 
@@ -555,9 +569,10 @@ indices<-which(p.adjust(results$p_final,method="none")<=0.05)
 
 # A->B adjusted p value less than 0.2 and B->A greater than 0.05 for cis->trans causal
 # Number of causal pairs 
-sum((p.adjust(resultsAtoB$p_final,method="BH")<=0.2 & resultsBtoA$p_final>0.05),na.rm=T)
-
+sum((p.adjust(resultsAtoB$p_final,method="BH")<=0.2 & resultsBtoA$p_final>0.05),na.rm=T)  
+# this gives 21 pairs after including mappability 
 causalindices<-which(p.adjust(resultsAtoB$p_final,method="BH")<=0.2 & resultsBtoA$p_final>0.05)
+#remove the above or below line once mappability is finalised 
 # inputs=5239 for muscle, adipose 6689
 trionames<-read_trios("./muscle/human_muscle_deseq.txt",inputs=5239)
 causalnames<-trionames[causalindices,]
@@ -573,7 +588,8 @@ colnames(causalnames_convertB)<-c("L","A_ensg","A_hgcn","B_ensg","B_hgcn")
 rownames(causalnames_convertB)<-NULL
 stopifnot (causalnames_convertB$A_ensg == causalnames$A)
 stopifnot (causalnames_convertB$B_ensg == causalnames$B)
-write.csv(causalnames_convertB,"./../results/journal/human_muscle/cistranscausal.csv",row.names = F,quote=F)
+#file name changed to map that includes mappability conditions 
+write.csv(causalnames_convertB,"./../results/journal/human_muscle/cistranscausal_map.csv",row.names = F,quote=F)
 # B->A adjusted p value less than 0.2 and A->B greater than 0.05 for trans -> cis causal
 
 sum((p.adjust(resultsBtoA$p_final,method="BH")<=0.2 & resultsAtoB$p_final>0.05),na.rm=T)
