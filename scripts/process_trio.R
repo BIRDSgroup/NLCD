@@ -515,7 +515,9 @@ trionames_map<-read_trios("./muscle/human_muscle_deseq.txt",inputs=5239)
 trionames_map$A<-sub("\\..*$","",trionames_map$A)
 trionames_map$B<-sub("\\..*$","",trionames_map$B)
 trionames_map$id=1:nrow(trionames_map)
+#can try match command, will keep the order intact  
 triosnames_map$mapA = summary_gene_map[match(triosnames_map$A, summary_gene_map$V1),"max_value"]
+
 trionames_Amerge<-merge(trionames_map,summary_gene_map,by.x='A',by.y='V1')
 trionames_Amerge<-trionames_Amerge[order(trionames_Amerge$id),]
 colnames(trionames_Amerge)<-c("A","L","B","id","A.count","A.max","A.min")
@@ -523,7 +525,20 @@ trionames_bothmerge<-merge(trionames_Amerge,summary_gene_map,by.x='B',by.y='V1')
 trionames_bothmerge<-trionames_bothmerge[order(trionames_bothmerge$id),]
 colnames(trionames_bothmerge)<-c("B","A","L","id","A.count","A.max","A.min","B.count","B.max","B.min")
 trionames_dropped<-trionames_bothmerge[,c("L","A","B","A.max","B.max")]
-trionames_cross_merge<-merge(trionames_dropped,summary_cross_map,by.x=c("A","B"),by.y=c("V1","V2"))
+#create a duplicate and merge 
+summary_cross_map_rev<-summary_cross_map
+summary_cross_map_rev[,c("V1","V2")]<-summary_cross_map_rev[,c("V2","V1")]
+summary_cross_map_final<-rbind(summary_cross_map,summary_cross_map_rev)
+trionames_cross_merge<-merge(trionames_dropped,summary_cross_map_final,by.x=c("A","B"),by.y=c("V1","V2"),all.x=T)
+#sseparating them into two different tables, one with NAs and the other without
+trionames_cm_NA<-trionames_cross_merge[is.na(trionames_cross_merge$count),]
+trionames_cm<-trionames_cross_merge[!is.na(trionames_cross_merge$count),]
+
+table(trionames_cm_NA$A.max<1,trionames_cm_NA$B.max<1)
+
+table(trionames_cm$A.max<1,trionames_cm$B.max<1)
+
+
 # only 358 entries in trionames_cross_merge
 # merge in the reverse direction also by creating a duplicate 
 # 
