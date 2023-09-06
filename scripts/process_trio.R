@@ -538,6 +538,13 @@ trionames_cross_merge<-trionames_cross_merge[order(trionames_cross_merge$id),]
 trionames_cm_NA<-trionames_cross_merge[is.na(trionames_cross_merge$count),]
 trionames_cm<-trionames_cross_merge[!is.na(trionames_cross_merge$count),]
 
+#if either of the first gene is 1 then cross map is 0
+trionames_cross_merge_mod<-trionames_cross_merge
+trionames_cross_merge_mod$max_value[trionames_cross_merge_mod$A.max==1 | trionames_cross_merge_mod$B.max==1]<- 0
+#883+978+299+656
+trionames_cm_final<-trionames_cross_merge_mod[!is.na(trionames_cross_merge_mod$max_value),]
+
+trionames_cm_final_filtered<-trionames_cm_final[trionames_cm_final$A.max>=0.75 & trionames_cm_final$B.max & trionames_cm_final$max_value==0,]
 table(trionames_cm_NA$A.max<1,trionames_cm_NA$B.max<1,useNA="ifany")
 
 table(trionames_cm$A.max<1,trionames_cm$B.max<1,useNA="ifany")
@@ -551,7 +558,7 @@ sum(is.na(trionames_cm_NA$B.max)) #0
 
 
 ## going to take only those indices where these values are present ####
-mappableindices<- trionames_cm$id
+mappableindices<- trionames_cm_final_filtered$id
 # do the below two only if you want to exclude based on mappability 
 resultsAtoB<- resultsAtoB[mappableindices,]
 resultsBtoA<- resultsBtoA[mappableindices,]
@@ -570,7 +577,7 @@ indices<-which(p.adjust(results$p_final,method="none")<=0.05)
 # A->B adjusted p value less than 0.2 and B->A greater than 0.05 for cis->trans causal
 # Number of causal pairs 
 sum((p.adjust(resultsAtoB$p_final,method="BH")<=0.2 & resultsBtoA$p_final>0.05),na.rm=T)  
-# this gives 21 pairs after including mappability 
+# this gives 15 pairs after including mappability 
 causalindices<-which(p.adjust(resultsAtoB$p_final,method="BH")<=0.2 & resultsBtoA$p_final>0.05)
 #remove the above or below line once mappability is finalised 
 # inputs=5239 for muscle, adipose 6689
@@ -589,7 +596,7 @@ rownames(causalnames_convertB)<-NULL
 stopifnot (causalnames_convertB$A_ensg == causalnames$A)
 stopifnot (causalnames_convertB$B_ensg == causalnames$B)
 #file name changed to map that includes mappability conditions 
-write.csv(causalnames_convertB,"./../results/journal/human_muscle/cistranscausal_map.csv",row.names = F,quote=F)
+write.csv(causalnames_convertB,"./../results/journal/human_muscle/cistranscausal_map_filtered.csv",row.names = F,quote=F)
 # B->A adjusted p value less than 0.2 and A->B greater than 0.05 for trans -> cis causal
 
 sum((p.adjust(resultsBtoA$p_final,method="BH")<=0.2 & resultsAtoB$p_final>0.05),na.rm=T)
