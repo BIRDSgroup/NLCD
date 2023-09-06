@@ -477,6 +477,8 @@ cross_map<-read.table("./mappability/hg38_cross_mappability_strength_symmetric_m
 #check for duplication before version numbers are removed 
 sum(duplicated(cross_map[,c("V1","V2")]))
 #0 duplication 
+#check if there is only one dot in the gene names
+stopifnot(grepl("^[^.]*\\.[^.]*$",c(cross_map$V1,cross_map$V2)))
 #remove the version numbers 
 cross_map$V1<-sub("\\..*$","",cross_map$V1)
 cross_map$V2<-sub("\\..*$","",cross_map$V2)
@@ -500,6 +502,8 @@ summary_cross_map<-cross_map %>% group_by(V1,V2) %>% summarize(count=n(),max_val
 gene_map<-read.table("./mappability/hg38_gene_mappability.txt.gz",sep='\t',header = F)
 #check the duplicates without removing version numbers
 sum(duplicated(gene_map[,c("V1")]))
+# check if all the genes have exactly one dot
+stopifnot(grepl("^[^.]*\\.[^.]*$",gene_map$V1))
 gene_map$V1<-sub("\\..*$","",gene_map$V1)
 #check the duplicates after removing version numbers
 sum(duplicated(gene_map[,c("V1")])) # 45 duplicates
@@ -511,6 +515,7 @@ trionames_map<-read_trios("./muscle/human_muscle_deseq.txt",inputs=5239)
 trionames_map$A<-sub("\\..*$","",trionames_map$A)
 trionames_map$B<-sub("\\..*$","",trionames_map$B)
 trionames_map$id=1:nrow(trionames_map)
+triosnames_map$mapA = summary_gene_map[match(triosnames_map$A, summary_gene_map$V1),"max_value"]
 trionames_Amerge<-merge(trionames_map,summary_gene_map,by.x='A',by.y='V1')
 trionames_Amerge<-trionames_Amerge[order(trionames_Amerge$id),]
 colnames(trionames_Amerge)<-c("A","L","B","id","A.count","A.max","A.min")
@@ -519,7 +524,9 @@ trionames_bothmerge<-trionames_bothmerge[order(trionames_bothmerge$id),]
 colnames(trionames_bothmerge)<-c("B","A","L","id","A.count","A.max","A.min","B.count","B.max","B.min")
 trionames_dropped<-trionames_bothmerge[,c("L","A","B","A.max","B.max")]
 trionames_cross_merge<-merge(trionames_dropped,summary_cross_map,by.x=c("A","B"),by.y=c("V1","V2"))
-# only 358 entries in trionames_cross_merge 
+# only 358 entries in trionames_cross_merge
+# merge in the reverse direction also by creating a duplicate 
+# 
 # without p value adjustment 
 addmargins(table(resultsAtoB$p_final<=0.05,resultsBtoA$p_final<=0.05))
 ## losing out a lot of calls after doing p adjust ## 
