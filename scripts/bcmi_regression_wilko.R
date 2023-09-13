@@ -465,9 +465,147 @@ for(l in c(0.05,0.1,0.15))
 }
 
 
+##### going to try 10 different seeds but with cut off point different for spearman############
+### the cutoff point is corresponding to the bcmi cut off ### 
+######### sir suggestion ##############
+base.dir="./mpmi_indices/"
+seed=sample(.Machine$integer.max, 1) # 1140350788
+set.seed(1140350788)
+num_seeds<-10
+random_seeds <- sample.int(2^31 - 1, num_seeds)
+# 1588846348 1463234807 1356651008  704118021 1696680727  671479058 1703830755  900040367  175283650  1732477378
+### bcmi > 0.05 0.1 0.15 ##########
+seed_count=0
+for (s in random_seeds)
+{
+  seed_count=seed_count+1
+  base.dir=paste0("./mpmi_indices/seed",seed_count,"/")
+  dir.create(base.dir)
+  print(s)
+  set.seed(s) 
+  for(l in c(0.05,0.1,0.15))
+  {
+    causal_points=c()
+    for(i in c(0,0.05,0.1))
+    {
+      points=which(  causal_data$lowerside==TRUE & causal_data$distance>i & causal_data$bcmi_causal > l) #new condition added
+      points=points-1 # to make them zero indexed for python 
+      lapply(points, write, paste0(base.dir,"yeast_wilko_mi_causal_bcmi",l,"_",i,".csv"),append=TRUE)
+      causal_points=c(causal_points,length(points))
+      cat("bcmi",l,"odc cutoff",i," number of points", length(points),"\n")
+    }
+    cutoff=c(0,0.05,0.1)
+    j=0
+    for(i in causal_points)
+    {
+      j=j+1
+      if( i > sum(indep_data$bcmi_indep>l) )
+      {
+        print("independent data doesnt have enought points so taking all of them")
+        points=which(indep_data$bcmi_indep>l)
+      }
+      else
+      {
+        points=sample(which(indep_data$bcmi_indep>l),size=i,replace = FALSE) #new condition added
+      }
+      
+      points=points-1 # to make them zero indexed for python 
+      lapply(points, write, paste0(base.dir,"yeast_wilko_mi_indep_bcmi",l,"_",cutoff[j],".csv"),append=TRUE)
+    }
+    
+  }
+  
+  #### spearman 0.05 0.1 0.15 ### 
+  
+  for(l in c(0.05,0.1,0.15))
+  {
+    causal_points=c()
+    obj<- lm(abs_spear_causal ~ bcmi_causal,data=causal_data)
+    v=predict(obj,data.frame(bcmi_causal=c(l)))
+    for(i in c(0,0.05,0.1))
+    {
+      points=which(   causal_data$lowerside==TRUE & causal_data$distance>i & causal_data$abs_spear_causal > v) #new condition added
+      points=points-1 # to make them zero indexed for python 
+      lapply(points, write, paste0(base.dir,"yeast_wilko_mi_causal_spear",l,"_",i,".csv"),append=TRUE)
+      causal_points=c(causal_points,length(points))
+      cat("spear",l,"odc cutoff",i," number of points", length(points),"\n")
+      
+    }
+    cutoff=c(0,0.05,0.1)
+    j=0
+    #obj<- lm(abs_spear_indep ~ bcmi_indep,data=indep_data)
+    #v=predict(obj,data.frame(bcmi_indep=c(l)))
+    for(i in causal_points)
+    {
+      j=j+1
+      if( i > sum(indep_data$abs_spear_indep>v) )
+      {
+        print("independent data doesnt have enought points so taking all of them")
+        points=which(indep_data$abs_spear_indep>v)
+      }
+      else
+      {
+        points=sample(which(indep_data$abs_spear_indep>v),size=i,replace = FALSE) #new condition added
+      }
+      
+      points=points-1 # to make them zero indexed for python 
+      lapply(points, write, paste0(base.dir,"yeast_wilko_mi_indep_spear",l,"_",cutoff[j],".csv"),append=TRUE)
+    }
+    
+  }
+  
+  ### spearman or bcmi 0.05 0.1 0.15 ###### 
+  spearman_cutoff_causal=c()
+  spearman_cutoff_indep=c()
+  for(l in c(0.05,0.1,0.15))
+  {
+    
+    causal_points=c()
+    obj<- lm(abs_spear_causal ~ bcmi_causal,data=causal_data)
+    v=predict(obj,data.frame(bcmi_causal=c(l)))
+    spearman_cutoff_causal=c(spearman_cutoff_causal,v)
+    for(i in c(0,0.05,0.1))
+    {
+      
+      points=which(causal_data$lowerside==TRUE & causal_data$distance>i & (causal_data$bcmi_causal > l  | causal_data$abs_spear_causal>v)) #new condition added
+      points=points-1 # to make them zero indexed for python 
+      lapply(points, write, paste0(base.dir,"yeast_wilko_mi_causal_both",l,"_",i,".csv"),append=TRUE)
+      causal_points=c(causal_points,length(points))
+      cat("both bcmi",l,"spearman",v, "odc cutoff",i," number of points", length(points),"\n")
+    }
+    cutoff=c(0,0.05,0.1)
+    j=0
+    #obj<- lm(abs_spear_indep ~ bcmi_indep,data=indep_data)
+    #v=predict(obj,data.frame(bcmi_indep=c(l)))
+    #spearman_cutoff_indep=c(spearman_cutoff_indep,v)
+    for(i in causal_points)
+    {
+      j=j+1
+      if( i > sum(indep_data$bcmi_indep>l | indep_data$abs_spear_indep>v) )
+      {
+        print("independent data doesnt have enought points so taking all of them")
+        points=which(indep_data$bcmi_indep>l | indep_data$abs_spear_indep>v)
+      }
+      else
+      {
+        points=sample(which(indep_data$bcmi_indep>l | indep_data$abs_spear_indep>v),size=i,replace = FALSE) #new condition added
+      }
+      
+      points=points-1 # to make them zero indexed for python 
+      lapply(points, write, paste0(base.dir,"yeast_wilko_mi_indep_both",l,"_",cutoff[j],".csv"),append=TRUE)
+    }
+    
+  }
+  
+}
+
+write.table(spearman_cutoff_causal,file="spearman_cutoff_causal.txt",quote=FALSE,row.names=F,col.names=F)
+#write.table(spearman_cutoff_indep,file="spearman_cutoff_indep.txt",quote=FALSE,row.names=F,col.names=F)
 
 
 
-
-
-
+#saving files for the supplementary file 
+supp_data_causal<- causal_data[,c('bcmi_causal','abs_spear_causal','distance')]
+supp_data_indep<-indep_data[,c('bcmi_indep','abs_spear_indep','distance')]
+write.table(supp_data_causal,"supp_causal_yeast.csv",quote = FALSE,row.names = FALSE)
+write.table(supp_data_indep,"supp_indep_yeast.csv",quote = FALSE,row.names = FALSE)
