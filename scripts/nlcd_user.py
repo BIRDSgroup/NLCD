@@ -77,15 +77,29 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,norma
     #parallelizing, here the number of workers is set as default to the number of cpus, you can modify it  
     with Pool() as pool:
         res = pool.starmap(nlcd_single_for_batch, zip(shared_data, [shuffles]*ntrios, [algo]*ntrios, child_seeds_ints, [verbose]*ntrios, [reverse]*ntrios,[normal]*ntrios))
-    
-    df=pd.DataFrame(res)
+    print(res)
+    data=[[sublist[0], sublist[1], sublist[2], sublist[3],sublist[4],sublist[5],sublist[14]] if sublist!=[None] else [None] for sublist in res]
+    p_df=pd.DataFrame(data)
+    data=[[sublist[6],*sublist[10]] if sublist!=[None] else [None] for sublist in res] # Test 1
+    t1loss=pd.DataFrame(data).T
+    data=[[sublist[7],*sublist[11]] if sublist!=[None] else [None] for sublist in res] # Test 2
+    t2loss=pd.DataFrame(data).T
+    data=[[sublist[9],*sublist[13]] if sublist!=[None] else [None] for sublist in res] # Test 4
+    t4loss=pd.DataFrame(data).T
+    data=[list([x, *y] for x, y in zip(sublist[8], sublist[12]))[0] if sublist!=[None] else [None] for sublist in res]
+    t3loss_0=pd.DataFrame(data).T
+    data=[list([x, *y] for x, y in zip(sublist[8], sublist[12]))[1] if sublist!=[None] else [None] for sublist in res]
+    t3loss_1=pd.DataFrame(data).T
+    data=[list([x, *y] for x, y in zip(sublist[8], sublist[12]))[2] if sublist!=[None] and len(list([x, *y] for x, y in zip(sublist[8], sublist[12])))>2   else [None] for sublist in res]
+    t3loss_2=pd.DataFrame(data).T
+    #df=pd.DataFrame(res)
     et = time.time()
     elapsed_time = et - st
     print("Algo ",algo," shuffles ",shuffles," datasize = ",len(shared_data[0][0])," reverse ",reverse)
     print('start time: ', st,' end time: ',et, 'Execution time:', elapsed_time, 'seconds')
-    df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 4','child_seed']
-    df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
-    return df
+    p_df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 4','child_seed']
+    p_df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
+    return p_df,t1loss,t2loss,t4loss,t3loss_0,t3loss_1,t3loss_2
 
 def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False, normal=False):
     assert len(singletriodata)==3
@@ -110,8 +124,9 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
         out=combine_tests(L,B,A,shuffles,algo,normal)
     else:
         print("Invalid entry for reverse parameter")
-    out.append(sample_seed)
-    if verbose==True:
+    if out!=[None]:
+        out.append(sample_seed)
+    if verbose==True: # need to fix this to add the original losses 
         print("The final p value is ",out[0])
         print("Test 1 L assoc B ",out[1])
         print("Test 2 L assoc A | B ",out[2])

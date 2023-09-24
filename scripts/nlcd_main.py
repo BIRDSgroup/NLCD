@@ -160,7 +160,7 @@ def test_4(L,A,B,shuffles,algo):
     original_loss/=count
     overlap_scores = [np.sum(overlaps) / len(overlaps) for overlaps in overlap]
     total_overlap_score = np.sum(overlap_scores)/count
-    return [calculate_pvalue(original_loss,perm_loss),total_overlap_score]
+    return [calculate_pvalue(original_loss,perm_loss),total_overlap_score,original_loss,perm_loss]
 
 
 def compute_1_loss(x_test,y_test):
@@ -190,7 +190,7 @@ def test_1(L,B,shuffles):
         perm_loss.append(compute_1_loss(L,np.random.permutation(B)))
 
     original_loss=compute_1_loss(L,B)
-    return calculate_pvalue(original_loss,perm_loss)    
+    return calculate_pvalue(original_loss,perm_loss),original_loss,perm_loss    
 
 
 def test_3_loss(A,B,algo):
@@ -208,45 +208,49 @@ def test_3(L,A,B,shuffles,algo):
     '''
     unique_values = np.unique(L)
     p_values = []
-
+    original_losses=[]
+    perm_losslist=[]
     for value in unique_values:
         indices = np.where(L == value)[0]
         A_value = A[indices]
         B_value = B[indices]
-      
+        
         original_loss = test_3_loss(A_value, B_value, algo)
+        original_losses.append(original_loss)
         perm_losses = [test_3_loss(A_value, np.random.permutation(B_value), algo) for _ in range(shuffles)]
+        perm_losslist.append(perm_losses)
         p_value = calculate_pvalue(original_loss, perm_losses)
         p_values.append(p_value)
-        
+    
+    #min_original_loss=original_losses[p_values.index(min(p_values))]    
     min_p_value = min(p_values)
-    return min_p_value
+    return min_p_value,original_losses,perm_losslist
 
 
 def test_2(L,A,B,shuffles,algo):
     Apred, _ = nlr_train_predict(B, A, algo)
     Aresid = A - Apred
-    out = test_1(L, Aresid, shuffles)
-    return out    
+    out,original_loss,perm_loss = test_1(L, Aresid, shuffles)
+    return out,original_loss,perm_loss    
 
 
 def combine_tests(L,A,B,shuffles,algo,normal):
     '''
     Function to combine all the tests 
     '''
-    if( len(np.unique(L))==1):
+    if( len(np.unique(L))==1): # fix the number 10
         print("Zero variance of L, skipping trio")
-        return [None]*6
+        return [None]
     if( 1 in [sum(L==x) for x in np.unique(L)] ):
-        print(" Only single value for a genotype value, cant do the statistics ")
-        return [None]*6
+        print(" Only single value for a genotype value, can't do the statistics ")
+        return [None]
     if(normal==True):
         A=normalize(L,A)
         B=normalize(L,B)
 
-    LB_p=test_1(L,B,shuffles)
-    LAgvnB=test_2(L,A,B,shuffles,algo)
-    ABgvnL=test_3(L,A,B,shuffles,algo)
-    LindBgvnA,overlapscore2=test_4(L,A,B,shuffles,algo)
-    p_final=np.max([LB_p,LAgvnB,ABgvnL,LindBgvnA])
-    return [p_final,LB_p,LAgvnB,ABgvnL,LindBgvnA,overlapscore2]
+    T1_p,T1_OL,T1_PL=test_1(L,B,shuffles)
+    T2_p,T2_OL,T2_PL=test_2(L,A,B,shuffles,algo)
+    T3_p,T3_OL,T3_PL=test_3(L,A,B,shuffles,algo)
+    T4_p,T4_OS,T4_OL,T4_PL=test_4(L,A,B,shuffles,algo)
+    p_final=np.max([T1_p,T2_p,T3_p,T4_p])
+    return [p_final,T1_p,T2_p,T3_p,T4_p,T4_OS,T1_OL,T2_OL,T3_OL,T4_OL,T1_PL,T2_PL,T3_PL,T4_PL]
