@@ -77,9 +77,9 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,norma
     #parallelizing, here the number of workers is set as default to the number of cpus, you can modify it  
     with Pool() as pool:
         res = pool.starmap(nlcd_single_for_batch, zip(shared_data, [shuffles]*ntrios, [algo]*ntrios, child_seeds_ints, [verbose]*ntrios, [reverse]*ntrios,[normal]*ntrios))
-    print(res)
+    #print(res)
     data=[[sublist[0], sublist[1], sublist[2], sublist[3],sublist[4],sublist[5],sublist[14]] if sublist!=[None] else [None] for sublist in res]
-    p_df=pd.DataFrame(data)
+    p_df=pd.DataFrame(data,dtype=object)
     data=[[sublist[6],*sublist[10]] if sublist!=[None] else [None] for sublist in res] # Test 1
     t1loss=pd.DataFrame(data).T
     data=[[sublist[7],*sublist[11]] if sublist!=[None] else [None] for sublist in res] # Test 2
@@ -98,6 +98,14 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,norma
     print("Algo ",algo," shuffles ",shuffles," datasize = ",len(shared_data[0][0])," reverse ",reverse)
     print('start time: ', st,' end time: ',et, 'Execution time:', elapsed_time, 'seconds')
     p_df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 4','child_seed']
+    #print(p_df['p_final'].dtype)
+    #print(p_df['p_LassocB'].dtype)
+    #print(p_df['p_LassocA|B'].dtype)
+    #print(p_df['p_AassocB|L'].dtype)
+    #print(p_df['p_LindB|A'].dtype)
+    #print(p_df['OS Test 4'].dtype)
+    #print(p_df['child_seed'].dtype)
+    #p_df['child_seed'] = p_df['child_seed'].astype(str)
     p_df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
     return p_df,t1loss,t2loss,t4loss,t3loss_0,t3loss_1,t3loss_2
 
