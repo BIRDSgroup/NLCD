@@ -178,6 +178,7 @@ def compute_1_loss(x_test,y_test):
         y_mean[indices] = mu
         y_std[indices] = sigma
     #return NLL loss 
+    #return np.mean(((((y_test-y_mean)/y_std)**2)/2)+np.log(2*np.pi)+np.log((y_std)))
     return -np.mean(np.log(np.exp(-(((y_test-y_mean)/y_std)**2)/2)/np.sqrt(2*np.pi*(y_std**2))))
 
 

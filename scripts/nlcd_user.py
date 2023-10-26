@@ -58,7 +58,7 @@ def read_configuration(data):
     fo.close()
     return pd.DataFrame(confignames)
 
-def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,normal=False):
+def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,normal=False,usercall=False):
     st = time.time()
     if(sample_seed==None):
         ss = SeedSequence()
@@ -98,16 +98,11 @@ def nlcd_batch(shared_data, shuffles, algo, reverse=False,sample_seed=None,norma
     print("Algo ",algo," shuffles ",shuffles," datasize = ",len(shared_data[0][0])," reverse ",reverse)
     print('start time: ', st,' end time: ',et, 'Execution time:', elapsed_time, 'seconds')
     p_df.columns=['p_final','p_LassocB','p_LassocA|B','p_AassocB|L','p_LindB|A','OS Test 4','child_seed']
-    #print(p_df['p_final'].dtype)
-    #print(p_df['p_LassocB'].dtype)
-    #print(p_df['p_LassocA|B'].dtype)
-    #print(p_df['p_AassocB|L'].dtype)
-    #print(p_df['p_LindB|A'].dtype)
-    #print(p_df['OS Test 4'].dtype)
-    #print(p_df['child_seed'].dtype)
-    #p_df['child_seed'] = p_df['child_seed'].astype(str)
     p_df['parent_seed']=[ss.entropy]+['same']*(ntrios-1)
-    return p_df,t1loss,t2loss,t4loss,t3loss_0,t3loss_1,t3loss_2
+    if usercall==False:
+        return p_df,t1loss,t2loss,t4loss,t3loss_0,t3loss_1,t3loss_2
+    else:
+        return p_df
 
 def nlcd_single_for_batch(singletriodata, shuffles, algo, sample_seed=None, verbose=False, reverse=False, normal=False):
     assert len(singletriodata)==3
@@ -134,16 +129,18 @@ def nlcd_single(L, A, B, shuffles, algo, sample_seed=None, verbose=True, reverse
         print("Invalid entry for reverse parameter")
     if out!=[None]:
         out.append(sample_seed)
-    if verbose==True: # need to fix this to add the original losses 
+    if verbose==True and out!=[None]:
         print("The final p value is ",out[0])
         print("Test 1 L assoc B ",out[1])
         print("Test 2 L assoc A | B ",out[2])
         print("Test 3 A assoc B | L ",out[3])
         print("Test 4 L ind B | A ",out[4])
-        #print("Overlap score from Test 2 ",out[5])
         print("Overlap score from Test 4 ",out[5])
-        print("Seed set at ",out[6])
-        
+        print("Seed set at ",out[14])
+        return out[0:6]+[out[14]]
+    elif verbose==True:
+        print("Output vector is None")
+        return 
     
     return out
 
