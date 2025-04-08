@@ -24,8 +24,8 @@ read_data<-function(path,inputs)
   close(con)
   return (dataset)
 }
+# change it to yeastgt_0 for the indpendent dataset
 dataset_yeast<-read_data('yeastgt_1_wilko1234_ready.txt',inputs=1234)
-#dataset_yeast<-read_data('yeastgt_0_wilko1257_ready.txt',inputs=1257)
 inputs=1234
 mi_causal<- numeric(inputs)
 bcmi_causal<- numeric(inputs)
