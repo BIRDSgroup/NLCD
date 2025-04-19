@@ -10,7 +10,7 @@ This repo contains the scripts and data used in the paper : cite our paper.
 -> `figures`: Contains figures and code to reproduce the plots, tables \
 -> `results`: \
 -> `scripts`: \
--> `yeast`: Contains yeast datasets, and code to process the yeast datasets. 
+-> `yeast`: Contains yeast datasets, and codes to process the raw yeast data. 
 
 ## Installation
 ```
@@ -30,7 +30,7 @@ Instructions are provided in the data folder,results, figures and yeast folder o
 Files/Results that are large in size can be found here : https://drive.google.com/drive/folders/1W2uq8H3PmJKspsceDLFLkwFMoIW63jgf?usp=drive_link
 
 ## Contact 
-If you are facing any issues, please contact Aravind Easwar (aeaswar81@gmail.com), Dr. Manikandan Narayanan (nmanik@cse.iitm.ac.in)
+If you are facing any issues/queries, please contact Aravind Easwar (aeaswar81@gmail.com), Dr. Manikandan Narayanan (nmanik@cse.iitm.ac.in)
 
 ## License preamble 
 

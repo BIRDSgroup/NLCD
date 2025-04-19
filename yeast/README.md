@@ -1,0 +1,2 @@
+## How to process the raw yeast data  
+Refer to `full_procedure.ipynb` in the `scripts` folder that uses the files present here to process the raw data. The processed yeast causal (`yeastgt_1_wilko1234_ready.txt`) and independent (`yeastgt_1_wilko1234_ready.txt`)data are present in the drive link. 

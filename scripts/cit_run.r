@@ -70,7 +70,7 @@ cit_process<- function(path,inputs,reverse=FALSE,seed=NULL,perms=50,outpath=NULL
 
 # to reproduce the result say Sine data set with 500 samples and 100 permutations, inputs is the number of trios. 
 # inputs = 100 for all the simulated datasets 
-# for yeast the input is 1257
+# for yeast the input is 1234
 cit_process("./data/Sine500.txt",inputs=100,perms = 100,outpath = './results/journal/simulation/cit/test.csv',seed=1280338118)
 
 
