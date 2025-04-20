@@ -8,8 +8,8 @@ NLCD stands for Non-Linear Causal Discovery. It is a method to discover causal r
 
 -> `data`:  Contains simulation data and code to generate the simulation data \
 -> `figures`: Contains figures and code to reproduce the plots, tables \
--> `results`: \
--> `scripts`: \
+-> `results`: Contains simulation, yeast and human results for the SOTA methods \
+-> `scripts`: Contains the code to run all the four methods \
 -> `yeast`: Contains yeast datasets, and codes to process the raw yeast data. 
 
 ## Installation

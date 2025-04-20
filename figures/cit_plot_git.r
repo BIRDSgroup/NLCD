@@ -39,6 +39,7 @@ get_values<-function(L,A,B)
 
 
 ######### for putting it in manuscript ######################
+library(ggplot2)
 df<-read_data("./data/Paravar500.txt",inputs=100)
 i=5 # indexed 4 in python so 5 in R 
 data<-as.data.frame(df[[i]],check.rows=FALSE,check.cols=FALSE,col.names=c("L","A","B"))
@@ -48,17 +49,24 @@ B=data[,3]
 res=get_values(L,A,B)
 B0=res[[1]]
 B1=res[[2]]
+ggplot(data,aes(A,B,color=factor(L)))+geom_point()+geom_point(aes(A,B0),col='red')+geom_point(aes(A,B1),col='green')+
+  ggtitle("CIT prediction")
 
+# save B0 and B1 into a csv 
+
+write.csv(data.frame(B0, B1), file = "B_columns_cit_para_example_L.csv", row.names = FALSE)
 # the below code is working 
 ggplot(data, aes(A, B, color = factor(L))) +
   geom_point() +
   geom_point(aes(A, B0), col = 'red') +
   geom_point(aes(A, B1), col = 'green') + 
-  scale_color_manual(values = c("purple", "yellow","red","green")) +theme(legend.position="none")+
-  ggtitle("CIT prediction") +
-  theme(plot.title = element_text(hjust = 0.5))
+  scale_color_manual(values = c("purple", "yellow","red","green"),name='L') +theme(legend.position="none")+
+  #ggtitle("CIT prediction") +
+  theme(plot.title = element_text(hjust = 0.5))+theme_bw()
 ggsave("./results/journal/plots/fig3_example_L_cit.svg",plot=last_plot())
 ggsave("./results/journal/plots/fig3_example_L_cit.png",plot=last_plot(),dpi=1200)
+ggsave("./results/journal/plots/fig3_example_L_cit.pdf",plot=last_plot(),dpi=1200)
+
 
 
 ### muscle scatter plot ### 
