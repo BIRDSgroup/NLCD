@@ -13,6 +13,6 @@ The scripts folder contains :
 -> `prepare_final_table.R`: Code used to find the causal trios, includes mappability mapping, p value adjustment and other filters applied \
 -> `prepare_pvalues_epept_normal.R` : Compute the EPEPT final p-values from the epept intermediate values/losses \
 -> `process_trio_automate.R`: Code used to compute human trissues from tissues using genotype and gene expression, includes using MatrixEQTL and covariate adjustment \
--> `bcmi_regression_wilko.R`: contains the code that plots the causal and independent data of yeast bcmi vs spearman CIT and NLCD. Also contains the code to select the indices for 10 seeds for a range of values values of bcmi and spearman  \
+-> `bcmi_regression_wilko_git.R`: contains the code that plots the causal and independent data of yeast bcmi vs spearman CIT and NLCD. Also contains the code to select the indices for 10 seeds for a range of values values of bcmi and spearman  \
 -> `cit_run.r` : can be used as a template to run the cit code \
 -> `cit_code.R` : contains the code used to run CIT on simulation and yeast data  
