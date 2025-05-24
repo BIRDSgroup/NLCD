@@ -1,1 +1,1 @@
-NLCD 500 perms and cit 100 perms
+NLCD 500 perms and cit 100 perms on 1752 triplets

@@ -24,15 +24,14 @@ read_data<-function(path,inputs)
   close(con)
   return (dataset)
 }
-# change it to yeastgt_0 for the indpendent dataset
-dataset_yeast<-read_data('yeastgt_1_wilko1234_ready.txt',inputs=1234)
-inputs=1234
-mi_causal<- numeric(inputs)
-bcmi_causal<- numeric(inputs)
-zvalue_causal<- numeric(inputs)
-cor_causal<-numeric(inputs)
-spear_causal<-numeric(inputs)
-for(i in 1:1234)
+dataset_yeast<-read_data('/home/aravind/Documents/yeast_analysis/yeast_cov_corrected/yeastgt_0_wilko1752_ready.txt',inputs=1752)
+inputs=1752
+mi_indep<- numeric(inputs)
+bcmi_indep<- numeric(inputs)
+zvalue_indep<- numeric(inputs)
+cor_indep<-numeric(inputs)
+spear_indep<-numeric(inputs)
+for(i in 1:1752)
 {
   print(i)
   try(
@@ -43,15 +42,15 @@ for(i in 1:1234)
       B<- temp[,3]
       
       mp<-cmi.pw(A,B)
-      mi_causal[i]<-mp$mi
-      bcmi_causal[i]<-mp$bcmi
-      zvalue_causal[i]<-mp$zvalue
-      cor_causal[i]<- cor(A,B)
-      spear_causal[i]<-cor(A,B,method = "spearman")
+      mi_indep[i]<-mp$mi
+      bcmi_indep[i]<-mp$bcmi
+      zvalue_indep[i]<-mp$zvalue
+      cor_indep[i]<- cor(A,B)
+      spear_indep[i]<-cor(A,B,method = "spearman")
       
       
     }
   )}
-df <- data.frame(mi_causal,bcmi_causal,zvalue_causal,cor_causal,spear_causal)
-write.csv(df,"mpmicorspear_causal_wilko1234.csv",row.names=FALSE)
+df <- data.frame(mi_indep,bcmi_indep,zvalue_indep,cor_indep,spear_indep)
+write.csv(df,"/home/aravind/Documents/yeast_analysis/mpmicorspear_indep_wilko1752.csv",row.names=FALSE)
 

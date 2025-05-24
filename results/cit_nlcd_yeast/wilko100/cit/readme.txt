@@ -1,1 +1,1 @@
-1234 trios, updated yeast
+1752 trios with n.resampl set at 100 permutations

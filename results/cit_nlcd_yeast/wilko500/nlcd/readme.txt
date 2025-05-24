@@ -1,1 +1,1 @@
-for 1234 trios updated yeast trio
+nlcd with permutations set at 500 on yeast 1752 triplets

@@ -144,7 +144,7 @@ write.table(results_comb,"./../../../../findr/findrfiles/scripts/findr_yeast/cau
 L_mat<-as.matrix(read.table("./../../../../findr/findrfiles/scripts/findr_yeast/L_mat_findr_indp.csv",sep = ',',row.names = 1,header=T))
 A_mat<-as.matrix(read.table("./../../../../findr/findrfiles/scripts/findr_yeast/A_mat_findr_indp.csv",sep = ',',row.names = 1,header=T))
 B_mat<-as.matrix(read.table("./../../../../findr/findrfiles/scripts/findr_yeast/B_mat_findr_indp.csv",sep = ',',row.names = 1,header=T))
-findr.pv()
+#findr.pv()
 results_comb<-findr.pij_gassist(L_mat,A_mat,B_mat,na=1,nodiag=T)
 #results_comb1<-findr.pij_gassist(L_mat,A_mat,B_mat,na=1,nodiag=T)
 write.table(results_comb,"./../../../../findr/findrfiles/scripts/findr_yeast/indp_results.csv",sep = ',',quote=F)

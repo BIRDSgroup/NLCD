@@ -28,12 +28,12 @@ library(MRPC)
 types<-c("1","0")
 for (type in types)
 {
-    yeast_data<-read_data(paste0("./yeast_data/yeast_trios/yeastgt_",type,"_wilko1234_ready.txt"),inputs=1234) #100 is the number of trios 
+    yeast_data<-read_data(paste0("/home/aravind/Documents/MRPC/yeast_data/yeast_trios/yeastgt_",type,"_wilko1752_ready.txt"),inputs=1752) #100 is the number of trios 
     res_values<-list()
     res_list<-list()
     res_trio<-list()
     counter=0;
-    for(i in 1:1234)
+    for(i in 1:1752)
     {
       print(paste0("trio number ",i))
       for(f in c(0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95,1))
@@ -96,7 +96,7 @@ for (type in types)
     res_table<-cbind(res_table_trios,res_table_names,res_table_values)
     
     
-    write.csv(res_table,file=paste0("./yeast_results/yeast_indv/",type,"_trios_mrpc",".csv"),row.names = F,quote = F)
+    write.csv(res_table,file=paste0("/home/aravind/Documents/MRPC/yeast_results/yeast_indv/",type,"_trios_mrpc",".csv"),row.names = F,quote = F)
     print(paste0(type," completed"))
 
 }

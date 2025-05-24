@@ -39,7 +39,7 @@ read_data<-function(path,inputs)
 ### causal data ######## 
 
 
-causal_data<- read.table("./mpmicorspear_causal_wilko1234.csv", header = TRUE, sep = ",", dec = ".")
+causal_data<- read.table("./mpmicorspear_causal_wilko1752.csv", header = TRUE, sep = ",", dec = ".")
 causal_data$abs_spear_causal<- abs(causal_data$spear_causal)
 
 obj<- lm(causal_data$abs_spear_causal ~ causal_data$bcmi_causal)
@@ -55,7 +55,7 @@ causal_data$distance<-apply(causal_data,1,function(x) dist_point_line(c(x['bcmi_
 
 ### independent data ###### 
 
-indep_data<- read.table("./mpmicorspear_indep_wilko1234.csv", header = TRUE, sep = ",", dec = ".")
+indep_data<- read.table("./mpmicorspear_indep_wilko1752.csv", header = TRUE, sep = ",", dec = ".")
 indep_data$abs_spear_indep<- abs(indep_data$spear_indep)
 indep_data$diff<- abs(indep_data$bcmi_indep - indep_data$abs_spear_indep)
 obj<- lm(indep_data$abs_spear_indep ~ indep_data$bcmi_indep)
@@ -77,7 +77,7 @@ indep_data$distance<-apply(indep_data,1,function(x) dist_point_line(c(x['bcmi_in
 ##### going to try 10 different seeds but with cut off point different for spearman############
 ### the cutoff point is corresponding to the bcmi cut off ### 
 ######### sir suggestion ##############
-base.dir="./mpmi_indices_sanity/"
+base.dir="./mpmi_indices_1752/"
 seed=sample(.Machine$integer.max, 1) # 1140350788
 set.seed(1140350788)
 num_seeds<-10
@@ -88,10 +88,11 @@ seed_count=0
 for (s in random_seeds)
 {
   seed_count=seed_count+1
-  base.dir=paste0("./mpmi_indices_sanity/seed",seed_count,"/")
+  base.dir=paste0("./mpmi_indices_1752/seed",seed_count,"/")
   dir.create(base.dir)
   print(s)
   set.seed(s) 
+  ## bcmi
   for(l in c(0.05,0.1,0.15))
   {
     causal_points=c()
@@ -111,6 +112,13 @@ for (s in random_seeds)
       if( i > sum(indep_data$bcmi_indep>l) )
       {
         print("independent data doesnt have enought points so taking all of them")
+        #print(sum(indep_data$bcmi_indep>l))
+        #print(l)
+        #print(i)
+        if(sum(indep_data$bcmi_indep>l)==0)
+        {
+          print("number of points in independent data set is zero")
+        }
         points=which(indep_data$bcmi_indep>l)
       }
       else
@@ -150,6 +158,10 @@ for (s in random_seeds)
       if( i > sum(indep_data$abs_spear_indep>v) )
       {
         print("independent data doesnt have enought points so taking all of them")
+        if(sum(indep_data$abs_spear_indep>l)==0)
+        {
+          print("number of points in independent data set is zero")
+        }
         points=which(indep_data$abs_spear_indep>v)
       }
       else
@@ -193,6 +205,10 @@ for (s in random_seeds)
       if( i > sum(indep_data$bcmi_indep>l | indep_data$abs_spear_indep>v) )
       {
         print("independent data doesnt have enought points so taking all of them")
+        if(sum(indep_data$bcmi_indep>l | indep_data$abs_spear_indep>v) ==0)
+        {
+          print("number of points in independent data set is zero")
+        }
         points=which(indep_data$bcmi_indep>l | indep_data$abs_spear_indep>v)
       }
       else
@@ -208,14 +224,18 @@ for (s in random_seeds)
   
 }
 
-#write.table(spearman_cutoff_causal,file="spearman_cutoff_causal.txt",quote=FALSE,row.names=F,col.names=F)
-#write.table(spearman_cutoff_indep,file="spearman_cutoff_indep.txt",quote=FALSE,row.names=F,col.names=F)
+write.table(spearman_cutoff_causal,file="./mpmi_indices_1752/spearman_cutoff_causal.txt",quote=FALSE,row.names=F,col.names=F)
+write.table(spearman_cutoff_indep,file="./mpmi_indices_1752/spearman_cutoff_indep.txt",quote=FALSE,row.names=F,col.names=F)
 
 
 ########### Figure 4a and S8 ##############
 library(gridExtra)
 library(grid)
 ### causal data Figure 4 a
+nlcdyeast_causal<-read.table("./yeast_nlcd_result/yeast_causal_1752.csv",header=T,sep=',') 
+nlcdyeast_indp<-read.table("./yeast_nlcd_result/yeast_indp_1752.csv",header=T,sep=',') 
+cityeast_causal<-read.table("./yeast_cit_result/yeast_causal_1752.csv",header=T,sep=',') 
+cityeast_indp<-read.table("./yeast_cit_result/yeast_indp_1752.csv",header=T,sep=',')
 nlcd_plot<-ggplot(causal_data, aes(x=bcmi_causal, y=abs_spear_causal, color=as.factor(ifelse(nlcdyeast_causal$p_final < 0.05, "Causal (p<=0.05)", "Independent (p>0.05)")))) + 
   geom_point(alpha=0.5)+
   geom_smooth(method='lm', color = 'black')+ggtitle("NLCD ",) + labs(x="BCMI",y=expression(paste("Absolute Spearman (|", rho, "|)", sep = "")),colour = "NLCD prediction")+theme_bw()+ theme(legend.position="none",plot.title = element_text(size=10,hjust = 0.5)) 
@@ -261,5 +281,5 @@ combined_plot <- grid.arrange(arrangeGrob(nlcd_plot + theme(legend.position="non
 #saving files for the supplementary file 
 supp_data_causal<- causal_data[,c('bcmi_causal','abs_spear_causal','distance')]
 supp_data_indep<-indep_data[,c('bcmi_indep','abs_spear_indep','distance')]
-write.table(supp_data_causal,"supp_causal_yeast.csv",quote = FALSE,row.names = FALSE)
-write.table(supp_data_indep,"supp_indep_yeast.csv",quote = FALSE,row.names = FALSE)
+write.table(supp_data_causal,"supp_causal_yeast_1752.csv",quote = FALSE,row.names = FALSE)
+write.table(supp_data_indep,"supp_indep_yeast_1752.csv",quote = FALSE,row.names = FALSE)
