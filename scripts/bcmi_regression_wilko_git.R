@@ -42,7 +42,7 @@ read_data<-function(path,inputs)
 causal_data<- read.table("./mpmicorspear_causal_wilko1752.csv", header = TRUE, sep = ",", dec = ".")
 causal_data$abs_spear_causal<- abs(causal_data$spear_causal)
 
-obj<- lm(causal_data$abs_spear_causal ~ causal_data$bcmi_causal)
+obj<- rlm(causal_data$abs_spear_causal ~ causal_data$bcmi_causal)
 c<-coef(obj)[1]
 m<-coef(obj)[2]
 summary(obj)
@@ -96,7 +96,7 @@ for (s in random_seeds)
   for(l in c(0.05,0.1,0.15))
   {
     causal_points=c()
-    for(i in c(0,0.05,0.1))
+    for(i in c(0,0.0125,0.025,0.0375,0.05,0.1))
     {
       points=which(  causal_data$lowerside==TRUE & causal_data$distance>i & causal_data$bcmi_causal > l) #new condition added
       points=points-1 # to make them zero indexed for python 
@@ -104,7 +104,7 @@ for (s in random_seeds)
       causal_points=c(causal_points,length(points))
       cat("bcmi",l,"odc cutoff",i," number of points", length(points),"\n")
     }
-    cutoff=c(0,0.05,0.1)
+    cutoff=c(0,0.0125,0.025,0.0375,0.05,0.1)
     j=0
     for(i in causal_points)
     {
@@ -139,7 +139,7 @@ for (s in random_seeds)
     causal_points=c()
     obj<- lm(abs_spear_causal ~ bcmi_causal,data=causal_data)
     v=predict(obj,data.frame(bcmi_causal=c(l)))
-    for(i in c(0,0.05,0.1))
+    for(i in c(0,0.0125,0.025,0.0375,0.05,0.1))
     {
       points=which(   causal_data$lowerside==TRUE & causal_data$distance>i & causal_data$abs_spear_causal > v) #new condition added
       points=points-1 # to make them zero indexed for python 
@@ -148,7 +148,7 @@ for (s in random_seeds)
       cat("spear",l,"odc cutoff",i," number of points", length(points),"\n")
       
     }
-    cutoff=c(0,0.05,0.1)
+    cutoff=c(0,0.0125,0.025,0.0375,0.05,0.1)
     j=0
     #obj<- lm(abs_spear_indep ~ bcmi_indep,data=indep_data)
     #v=predict(obj,data.frame(bcmi_indep=c(l)))
@@ -185,16 +185,18 @@ for (s in random_seeds)
     obj<- lm(abs_spear_causal ~ bcmi_causal,data=causal_data)
     v=predict(obj,data.frame(bcmi_causal=c(l)))
     spearman_cutoff_causal=c(spearman_cutoff_causal,v)
-    for(i in c(0,0.05,0.1))
+    for(i in c(0,0.0125,0.025,0.0375,0.05,0.1))
     {
       
       points=which(causal_data$lowerside==TRUE & causal_data$distance>i & (causal_data$bcmi_causal > l  | causal_data$abs_spear_causal>v)) #new condition added
+      # making sure that the or condition is same as bcmi 
+      stopifnot(which(  causal_data$lowerside==TRUE & causal_data$distance>i & causal_data$bcmi_causal > l)==points)
       points=points-1 # to make them zero indexed for python 
       lapply(points, write, paste0(base.dir,"yeast_wilko_mi_causal_both",l,"_",i,".csv"),append=TRUE)
       causal_points=c(causal_points,length(points))
       cat("both bcmi",l,"spearman",v, "odc cutoff",i," number of points", length(points),"\n")
     }
-    cutoff=c(0,0.05,0.1)
+    cutoff=c(0,0.0125,0.025,0.0375,0.05,0.1)
     j=0
     #obj<- lm(abs_spear_indep ~ bcmi_indep,data=indep_data)
     #v=predict(obj,data.frame(bcmi_indep=c(l)))
@@ -237,10 +239,10 @@ nlcdyeast_indp<-read.table("./yeast_nlcd_result/yeast_indp_1752.csv",header=T,se
 cityeast_causal<-read.table("./yeast_cit_result/yeast_causal_1752.csv",header=T,sep=',') 
 cityeast_indp<-read.table("./yeast_cit_result/yeast_indp_1752.csv",header=T,sep=',')
 nlcd_plot<-ggplot(causal_data, aes(x=bcmi_causal, y=abs_spear_causal, color=as.factor(ifelse(nlcdyeast_causal$p_final < 0.05, "Causal (p<=0.05)", "Independent (p>0.05)")))) + 
-  geom_point(alpha=0.5)+
+  geom_point(alpha=0.5)+ylim(0, 1.0)+
   geom_smooth(method='lm', color = 'black')+ggtitle("NLCD ",) + labs(x="BCMI",y=expression(paste("Absolute Spearman (|", rho, "|)", sep = "")),colour = "NLCD prediction")+theme_bw()+ theme(legend.position="none",plot.title = element_text(size=10,hjust = 0.5)) 
 cit_plot<-ggplot(causal_data, aes(x=bcmi_causal, y=abs_spear_causal, color=as.factor(ifelse(cityeast_causal$p_cit < 0.05, "Causal (p<=0.05)", "Independent (p>0.05)")))) + 
-  geom_point(alpha=0.5)+
+  geom_point(alpha=0.5)+ylim(0, 1.0)+
   geom_smooth(method='lm', color = 'black')+ggtitle("CIT ") +labs(x="BCMI",colour = "NLCD/CIT predictions:") +ylab(NULL)+ theme_bw()+ theme(legend.position = "bottom",axis.text.y=element_blank(),plot.title = element_text(size=10,hjust = 0.5))
 #legend extractor function
 g_legend<-function(a.gplot){
@@ -258,10 +260,10 @@ combined_plot <- grid.arrange(arrangeGrob(nlcd_plot + theme(legend.position="non
 
 ## going to do the same for independent data ##  Figure S8
 nlcd_plot<-ggplot(indep_data, aes(x=bcmi_indep, y=abs_spear_indep, color=as.factor(ifelse(nlcdyeast_indp$p_final < 0.05, "Causal (p<=0.05)", "Independent (p>0.05)")))) + 
-  geom_point(alpha=0.5)+
+  geom_point(alpha=0.5)+ylim(0, 1.0)+
   geom_smooth(method='lm', color = 'black')+ggtitle("NLCD ",) + labs(x="BCMI",y=expression(paste("Absolute Spearman (|", rho, "|)", sep = "")),colour = "NLCD prediction")+theme_bw()+ theme(legend.position="none",plot.title = element_text(size=10,hjust = 0.5)) 
 cit_plot<-ggplot(indep_data, aes(x=bcmi_indep, y=abs_spear_indep, color=as.factor(ifelse(cityeast_indp$p_cit < 0.05, "Causal (p<=0.05)", "Independent (p>0.05)")))) + 
-  geom_point(alpha=0.5)+
+  geom_point(alpha=0.5)+ylim(0, 1.0)+
   geom_smooth(method='lm', color = 'black')+ggtitle("CIT ") +labs(x="BCMI",colour = "NLCD/CIT predictions:") +ylab(NULL)+ theme_bw()+ theme(legend.position = "bottom",axis.text.y=element_blank(),plot.title = element_text(size=10,hjust = 0.5))
 #legend extractor function
 g_legend<-function(a.gplot){
