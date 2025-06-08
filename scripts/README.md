@@ -13,4 +13,4 @@ The scripts folder contains :  \
 -> `process_trio_automate.R`: Code used to compute human trissues from tissues using genotype and gene expression, includes using MatrixEQTL and covariate adjustment \
 -> `bcmi_regression_wilko_git.R`: contains the code that plots the causal and independent data of yeast bcmi vs spearman CIT and NLCD. Also contains the code to select the indices for 10 seeds for a range of values values of bcmi and spearman, also includes the code for plotting Figure 4a and S8  \
 -> `cit_code.R` : contains the code used to run CIT on simulation and yeast data \
-Note: expression files are present in the drive link
+Note: Expression files are present in the drive link
