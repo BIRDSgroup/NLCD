@@ -278,6 +278,11 @@ combined_plot <- grid.arrange(arrangeGrob(nlcd_plot + theme(legend.position="non
                                           cit_plot + theme(legend.position="none"),
                                           nrow=1,widths = c(1.1, 0.94)),
                               mylegend, nrow=2,heights=c(10, 1)) #c(10,1)
+
+############# Confusion matrix ########## 
+# founding using cityeast_indp$p_cit < 0.05 nlcdyeast_indp$p_final<0.05 etc 
+# NLCD TP= 499 FN= 1253 FP=443 TN=1309 
+# CIT TP=682 FN=1070 FP=611 TN=1141
 ######################################
 
 #saving files for the supplementary file 
