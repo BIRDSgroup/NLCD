@@ -311,7 +311,7 @@ print(paste(tissue," Done"))
 }
 
 
-## the below code can be safely ignored
+## the below code can be safely ignored (instead see code in prepare_final_table.R)
 
 
 ######### Part 2 mappability and p value adjustment ###############   
