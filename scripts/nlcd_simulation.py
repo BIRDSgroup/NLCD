@@ -13,10 +13,33 @@ if __name__ == '__main__':
     parser.add_argument('-n',"--normal",action='store_true',help = " If you want to normalize A|L default false ")
     parser.add_argument("--seed",type=int,help='Seed to reproduce the result')
     parser.add_argument("-l","--losses",action='store_true',help="Losses are stored by default")
+    parser.add_argument("--kernel", type=str,   default=None)
+    parser.add_argument("--alpha",  type=float, default=None)
+    parser.add_argument("--gamma",  type=float, default=None)
+    parser.add_argument("--degree", type=int,   default=None)
+    # train/test split mode (R2C4: addresses overfitting concern)
+    parser.add_argument("--split", action='store_true',
+                        help="Use train/test split for fitting MLE/regressors and evaluating loss on held-out test (R2C4)")
+    parser.add_argument("--train-frac", type=float, default=0.8,
+                        help="Train fraction when --split is set (default 0.8)")
+
     args = parser.parse_args()
+    hyper = {k: v for k, v in dict(kernel=args.kernel, alpha=args.alpha,
+                                  gamma=args.gamma, degree=args.degree).items() if v is not None}
+    if hyper:
+        args.algo = {"name": args.algo, "params": hyper}
+
+    if args.split and args.normal:
+        parser.error("--normal cannot be combined with --split (would leak test-set sigma into preprocessing)")
+    if args.split and not (0.0 < args.train_frac < 1.0):
+        parser.error("--train-frac must be in (0, 1)")
+
     dataset=read_data(args.inputpath)
     #df=nlcd_batch(dataset, args.shuffles, args.algo, args.reverse,args.seed,args.normal)
-    p_df,t1loss,t2loss,t4loss,t3loss_0,t3loss_1,t3loss_2=nlcd_batch(dataset,args.shuffles,args.algo,args.reverse,args.seed,args.normal)
+    p_df,t1loss,t2loss,t4loss,t3loss_0,t3loss_1,t3loss_2=nlcd_batch(
+        dataset, args.shuffles, args.algo, args.reverse, args.seed, args.normal,
+        split=args.split, train_frac=args.train_frac,
+    )
     # going to change the float_format parameter from %f to string, by default it is string so remove the parameter
     p_df.to_csv(args.outputpath, header=True, index=False)
     if args.losses==True:

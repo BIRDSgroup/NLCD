@@ -1,0 +1,16 @@
+\begin{table}
+\centering
+\caption{Per-component-test AUPRC on the yeast benchmark (1{,}752 causal vs 1{,}752 independent triplets), reported as mean $\pm$ std over 10 runs, with the overall NLCD/CIT p-value (\textit{p\_final}) as the last row. Score: $1-p$; positives are causal triplets.}
+\label{tab:R2C5_per_test_auprc}
+\begin{tabular}{lccc}
+\toprule
+    Component test &       AUPRC (CIT) &      AUPRC (NLCD) & $\Delta$ (NLCD $-$ CIT) \\
+\midrule
+    Test 1:  L ~ B & 0.542 $\pm$ 0.000 & 0.514 $\pm$ 0.003 &      -0.028 $\pm$ 0.003 \\
+Test 2:  L ~ A | B & 0.499 $\pm$ 0.000 & 0.499 $\pm$ 0.001 &      +0.000 $\pm$ 0.001 \\
+Test 3:  A ~ B | L & 0.517 $\pm$ 0.000 & 0.516 $\pm$ 0.001 &      -0.002 $\pm$ 0.001 \\
+Test 4:  L ⟂ B | A & 0.532 $\pm$ 0.001 & 0.516 $\pm$ 0.001 &      -0.016 $\pm$ 0.001 \\
+  Overall: p_final & 0.546 $\pm$ 0.000 & 0.525 $\pm$ 0.002 &      -0.022 $\pm$ 0.002 \\
+\bottomrule
+\end{tabular}
+\end{table}
