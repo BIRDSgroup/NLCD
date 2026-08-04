@@ -1,6 +1,6 @@
 # NLCD : A method to discover nonlinear causal relations among genes
 
-This repo contains the scripts and data used in the paper: "NLCD: A method to discover nonlinear causal relations among genes. Aravind Easwar and Manikandan Narayanan". 
+This repo contains the scripts and data used in the paper: "NLCD: A method to discover nonlinear causal relations among genes. Aravind Easwar and Manikandan Narayanan". PLoS Comput Biol 22(7): e1014570. https://doi.org/10.1371/journal.pcbi.1014570
 
 NLCD stands for Non-Linear Causal Discovery. It is a method to discover causal relations between two genes or between two traits in general (including gene expression or other clinical traits) from matched trait and genetic data. Please find more information about the method and its evaluation and application in our paper.
 
