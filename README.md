@@ -7,7 +7,7 @@ NLCD stands for Non-Linear Causal Discovery. It is a method to discover causal r
 ## Note about version
 
 **This branch (`master`)** contains the code as it was at the time of initial
-submission to the journal. Please look at **branch (v2) for the revised code** (including additional experiments, and results produced in response to peer-review comments on the manuscript).
+submission to the journal. Please look at **[branch v2](https://github.com/BIRDSgroup/NLCD/tree/v2) for the revised code** (including additional experiments, and results produced in response to peer-review comments on the manuscript).
 
 ## Repo Folder Overview
 
